@@ -1,38 +1,7 @@
 import { building } from "$app/environment";
 import { prisma } from "$lib/server/db/prisma";
-import { handleConnection } from "$lib/server/websocket/handle";
-import {
-    type ExtendedGlobal,
-    GlobalThisWSS,
-} from "$lib/server/websocket/utils";
 import type { Handle } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
-
-let wssInitialized = false;
-const startupWebsocketServer = () => {
-    if (wssInitialized) return;
-    console.log("[wss:kit] setup");
-    const wss = (globalThis as ExtendedGlobal)[GlobalThisWSS];
-    if (wss !== undefined) {
-        wss.on("connection", handleConnection);
-        wssInitialized = true;
-    }
-};
-
-const handleWss: Handle = async ({ event, resolve }) => {
-    startupWebsocketServer();
-    // Skip WebSocket server when pre-rendering pages
-    if (!building) {
-        const wss = (globalThis as ExtendedGlobal)[GlobalThisWSS];
-        if (wss !== undefined) {
-            event.locals.wss = wss;
-        }
-    }
-    const response = await resolve(event, {
-        filterSerializedResponseHeaders: (name) => name === "content-type",
-    });
-    return response;
-};
 
 const handleSession: Handle = async ({ event, resolve }) => {
     const { cookies, locals } = event;
@@ -75,4 +44,4 @@ const handleSession: Handle = async ({ event, resolve }) => {
     return resolve(event);
 };
 
-export const handle = sequence(handleWss, handleSession);
+export const handle = sequence(handleSession);

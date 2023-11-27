@@ -1,7 +1,11 @@
 {
     "compilerOptions": {
+        "paths": {
+            "$lib": ["../lib"],
+            "$lib/*": ["../lib/*"]
+        },
         "outDir": "./build",
-        "rootDir": "./src",
+        "rootDirs": ["./src", "../lib"]
     },
     "exclude": ["node_modules", "build"]
 }
