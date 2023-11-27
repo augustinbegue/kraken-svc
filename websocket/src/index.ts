@@ -1,9 +1,14 @@
 import { Logger } from "tslog";
 import { App } from "uWebSockets.js";
 import type { WSMessage, WSMessagePlaceUpdate } from "$lib/websocket";
+import { prisma } from "$lib/server/db/prisma";
+
+require("dotenv").config({
+    path: "../.env",
+});
 
 const log = new Logger({
-    name: "WS",
+    name: "Websocket",
     prettyLogTemplate:
         "{{yyyy}}.{{mm}}.{{dd}} {{hh}}:{{MM}}:{{ss}}:{{ms}}\t{{logLevelName}}\t[{{name}}]\t",
 });
@@ -15,31 +20,26 @@ const SUBSCRIPTIONS_ENUM = Object.freeze({
 });
 const app = App();
 
-app.ws("/place", {
+app.ws("/*", {
     open: (ws) => {
         if (!APP_SECRET) {
             throw new Error("APP_SECRET is not defined");
         }
 
+        (ws as any).id = Math.random().toString(36).substring(2, 15);
         log.info(
-            `[/place] client connected (${decoder.decode(
-                ws.getRemoteAddressAsText(),
-            )})`,
+            `client connected (${(ws as any).id}) from ${
+                decoder.decode(ws.getRemoteAddressAsText()) || "unknown"
+            }`,
         );
         ws.subscribe(SUBSCRIPTIONS_ENUM.PLACE);
     },
     close: (ws, code, message) => {
-        log.info(
-            `[/place] client disconnected (${decoder.decode(
-                ws.getRemoteAddressAsText(),
-            )})`,
-        );
+        log.info(`client disconnected (${(ws as any).id})`);
     },
-    message: (ws, message, isBinary) => {
+    message: async (ws, message, isBinary) => {
         log.info(
-            `[/place] client message (${decoder.decode(
-                ws.getRemoteAddressAsText(),
-            )})`,
+            `client message (${(ws as any).id}): ${decoder.decode(message)}`,
         );
 
         const messageObject = JSON.parse(decoder.decode(message)) as WSMessage;
@@ -50,13 +50,33 @@ app.ws("/place", {
             return;
         }
 
+        // Place update
         if (messageObject.type === "place.update") {
+            messageObject.secret = undefined;
             const data = (messageObject as WSMessagePlaceUpdate).data;
-            ws.publish(SUBSCRIPTIONS_ENUM.PLACE, message, isBinary);
+
+            // Update the database
+            await prisma.tile.update({
+                where: {
+                    i: data.i,
+                },
+                data: {
+                    color: data.color,
+                },
+            });
+
+            log.info(`place.update: ${JSON.stringify(data)}`);
+
+            // Send the update to all subscribers
+            ws.publish(
+                SUBSCRIPTIONS_ENUM.PLACE,
+                JSON.stringify(messageObject),
+                isBinary,
+            );
         }
     },
-}).listen(parseInt(process.env.WS_PORT || "3001"), (listenSocket) => {
+}).listen(parseInt(process.env.WS_PORT || "8888"), (listenSocket) => {
     if (listenSocket) {
-        log.info(`Listening to port ${process.env.WS_PORT || "3001"}`);
+        log.info(`Listening to port ${process.env.WS_PORT || "8888"}`);
     }
 });

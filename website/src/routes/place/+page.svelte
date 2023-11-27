@@ -7,6 +7,8 @@
     import type { PageData } from "./$types";
     import type { WSMessagePlaceUpdate } from "$lib/websocket";
     import type { TileInfo } from "@prisma/client";
+    import { dev } from "$app/environment";
+    import type { ApiTileDrawBody } from "../api/place/tile/draw/+server";
 
     export let data: PageData;
 
@@ -28,11 +30,15 @@
         return new Promise<void>((resolve, reject) => {
             if (wsInitialized) resolve();
 
-            const protocol = location.protocol === "https:" ? "wss" : "ws";
-            ws = new WebSocket(`${protocol}://${location.host}/websocket`);
+            if (dev) {
+                ws = new WebSocket(`ws://localhost:8888/websocket`);
+            } else {
+                const protocol = location.protocol === "https:" ? "wss" : "ws";
+                ws = new WebSocket(`${protocol}://${location.host}/websocket`);
+            }
 
             ws.addEventListener("error", (err) => {
-                console.error("[ws:client] error", err);
+                if (dev) console.error("[ws:client] error", err);
                 reject(err);
             });
 
@@ -40,19 +46,22 @@
                 wsInitialized = true;
                 resolve();
 
-                console.log("[ws:client] connected");
+                if (dev) console.log("[ws:client] connected");
             });
 
             ws.addEventListener("close", () => {
-                console.log("[ws:client] disconnected");
+                if (dev) console.log("[ws:client] disconnected");
+                wsInitialized = false;
+                ws = undefined;
             });
 
             ws.addEventListener("message", async (ev) => {
-                const message = JSON.parse(await ev.data.text());
+                const message = JSON.parse(await ev.data);
+                if (dev) console.log("[ws:client] message", message);
 
                 if (message.type === "place.update") {
                     const data = (message as WSMessagePlaceUpdate).data;
-                    console.log("[ws:client] place.update", data);
+                    if (dev) console.log("[ws:client] place.update", data);
 
                     placeCanvas.updateBoard(data.x, data.y, data.color);
                 }
@@ -77,29 +86,31 @@
     let tileTooltip: HTMLDivElement;
 
     // Place Requests
-    function sendUpdate(x: number, y: number, color: string) {
-        ws.send(
-            JSON.stringify({
-                type: "place.update",
-                data: {
-                    x,
-                    y,
-                    color,
-                },
-            }),
-        );
+    async function sendUpdate(x: number, y: number, color: string) {
+        if (cooldown > 0) return;
+
+        const body: ApiTileDrawBody = {
+            x,
+            y,
+            color,
+        };
+        const res = await fetch(`/api/place/tile/draw`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+        });
+
         lastPlacedDate = Date.now();
         computeCooldown();
     }
     async function getTileInfo(x: number, y: number) {
         const i = placeCanvas.getIndexFromCanvasCoords(x, y);
 
-        console.log("getTileInfo", x, y, i);
-
         const res = await fetch(`/api/place/tile/${i}`);
 
         if (!res.ok) {
-            console.error("Unable to fetch tile info", res);
             return;
         }
 
@@ -130,8 +141,16 @@
         placeCanvas = new PlaceCanvas(canvas, cursor, board.tiles);
         interactionEnabled = placeCanvas.interactionEnabled;
         placeCanvas.onTileClick = async (event, x, y) => {
-            const info = await getTileInfo(x, y);
-            if (!info) return;
+            let info: TileInfo | undefined;
+            try {
+                info = await getTileInfo(x, y);
+            } catch (error) {
+            } finally {
+                if (!info) {
+                    tileTooltip.classList.remove("tooltip-open");
+                    return;
+                }
+            }
 
             tileTooltip.style.left = `${event.clientX}px`;
             tileTooltip.style.top = `${event.clientY}px`;
@@ -200,21 +219,22 @@
                     <button
                         class="color"
                         disabled={cooldown > 0}
-                        on:click={() => {
+                        on:click={async () => {
                             let cursorBounds = cursor.getBoundingClientRect();
                             const { x, y } =
                                 placeCanvas.getCanvasCoordsFromScreenCoords(
                                     cursorBounds.left,
                                     cursorBounds.top,
                                 );
-                            sendUpdate(x, y, activeColor);
+                            await sendUpdate(x, y, activeColor);
                         }}
                         style="
                     background-size: 100% 100%;
                     background-position: 0px 0px;
                     background-image: conic-gradient(from 0deg at 50% 50%, #FFFFFF00 0%, #FFFFFF00 {(1 -
-                            cooldown / (60 * 1000)) *
-                            100}%, #FF000050 {(1 - cooldown / (60 * 1000)) *
+                            cooldown / PlaceCanvas.COOLDOWN) *
+                            100}%, #FF000050 {(1 -
+                            cooldown / PlaceCanvas.COOLDOWN) *
                             100}%, #FF000050 99%);
                     "
                     >

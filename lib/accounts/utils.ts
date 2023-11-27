@@ -1,5 +1,5 @@
 import type { Session } from "@prisma/client";
-import type { ClientSession } from "../../app";
+import type { ClientSession } from ".";
 
 export function getSessionCookie(request: any): string | undefined {
     let session = request.headers.cookie

@@ -5,7 +5,7 @@ export class PlaceCanvas {
     // Constants
     static TILE_SIZE = 16;
     static CANVAS_SIZE = 255;
-    static COOLDOWN = 1000 * 60 * 1; // 1 minute
+    static COOLDOWN = 1000; // 1 sec
     static CANVAS_PALETTE = [
         "#6d001a",
         "#be0039",
@@ -370,7 +370,6 @@ export class PlaceCanvas {
      */
     updateBoard(x: number, y: number, color: string) {
         const i = this.getIndexFromCanvasCoords(x, y);
-        console.log(i);
         this.board[i] = { i, color };
         this.drawTile(x, y, color);
     }

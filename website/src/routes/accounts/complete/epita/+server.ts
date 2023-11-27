@@ -8,14 +8,10 @@ import type { RequestHandler } from "./$types";
 import { prisma } from "$lib/server/db/prisma";
 import type { Profile } from "@prisma/client";
 
-export const GET: RequestHandler = async ({ locals, url, cookies }) => {
+export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
     const code = url.searchParams.get("code");
     const state = url.searchParams.get("state");
     const localState = cookies.get("state");
-
-    console.log("code", code);
-    console.log("state", state);
-    console.log("locals state", localState);
 
     if (state !== localState) {
         throw error(400, "Invalid state");

@@ -2,12 +2,21 @@ import { PlaceCanvas } from "$lib/place/PlaceCanvas";
 import type { Session } from "@prisma/client";
 import { prisma } from "../db/prisma";
 
-export async function updateCanvas(
-    session: Session,
+/**
+ * checks if the user can update the canvas and sends the update to the websocket server
+ * @param session session of the user
+ * @param x x coordinate
+ * @param y y coordinate
+ * @param color color to place
+ * @returns true if the update was successful, false otherwise
+ */
+export async function sendCanvasUpdate(
+    locals: App.Locals,
     x: number,
     y: number,
     color: string,
 ) {
+    const session = locals.session as Session;
     // Check if the profile exists,
     let placeProfile = await prisma.placeProfile.findUnique({
         where: {
@@ -23,8 +32,6 @@ export async function updateCanvas(
         placeProfile.lastPlaced.getTime() + PlaceCanvas.COOLDOWN >=
         Date.now()
     ) {
-        console.log("cooldown not over");
-
         return false;
     }
 
@@ -34,15 +41,7 @@ export async function updateCanvas(
     }
 
     const i = x + y * PlaceCanvas.CANVAS_SIZE;
-    await prisma.tile.update({
-        where: {
-            i,
-        },
-        data: {
-            color,
-        },
-    });
-    // TODO: Send update to the websocket server
+
     await prisma.placeProfile.update({
         where: {
             login: session.login,
@@ -64,6 +63,15 @@ export async function updateCanvas(
                     login: session.login,
                 },
             },
+        },
+    });
+    locals.ws.send({
+        type: "place.update",
+        data: {
+            i,
+            x,
+            y,
+            color,
         },
     });
 
