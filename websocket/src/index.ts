@@ -7,6 +7,9 @@ require("dotenv").config({
     path: "../.env",
 });
 
+const APP_SECRET = process.env.APP_SECRET;
+const PORT = new URL(process.env.WS_URL || "ws://localhost:8888").port;
+
 const log = new Logger({
     name: "Websocket",
     prettyLogTemplate:
@@ -14,7 +17,6 @@ const log = new Logger({
 });
 const decoder = new TextDecoder("utf-8");
 
-const APP_SECRET = process.env.APP_SECRET;
 const SUBSCRIPTIONS_ENUM = Object.freeze({
     PLACE: "PLACE",
 });
@@ -75,8 +77,10 @@ app.ws("/*", {
             );
         }
     },
-}).listen(parseInt(process.env.WS_PORT || "8888"), (listenSocket) => {
+}).listen(parseInt(PORT), (listenSocket) => {
     if (listenSocket) {
-        log.info(`Listening to port ${process.env.WS_PORT || "8888"}`);
+        log.info(`Listening to port ${PORT}`);
+    } else {
+        log.error(`Failed to listen to port ${PORT}`);
     }
 });

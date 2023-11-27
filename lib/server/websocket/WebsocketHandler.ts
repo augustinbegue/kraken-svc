@@ -18,8 +18,12 @@ export class WebsocketHandler {
         });
 
         this.ws.on("close", () => {
-            log.info("Disconnected from websocket server. Reconnecting...");
-            this.ws = new WebSocket(WS_URL);
+            try {
+                this.ws = new WebSocket(WS_URL);
+            } catch (error) {
+                console.error(error);
+                log.error("Failed to reconnect to websocket server");
+            }
         });
 
         if (!APP_SECRET) {

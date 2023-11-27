@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+    website:
+        build:
+            dockerfile: dockerfile-website
+            tags:
+                - docker.hostag.fr/krakensvc/website:${npm_package_version}
+        ports:
+            - "8080:3000"
+        env_file:
+            - .env
+    websocket:
+        build:
+            dockerfile: dockerfile-websocket
+            tags:
+                - docker.hostag.fr/krakensvc/websocket:${npm_package_version}
+        ports:
+            - "8888:3001"
+        env_file:
+            - .env

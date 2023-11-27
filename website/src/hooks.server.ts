@@ -1,3 +1,4 @@
+import { WS_URL } from "$env/static/private";
 import { isLoggedIn } from "$lib/accounts/utils";
 import { prisma } from "$lib/server/db/prisma";
 import { log } from "$lib/server/logger";
@@ -10,6 +11,9 @@ export let wsHandler: WebsocketHandler;
 
 const handleWebsocket: Handle = async ({ event, resolve }) => {
     const { locals } = event;
+
+    log.info(`Connecting to websocket server: ${WS_URL}`);
+
     if (!wsHandler) {
         wsHandler = new WebsocketHandler();
     }
