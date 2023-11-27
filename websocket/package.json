@@ -1,3 +1,14 @@
 {
-    "name": "kraken-websocket"
+  "name": "kraken-websocket",
+  "dependencies": {
+    "tslog": "^4.9.2"
+  },
+  "scripts": {
+    "dev": "ts-node-dev ./src/index.ts",
+    "build": "tsc",
+    "start": "node ./build/index.js"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^2.0.0"
+  }
 }

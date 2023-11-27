@@ -2,6 +2,7 @@ type WSMessageTypes = "place.update";
 
 export interface WSMessage {
     type: string;
+    secret: string;
     data: any;
 }
 
