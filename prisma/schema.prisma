@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Default base type for all models
+//    id       String   @id @default(uuid())
+//    createdAt DateTime @default(now())
+//    updatedAt DateTime @updatedAt
+//    isActive  Boolean  @default(true)
+//    isDeleted Boolean  @default(false)
+//    deletedAt DateTime?
+
+// User Model
+model Group {
+  slug    String    @id
+  name    String
+  kind    String
+  private Boolean
+  Profile Profile[] @relation("ProfileGroup")
+}
+
+model Profile {
+  preferred_username String        @id
+  created_at         DateTime      @default(now())
+  updated_at         DateTime      @updatedAt
+  isActive           Boolean       @default(true)
+  isDeleted          Boolean       @default(false)
+  deletedAt          DateTime?
+  given_name         String
+  family_name        String
+  nickname           String
+  name               String
+  zoneinfo           String
+  uid                Int
+  gid                Int
+  sessions           Session[]
+  groups             Group[]       @relation("ProfileGroup")
+  PlaceProfile       PlaceProfile?
+}
+
+model Session {
+  id           String    @id @default(uuid())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  isActive     Boolean   @default(true)
+  isDeleted    Boolean   @default(false)
+  deletedAt    DateTime?
+  profile      Profile   @relation(fields: [login], references: [preferred_username])
+  login        String
+  accessToken  String
+  refreshToken String?
+  expiresAt    DateTime
+}
+
+// EPlace Model
+model PlaceProfile {
+  profile     Profile    @relation(fields: [login], references: [preferred_username])
+  login       String     @unique
+  tilesPlaced Int        @default(0)
+  lastPlaced  DateTime   @updatedAt
+  tiles       TileInfo[]
+}
+
+model Tile {
+  i     Int    @id
+  color String
+}
+
+model TileInfo {
+  id           String       @id @default(uuid())
+  i            Int
+  color        String
+  placedAt     DateTime     @default(now())
+  placeProfile PlaceProfile @relation(fields: [login], references: [login])
+  login        String
+}

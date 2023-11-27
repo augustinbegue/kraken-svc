@@ -1,0 +1,26 @@
+{
+    "name": "kraken-svc",
+    "version": "0.1.0",
+    "workspaces": [
+        "website",
+        "websocket"
+    ],
+    "scripts": {
+        "prisma:generate": "prisma generate",
+        "build": "npm run prisma:generate && concurrently npm:build:*",
+        "build:website": "npm run build --workspace=website",
+        "build:websocket": "npm run build --workspace=websocket",
+        "dev": "npm run prisma:generate && concurrently npm:dev:*",
+        "dev:website": "npm run dev --workspace=website",
+        "dev:websocket": "npm run dev --workspace=websocket",
+        "docker:build": "docker compose build",
+        "docker:up": "docker compose up -d",
+        "docker:push": "docker compose push"
+    },
+    "dependencies": {
+        "@prisma/client": "^5.6.0"
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    }
+}
