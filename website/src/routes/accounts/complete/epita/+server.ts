@@ -1,8 +1,4 @@
-import {
-    FORGE_ID_CLIENT_ID,
-    FORGE_ID_ISSUER,
-    FORGE_ID_SECRET,
-} from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import { error, json, redirect } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { prisma } from "$lib/server/db/prisma";
@@ -21,12 +17,12 @@ export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
         throw error(400, "Missing code");
     }
 
-    const tokres = await fetch(`${FORGE_ID_ISSUER}/token`, {
+    const tokres = await fetch(`${env.FORGE_ID_ISSUER}/token`, {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
             Authorization: `Basic ${btoa(
-                `${FORGE_ID_CLIENT_ID}:${FORGE_ID_SECRET}`,
+                `${env.FORGE_ID_CLIENT_ID}:${env.FORGE_ID_SECRET}`,
             )}`,
         },
         body: new URLSearchParams({
@@ -44,7 +40,7 @@ export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
         access_token: string;
     };
 
-    const res = await fetch(`${FORGE_ID_ISSUER}/userinfo`, {
+    const res = await fetch(`${env.FORGE_ID_ISSUER}/userinfo`, {
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },

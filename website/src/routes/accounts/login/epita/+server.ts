@@ -1,9 +1,9 @@
-import { FORGE_ID_CLIENT_ID, FORGE_ID_ISSUER } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import { redirect } from "@sveltejs/kit";
 
 export const GET = async ({ locals, cookies }) => {
-    const url = new URL(`${FORGE_ID_ISSUER}/authorize`);
-    url.searchParams.set("client_id", FORGE_ID_CLIENT_ID);
+    const url = new URL(`${env.FORGE_ID_ISSUER}/authorize`);
+    url.searchParams.set("client_id", env.FORGE_ID_CLIENT_ID);
     url.searchParams.set("response_type", "code");
     url.searchParams.set("scope", "openid profile epita");
     url.searchParams.set(

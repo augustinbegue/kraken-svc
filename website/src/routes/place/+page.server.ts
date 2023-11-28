@@ -3,7 +3,7 @@ import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { prisma } from "$lib/server/db/prisma";
 import type { Session } from "@prisma/client";
-import { WS_URL } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 
 export const load: PageServerLoad = async ({ locals, cookies }) => {
     const { session } = locals;
@@ -37,7 +37,7 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
         });
     }
 
-    const wsUrl = WS_URL;
+    const wsUrl = env.WS_URL;
 
     return {
         session,

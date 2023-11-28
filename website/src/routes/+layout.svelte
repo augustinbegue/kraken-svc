@@ -18,7 +18,7 @@
                     target="_blank"
                 >
                     Augustin BÉGUÉ
-                </a> for Kraken
+                </a> for redacted
             </p>
         </aside>
     </footer>

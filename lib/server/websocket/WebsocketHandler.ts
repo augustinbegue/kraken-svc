@@ -1,4 +1,4 @@
-import { WS_URL, APP_SECRET } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import type { WSMessage } from "$lib/websocket";
 import { log } from "$lib/server/logger";
 import { WebSocket } from "ws";
@@ -7,9 +7,9 @@ export class WebsocketHandler {
     private ws: WebSocket;
 
     constructor() {
-        log.info(`Connecting to websocket server: ${WS_URL}`);
+        log.info(`Connecting to websocket server: ${env.WS_URL}`);
 
-        this.ws = new WebSocket(WS_URL);
+        this.ws = new WebSocket(env.WS_URL);
 
         this.ws.on("open", () => {
             log.info("Connected to websocket server");
@@ -21,20 +21,20 @@ export class WebsocketHandler {
 
         this.ws.on("close", () => {
             try {
-                this.ws = new WebSocket(WS_URL);
+                this.ws = new WebSocket(env.WS_URL);
             } catch (error) {
                 console.error(error);
                 log.error("Failed to reconnect to websocket server");
             }
         });
 
-        if (!APP_SECRET) {
+        if (!env.APP_SECRET) {
             throw new Error("APP_SECRET is not defined");
         }
     }
 
     public send(message: WSMessage) {
-        message.secret = APP_SECRET;
+        message.secret = env.APP_SECRET;
         this.ws.send(JSON.stringify(message));
     }
 }
