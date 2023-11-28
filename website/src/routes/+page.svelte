@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
     import type { PageData } from "./$types";
 
     export let data: PageData;
@@ -15,12 +16,12 @@
 <div class="hero h-full bg-base-200">
     <div class="hero-content flex-col lg:flex-row">
         <img
-            src="assets/redacted.png"
-            alt="redacted"
+            src="assets/kraken.png"
+            alt="kraken"
             class="sm:max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg"
         />
         <div class="">
-            <h1 class="text-5xl font-bold">Liste redacted</h1>
+            <h1 class="text-5xl font-bold">Liste Kraken</h1>
             <div
                 class="flex flex-row justify-center lg:justify-start gap-4 mt-4"
             >
@@ -75,12 +76,18 @@
         </div>
     </div>
     <div class="flex flex-col gap-4">
-        <div class="card shadow-xl bg-base-200">
+        <div
+            class="card shadow-xl bg-base-200 cursor-pointer"
+            on:click={(e) => {
+                e.preventDefault();
+                goto("/place");
+            }}
+        >
             <div class="card-body">
                 <div class="card-title">KrakPlace</div>
                 <iframe
+                    class="aspect-square pointer-events-none"
                     src="/place/embed"
-                    class="aspect-square"
                     title="KrakPlace"
                 >
                 </iframe>
