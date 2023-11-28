@@ -38,6 +38,7 @@ export class PlaceWebsocketHandler {
 
         this.ws.addEventListener("open", () => {
             if (dev) console.log("[ws:client] connected");
+            this.onReady();
         });
 
         this.ws.addEventListener("close", () => {

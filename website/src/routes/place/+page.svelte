@@ -203,7 +203,7 @@
         </div>
     {/if}
 {:else}
-    <div class="flex flex-col justify-center items-center gap-4 h-[90vh]">
+    <div class="flex flex-col justify-center items-center gap-4 h-[90vh] z-50">
         <Loader2 class="animate-spin" size="36" />
         <p>{loadingState}</p>
     </div>

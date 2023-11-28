@@ -6,7 +6,7 @@
     import { PlaceWebsocketHandler } from "$lib/websocket/PlaceWebsocketHandler";
     import type { PageData } from "./$types";
 
-    let data: PageData;
+    export let data: PageData;
 
     // Place Canvas
     let canvas: HTMLCanvasElement;
@@ -46,7 +46,7 @@
 </script>
 
 {#if loadingState.length !== 0}
-    <div class="flex flex-col justify-center items-center gap-4 h-[90vh]">
+    <div class="flex flex-col justify-center items-center gap-4 h-[90vh] z-50">
         <Loader2 class="animate-spin" size="36" />
         <p>{loadingState}</p>
     </div>
