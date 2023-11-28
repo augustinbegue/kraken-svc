@@ -1,64 +1,24 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
-    import { fade, slide } from "svelte/transition";
-    import { ArrowBigLeft, Brush, Loader2 } from "lucide-svelte";
+    import { fade } from "svelte/transition";
+    import { Loader2 } from "lucide-svelte";
     import { PlaceCanvas } from "$lib/place/PlaceCanvas";
-    import type { WSMessagePlaceUpdate } from "$lib/websocket";
+    import { PlaceWebsocketHandler } from "$lib/websocket/PlaceWebsocketHandler";
+    import type { PageData } from "./$types";
+
+    let data: PageData;
 
     // Place Canvas
     let canvas: HTMLCanvasElement;
     let cursor: HTMLDivElement;
     let placeCanvas: PlaceCanvas;
 
-    let wsInitialized = false;
-    let ws: WebSocket;
-    function connectWS() {
-        return new Promise<void>((resolve, reject) => {
-            if (wsInitialized) resolve();
+    let wsHandler: PlaceWebsocketHandler;
 
-            const protocol = location.protocol === "https:" ? "wss" : "ws";
-            ws = new WebSocket(`${protocol}://${location.host}/websocket`);
-
-            ws.addEventListener("error", (err) => {
-                console.error("[ws:client] error", err);
-                reject(err);
-            });
-
-            ws.addEventListener("open", () => {
-                wsInitialized = true;
-                resolve();
-
-                console.log("[ws:client] connected");
-            });
-
-            ws.addEventListener("close", () => {
-                console.log("[ws:client] disconnected");
-            });
-
-            ws.addEventListener("message", async (ev) => {
-                const message = JSON.parse(await ev.data.text());
-
-                if (message.type === "place.update") {
-                    const data = (message as WSMessagePlaceUpdate).data;
-                    console.log("[ws:client] place.update", data);
-
-                    placeCanvas.updateBoard(data.x, data.y, data.color);
-                }
-            });
-        });
-    }
-
-    let loadingState = "Connecting to websocket...";
+    let loadingState = "Loading Canvas ...";
     onMount(async () => {
         document.getElementsByTagName("html")[0].style.overflow = "hidden";
         document.getElementsByTagName("body")[0].style.overflow = "hidden";
-
-        await connectWS();
-
-        if (!wsInitialized) {
-            loadingState = "Error: Unable to connect to websocket.";
-            return;
-        }
 
         loadingState = "Loading canvas...";
 
@@ -71,16 +31,21 @@
 
         const board = await res.json();
         placeCanvas = new PlaceCanvas(canvas, cursor, board.tiles, true);
+
+        wsHandler = new PlaceWebsocketHandler(data.wsUrl, placeCanvas);
+        wsHandler.onReady = () => {
+            loadingState = "";
+        };
     });
 
     onDestroy(() => {
         document.getElementsByTagName("html")[0].style.overflow = "auto";
         document.getElementsByTagName("body")[0].style.overflow = "auto";
-        if (wsInitialized) ws.close();
+        if (wsHandler) wsHandler.destroy();
     });
 </script>
 
-{#if !placeCanvas}
+{#if loadingState.length !== 0}
     <div class="flex flex-col justify-center items-center gap-4 h-[90vh]">
         <Loader2 class="animate-spin" size="36" />
         <p>{loadingState}</p>

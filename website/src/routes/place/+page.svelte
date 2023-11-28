@@ -9,6 +9,7 @@
     import type { TileInfo } from "@prisma/client";
     import { dev } from "$app/environment";
     import type { ApiTileDrawBody } from "../api/place/tile/draw/+server";
+    import { PlaceWebsocketHandler } from "$lib/websocket/PlaceWebsocketHandler";
 
     export let data: PageData;
 
@@ -24,52 +25,7 @@
     let interactionEnabled: Writable<boolean>;
 
     // Websocket
-    let wsInitialized = false;
-    let ws: WebSocket;
-    function connectWS() {
-        return new Promise<void>((resolve, reject) => {
-            if (wsInitialized) resolve();
-
-            if (dev) {
-                ws = new WebSocket(data.wsUrl);
-            } else {
-                const protocol = location.protocol === "https:" ? "wss" : "ws";
-                const wsUrl = new URL(data.wsUrl);
-                wsUrl.protocol = protocol;
-                ws = new WebSocket(wsUrl.toString());
-            }
-
-            ws.addEventListener("error", (err) => {
-                if (dev) console.error("[ws:client] error", err);
-                reject(err);
-            });
-
-            ws.addEventListener("open", () => {
-                wsInitialized = true;
-                resolve();
-
-                if (dev) console.log("[ws:client] connected");
-            });
-
-            ws.addEventListener("close", () => {
-                if (dev) console.log("[ws:client] disconnected");
-                wsInitialized = false;
-                ws = undefined;
-            });
-
-            ws.addEventListener("message", async (ev) => {
-                const message = JSON.parse(await ev.data);
-                if (dev) console.log("[ws:client] message", message);
-
-                if (message.type === "place.update") {
-                    const data = (message as WSMessagePlaceUpdate).data;
-                    if (dev) console.log("[ws:client] place.update", data);
-
-                    placeCanvas.updateBoard(data.x, data.y, data.color);
-                }
-            });
-        });
-    }
+    let wsHandler: PlaceWebsocketHandler;
 
     // Cooldown
     let lastPlacedDate = data.placeProfile.lastPlaced.getTime();
@@ -119,22 +75,12 @@
         return (await res.json()) as TileInfo;
     }
 
-    let loadingState = "Connecting to websocket...";
+    let loadingState = "Loading canvas...";
     onMount(async () => {
         document.getElementsByTagName("html")[0].style.overflow = "hidden";
         document.getElementsByTagName("body")[0].style.overflow = "hidden";
 
-        await connectWS();
-
-        if (!wsInitialized) {
-            loadingState = "Error: Unable to connect to websocket.";
-            return;
-        }
-
-        loadingState = "Loading canvas...";
-
         const res = await fetch(`/api/place/canvas`);
-
         if (!res.ok) {
             loadingState = "Error: Unable to load canvas.";
             return;
@@ -168,17 +114,23 @@
             if (dragging) tileTooltip.classList.remove("tooltip-open");
         };
 
+        loadingState = "Connecting to websocket...";
+        wsHandler = new PlaceWebsocketHandler(data.wsUrl, placeCanvas);
+        wsHandler.onReady = () => {
+            loadingState = "";
+        };
+
         computeCooldown();
     });
 
     onDestroy(() => {
         document.getElementsByTagName("html")[0].style.overflow = "auto";
         document.getElementsByTagName("body")[0].style.overflow = "auto";
-        if (wsInitialized) ws.close();
+        if (wsHandler) wsHandler.destroy();
     });
 </script>
 
-<div class="buttons" transition:fade>
+<div class="buttons">
     <a class="btn btn-primary rounded-full" href="/">
         <ArrowBigLeft />
     </a>
@@ -191,7 +143,7 @@
     data-tip="primary"
 ></div>
 
-{#if placeCanvas}
+{#if loadingState.length === 0}
     {#if $interactionEnabled}
         <div class="controls" transition:slide>
             <div class="palette">
@@ -259,7 +211,7 @@
 
 <div class="cursor absolute" bind:this={cursor}></div>
 
-<canvas class="canvas" bind:this={canvas} transition:fade> </canvas>
+<canvas class="canvas" bind:this={canvas}> </canvas>
 
 <style lang="postcss">
     .canvas {
