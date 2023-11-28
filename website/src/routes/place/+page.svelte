@@ -31,10 +31,12 @@
             if (wsInitialized) resolve();
 
             if (dev) {
-                ws = new WebSocket(`ws://localhost:8888/websocket`);
+                ws = new WebSocket(data.wsUrl);
             } else {
                 const protocol = location.protocol === "https:" ? "wss" : "ws";
-                ws = new WebSocket(`${protocol}://${location.host}/websocket`);
+                const wsUrl = new URL(data.wsUrl);
+                wsUrl.protocol = protocol;
+                ws = new WebSocket(wsUrl.toString());
             }
 
             ws.addEventListener("error", (err) => {

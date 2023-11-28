@@ -15,6 +15,6 @@ services:
             tags:
                 - docker.hostag.fr/krakensvc/websocket:${npm_package_version}
         ports:
-            - "8888:3001"
+            - "8888:8888"
         env_file:
             - .env

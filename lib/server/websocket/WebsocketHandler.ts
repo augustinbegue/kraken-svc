@@ -7,6 +7,8 @@ export class WebsocketHandler {
     private ws: WebSocket;
 
     constructor() {
+        log.info(`Connecting to websocket server: ${WS_URL}`);
+
         this.ws = new WebSocket(WS_URL);
 
         this.ws.on("open", () => {
