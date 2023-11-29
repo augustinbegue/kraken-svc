@@ -41,6 +41,7 @@ model Profile {
   zoneinfo           String
   uid                Int
   gid                Int
+  graduation_years   Int[]
   sessions           Session[]
   groups             Group[]       @relation("ProfileGroup")
   PlaceProfile       PlaceProfile?

@@ -2,7 +2,8 @@ import { env } from "$env/dynamic/private";
 import { error, json, redirect } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { prisma } from "$lib/server/db/prisma";
-import type { Profile } from "@prisma/client";
+import type { Group, Profile } from "@prisma/client";
+import { log } from "$lib/server/logger";
 
 export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
     const code = url.searchParams.get("code");
@@ -50,7 +51,10 @@ export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
         throw error(res.status, "Failed to fetch user info");
     }
 
-    const profile = (await res.json()) as Profile;
+    // Create session and profile if not exists
+    const profile = (await res.json()) as Profile & {
+        groups: Group[];
+    }
     const session = await prisma.session.create({
         data: {
             accessToken,
@@ -68,6 +72,7 @@ export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
                         zoneinfo: profile.zoneinfo,
                         uid: profile.uid,
                         gid: profile.gid,
+                        graduation_years: profile.graduation_years
                     },
                 },
             },
@@ -81,6 +86,35 @@ export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
             },
         },
     });
+
+    // Create/link groups to profile
+    log.debug(`Linking Groups: ${profile.groups.map((g) => g.name).join(", ")}`);
+    for (const group of profile.groups) {
+        await prisma.group.upsert({
+            where: {
+                slug: group.slug,
+            },
+            create: {
+                kind: group.kind,
+                slug: group.slug,
+                name: group.name,
+                private: group.private,
+                Profile: {
+                    connect: {
+                        preferred_username: profile.preferred_username,
+                    },
+                },
+            },
+            update: {
+                Profile: {
+                    connect: {
+                        preferred_username: profile.preferred_username,
+                    },
+                }
+            },
+        });
+    }
+    
 
     cookies.set("session", btoa(session.id), {
         path: "/",
