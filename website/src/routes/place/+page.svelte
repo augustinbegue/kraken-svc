@@ -131,7 +131,7 @@
 </script>
 
 <div class="buttons">
-    <a class="btn btn-primary rounded-full" href="/">
+    <a class="btn btn-ghost" href="/">
         <ArrowBigLeft />
     </a>
 </div>
@@ -228,7 +228,7 @@
         @apply flex flex-row gap-4 absolute bottom-0 w-screen justify-center z-50;
     }
     .controls .palette {
-        @apply flex flex-col gap-4 p-4 bg-base-200 rounded-t-xl items-center;
+        @apply flex flex-col gap-4 p-4 bg-base-200 items-center;
     }
 
     .controls .palette .full-palette {

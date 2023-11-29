@@ -6,7 +6,14 @@ export default {
   },
   plugins: [require("daisyui")],
   daisyui: {
-    themes: ["dim"],
+    themes: [{
+      dark: {
+        ...require("daisyui/src/theming/themes")["black"],
+        primary: "#ceb594",
+        secondary: "#ffb511",
+        accent: "#bb1e3a"
+      }
+    }],
   }
 }
 
