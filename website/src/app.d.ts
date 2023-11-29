@@ -2,6 +2,7 @@
 
 import type { WebsocketHandler } from "$lib/server/websocket/WebsocketHandler";
 import type { Session, Profile, Group } from "@prisma/client";
+import type { ClientSession } from "$lib/accounts";
 
 // for information about these interfaces
 declare global {

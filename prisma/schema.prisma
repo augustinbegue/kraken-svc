@@ -18,6 +18,12 @@ datasource db {
 //    isDeleted Boolean  @default(false)
 //    deletedAt DateTime?
 
+enum Role {
+  ADMIN
+  STAFF
+  USER
+}
+
 // User Model
 model Group {
   slug    String    @id
@@ -44,6 +50,7 @@ model Profile {
   graduation_years   Int[]
   sessions           Session[]
   groups             Group[]       @relation("ProfileGroup")
+  roles              Role[]        @default([USER])
   PlaceProfile       PlaceProfile?
 }
 
