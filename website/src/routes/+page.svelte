@@ -1,5 +1,6 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
+    import { ChevronLeft, ChevronRight } from "lucide-svelte";
     import type { PageData } from "./$types";
 
     export let data: PageData;
@@ -10,7 +11,14 @@
             date: "2021-09-20T00:00:00.000Z",
             description: "La campagne commence !",
         },
+        {
+            name: "Fin de la campagne",
+            date: "2021-10-20T00:00:00.000Z",
+            description: "La campagne se termine !",
+        },
     ];
+    let event = eventList[0];
+    let eventI = 0;
 
     const leaderboardByYear = [
         {
@@ -32,6 +40,48 @@
         {
             year: 2028,
             points: 316343,
+        },
+    ];
+    const leaderboardByProfile = [
+        {
+            login: "augustin.begue",
+            points: 2048,
+        },
+        {
+            login: "augustin.begue",
+            points: 2043,
+        },
+        {
+            login: "augustin.begue",
+            points: 1956,
+        },
+        {
+            login: "augustin.begue",
+            points: 1843,
+        },
+        {
+            login: "augustin.begue",
+            points: 1754,
+        },
+        {
+            login: "augustin.begue",
+            points: 1579,
+        },
+        {
+            login: "augustin.begue",
+            points: 1367,
+        },
+        {
+            login: "augustin.begue",
+            points: 1321,
+        },
+        {
+            login: "augustin.begue",
+            points: 1298,
+        },
+        {
+            login: "augustin.begue",
+            points: 1287,
         },
     ];
 </script>
@@ -110,12 +160,79 @@
         <div class="widget-title">Events</div>
         <div class="card shadow-xl bg-base-200">
             <div class="card-body">
-                <div class="flex flex-col overflow-hidden"></div>
+                <div class="flex flex-row overflow-hidden">
+                    <div
+                        class="flex flex-row gap-4 justify-between shrink-0 w-full"
+                    >
+                        <div class="flex flex-col">
+                            <div class="text-xl font-bold">
+                                {event.name}
+                            </div>
+                            <div class="text-gray-400">
+                                {event.description}
+                            </div>
+                        </div>
+                        <div class="text-gray-400">
+                            {new Date(event.date).toLocaleDateString()}
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-row w-full justify-between items-center">
+                    <button
+                        class="btn btn-ghost"
+                        disabled={eventList.length === 1 || eventI === 0}
+                        on:click={() => {
+                            eventI =
+                                (eventI - 1 + eventList.length) %
+                                eventList.length;
+                            event = eventList[eventI];
+                        }}
+                    >
+                        <ChevronLeft />
+                    </button>
+                    <span>
+                        {eventI + 1} / {eventList.length}
+                    </span>
+                    <button
+                        class="btn btn-ghost"
+                        disabled={eventList.length === 1 ||
+                            eventI === eventList.length - 1}
+                        on:click={() => {
+                            eventI = (eventI + 1) % eventList.length;
+                            event = eventList[eventI];
+                        }}
+                    >
+                        <ChevronRight />
+                    </button>
+                </div>
             </div>
         </div>
         <div class="widget-title">Leaderboard</div>
         <div class="card shadow-xl bg-base-200">
-            <div class="card-body"></div>
+            <div class="card-body">
+                <div class="flex flex-col">
+                    {#each leaderboardByProfile as profile, i}
+                        <div class="flex flex-row justify-between">
+                            <div class="text-xl font-bold">
+                                {#if i == 0}
+                                    🥇
+                                {:else if i == 1}
+                                    🥈
+                                {:else if i == 2}
+                                    🥉
+                                {:else}
+                                    {i + 1}.{" "}
+                                {/if}
+                                {profile.login}
+                            </div>
+                            <div class="text-gray-400">
+                                {profile.points} pts
+                            </div>
+                        </div>
+                        <div class="divider my-1"></div>
+                    {/each}
+                </div>
+            </div>
         </div>
     </div>
     <div class="flex flex-col gap-4">
