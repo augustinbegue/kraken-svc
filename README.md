@@ -13,6 +13,14 @@ Transmits realtime info from the rplace and leaderboard.
 
 # leaderboard
 
-- [] Create profile leaderboard
-- [] Create promo leaderboard
-- [] Show leaderboard on homepage: Promo display and profile top 10
+-   [] Create profile leaderboard
+-   [] Create promo leaderboard
+-   [] Show leaderboard on homepage: Promo display and profile top 10
+
+endpoints:
+
+-   add points
+-   remove points
+-   get sum of points for a group/year
+-   get leaderboard for a group/year (paged)
+-   get global leaderboard (paged)

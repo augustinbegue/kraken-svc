@@ -76,10 +76,10 @@ const handleAccessLogs: Handle = async ({ event, resolve }) => {
     log.info(
         `${event.request.method} ${event.url.pathname} from ${clientIdentifier}`,
     );
-    log.info(`Headers: `);
-    for (const [key, value] of event.request.headers.entries()) {
-        log.info(`  ${key}: ${value}`);
-    }
+    // log.info(`Headers: `);
+    // for (const [key, value] of event.request.headers.entries()) {
+    //     log.info(`  ${key}: ${value}`);
+    // }
 
     const response = await resolve(event);
 
@@ -88,10 +88,10 @@ const handleAccessLogs: Handle = async ({ event, resolve }) => {
             "content-length",
         )} to ${clientIdentifier}`,
     );
-    log.info(`Headers: `);
-    for (const [key, value] of response.headers.entries()) {
-        log.info(`  ${key}: ${value}`);
-    }
+    // log.info(`Headers: `);
+    // for (const [key, value] of response.headers.entries()) {
+    //     log.info(`  ${key}: ${value}`);
+    // }
 
     return response;
 };

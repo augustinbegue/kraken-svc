@@ -29,7 +29,7 @@ export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
         body: new URLSearchParams({
             grant_type: "authorization_code",
             code,
-            redirect_uri: "http://localhost:8080/accounts/complete/epita/",
+            redirect_uri: env.FORGE_ID_REDIRECT_URI,
         }),
     });
 
@@ -54,7 +54,7 @@ export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
     // Create session and profile if not exists
     const profile = (await res.json()) as Profile & {
         groups: Group[];
-    }
+    };
     const session = await prisma.session.create({
         data: {
             accessToken,
@@ -72,7 +72,7 @@ export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
                         zoneinfo: profile.zoneinfo,
                         uid: profile.uid,
                         gid: profile.gid,
-                        graduation_years: profile.graduation_years
+                        graduation_years: profile.graduation_years,
                     },
                 },
             },
@@ -88,7 +88,9 @@ export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
     });
 
     // Create/link groups to profile
-    log.debug(`Linking Groups: ${profile.groups.map((g) => g.name).join(", ")}`);
+    log.debug(
+        `Linking Groups: ${profile.groups.map((g) => g.name).join(", ")}`,
+    );
     for (const group of profile.groups) {
         await prisma.group.upsert({
             where: {
@@ -110,11 +112,10 @@ export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
                     connect: {
                         preferred_username: profile.preferred_username,
                     },
-                }
+                },
             },
         });
     }
-    
 
     cookies.set("session", btoa(session.id), {
         path: "/",
