@@ -28,9 +28,10 @@
                 </button>
             </div>
             <div class="flex-1">
-                <span class="btn btn-ghost text-xl">KrakAdmin</span>
+                <span class="btn btn-ghost text-base md:text-xl">KrakAdmin</span
+                >
             </div>
-            <div class="flex-none pr-4 gap-4">
+            <div class="flex-none pr-4 gap-4 text-sm md:text-base">
                 <p class="inline-flex gap-2">
                     logged in as <a
                         class="font-semibold"

@@ -64,6 +64,48 @@ export async function getLeaderboard(): Promise<Leaderboard> {
     return leaderboard;
 }
 
+export interface Reward {
+    id: number;
+    login: string;
+    activity?: number;
+    bonus: number;
+}
+export async function getRewards() {
+    if (!url) throw new Error('Could not find API_URL in environment variables');
+
+    url.pathname = '/items/rewards';
+    const res = await fetch(url);
+    const { data } = (await res.json()) as {
+        data: Reward[];
+    }
+    return data;
+}
+/**
+ * Create a new reward
+ * @param login 
+ * @param activity 
+ * @param bonus 
+ * @returns 
+ */
+export async function createReward(login: string, activity: number, bonus: number): Promise<Reward> {
+    if (!url) throw new Error('Could not find API_URL in environment variables');
+
+    url.pathname = '/items/rewards';
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            login,
+            activity,
+            bonus,
+        }),
+    });
+    const data = await res.json();
+    return data;
+}
+
 export interface Activity {
     id: number;
     name: string;

@@ -94,13 +94,14 @@ model TileInfo {
 
 // QR Codes Model
 model QRCode {
-  id        String    @id @default(uuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  isActive  Boolean   @default(true)
-  isDeleted Boolean   @default(false)
-  deletedAt DateTime?
-  usedBy    Profile[] @relation("UsedQRCode")
-  usedAt    DateTime?
-  maxUses   Int       @default(0) // 0 = unlimited
+  id         String    @id @default(uuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  isActive   Boolean   @default(true)
+  isDeleted  Boolean   @default(false)
+  deletedAt  DateTime?
+  usedBy     Profile[] @relation("UsedQRCode")
+  usedAt     DateTime?
+  maxUses    Int       @default(0) // 0 = unlimited
+  activityId Int
 }
