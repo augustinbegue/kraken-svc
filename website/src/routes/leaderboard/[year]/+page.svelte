@@ -1,11 +1,23 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import type { PageData } from "./$types";
+    import { page } from "$app/stores";
 
     export let data: PageData;
+    let entries: PageData["leaderboard"]["entries"] = [];
+
+    $: {
+        let year = $page.params.year;
+        entries = data.leaderboard.entries.filter((e) => {
+            console.log(e.profile.graduation_years, parseInt(year));
+
+            return e.profile.graduation_years.includes(parseInt(year));
+        });
+    }
 </script>
 
 <div class="flex flex-col">
-    {#each data.leaderboard.entries as entry, i}
+    {#each entries as entry, i}
         <div
             class="grid grid-rows-1 grid-cols-12 p-4 rounded-sm gap-2"
             class:bg-base-300={i % 2 !== 0}

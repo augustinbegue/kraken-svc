@@ -1,14 +1,46 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
+    import { page } from "$app/stores";
     import { ArrowBigLeft } from "lucide-svelte";
+    import { onMount } from "svelte";
 
     let tabs = [
-        { name: "Overall", active: true },
+        { name: "Overall", active: false },
         { name: "2028", active: false },
         { name: "2027", active: false },
         { name: "2026", active: false },
         { name: "2025", active: false },
         { name: "2024", active: false },
     ];
+
+    function gotoTab(name: string) {
+        if (name === "Overall") {
+            goto("/leaderboard");
+            return;
+        }
+
+        goto(`/leaderboard/${name}`);
+    }
+
+    onMount(() => {
+        console.log($page.url.pathname);
+
+        let overall = $page.url.pathname === "/leaderboard";
+
+        if (overall) {
+            tabs = tabs.map((t) => {
+                t.active = t.name === "Overall";
+                return t;
+            });
+
+            return;
+        } else {
+            tabs = tabs.map((t) => {
+                t.active = $page.url.pathname.includes(t.name);
+                return t;
+            });
+        }
+    });
 </script>
 
 <div class="navbar bg-base-100">
@@ -21,7 +53,10 @@
 
 <div class="flex flex-col bg-base-200 container mx-auto p-4">
     <h1 class="text-3xl font-bold">Leaderboard</h1>
-    <div role="tablist" class="tabs tabs-boxed hidden md:grid">
+    <div
+        role="tablist"
+        class="tabs tabs-boxed hidden md:grid mt-4 bg-base-300 p-2 my-2"
+    >
         {#each tabs as tab}
             <button
                 role="tab"
@@ -32,6 +67,8 @@
                         t.active = t.name === tab.name;
                         return t;
                     });
+
+                    gotoTab(tab.name);
                 }}
             >
                 {tab.name}
@@ -46,6 +83,8 @@
                 t.active = t.name === e.currentTarget.value;
                 return t;
             });
+
+            gotoTab(e.currentTarget.value);
         }}
     >
         {#each tabs as tab}

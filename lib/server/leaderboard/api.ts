@@ -1,4 +1,5 @@
 import { env } from '$env/dynamic/private';
+import { prisma } from '$lib/server/db/prisma';
 import type { Profile } from '@prisma/client';
 import NodeCache from 'node-cache';
 
@@ -15,18 +16,45 @@ export interface Leaderboard {
 }
 const LeaderboardCacheName = 'leaderboard';
 const LeaderboardTTL = 60;
-export async function getLeaderboard() {
+export async function getLeaderboard(): Promise<Leaderboard> {
     if (!host) throw new Error('Could not find API_URL in environment variables');
 
     const cached = cache.get(LeaderboardCacheName);
-    if (cached) return cached;
+    if (cached) return cached as Leaderboard;
 
     const res = await fetch(`${host}/leaderboard`);
-    const data = await res.json();
+    const data = (await res.json()) as {
+        login: string,
+        points: number
+    }[];
 
-    cache.set(LeaderboardCacheName, data, LeaderboardTTL);
+    const logins = data.map((entry) => entry.login);
+    const profiles = await prisma.profile.findMany({
+        where: {
+            preferred_username: {
+                in: logins,
+            },
+        },
+    });
 
-    return data;
+    let entries = data.map((entry) => {
+        const profile = profiles.find((profile) => profile.preferred_username === entry.login);
+        return {
+            profile,
+            points: entry.points,
+        };
+    });
+
+    entries = entries.filter((entry) => !!entry.profile);
+
+    const leaderboard = {
+        entries: entries.sort((a, b) => b.points - a.points) as LeaderboardEntry[],
+        total: entries.length,
+    };
+
+    cache.set(LeaderboardCacheName, leaderboard, LeaderboardTTL);
+
+    return leaderboard;
 }
 
 export interface Activity {
