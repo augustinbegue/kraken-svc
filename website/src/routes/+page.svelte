@@ -86,15 +86,15 @@
     ];
 </script>
 
-<div class="hero h-full bg-base-200">
+<div class="hero h-full bg-base-100">
     <div class="hero-content flex-col lg:flex-row">
         <img
-            src="assets/redacted.png"
-            alt="redacted"
-            class="sm:max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg"
+            src="assets/kraken.png"
+            alt="kraken"
+            class="max-w-xs lg:max-w-sm xl:max-w-md"
         />
         <div class="">
-            <h1 class="text-4xl font-bold">Liste Redacted</h1>
+            <h1 class="text-4xl font-bold">Liste Kraken</h1>
             <div
                 class="flex flex-row justify-center lg:justify-start gap-4 mt-4"
             >
@@ -109,7 +109,7 @@
 </div>
 <div class="container mx-auto px-4 pt-4">
     <h1 class="widget-title mb-4">Top des promos</h1>
-    <div class="stats shadow w-full bg-base-200">
+    <div class="stats shadow w-full bg-base-100">
         {#each leaderboardByYear.sort((a, b) => {
             return b.points - a.points;
         }) as entry, i}
@@ -117,9 +117,9 @@
                 <div class="stat-title text-xl">{entry.year}</div>
                 <div
                     class="stat-value"
-                    class:text-yellow-300={i === 0}
-                    class:text-gray-400={i === 1}
-                    class:text-orange-700={i === 2}
+                    class:text-accent={i === 0}
+                    class:text-secondary={i === 1}
+                    class:text-primary={i === 2}
                 >
                     {entry.points} <span class="text-base">pts</span>
                 </div>
@@ -133,7 +133,7 @@
 >
     <div class="flex flex-col gap-4">
         <div class="widget-title">Status</div>
-        <div class="card shadow-xl bg-base-200">
+        <div class="card shadow-xl bg-base-100">
             <div class="card-body">
                 {#if data.profile}
                     <p>Signed in as {data.profile.nickname}</p>
@@ -158,7 +158,7 @@
             </div>
         </div>
         <div class="widget-title">Events</div>
-        <div class="card shadow-xl bg-base-200">
+        <div class="card shadow-xl bg-base-100">
             <div class="card-body">
                 <div class="flex flex-row overflow-hidden">
                     <div
@@ -208,7 +208,7 @@
             </div>
         </div>
         <div class="widget-title">Leaderboard</div>
-        <div class="card shadow-xl bg-base-200">
+        <div class="card shadow-xl bg-base-100">
             <div class="card-body">
                 <div class="flex flex-col">
                     {#each leaderboardByProfile as profile, i}
@@ -238,7 +238,7 @@
     <div class="flex flex-col gap-4">
         <div class="widget-title">KrakPlace</div>
         <div
-            class="card shadow-xl bg-base-200 cursor-pointer"
+            class="card shadow-xl bg-base-100 cursor-pointer"
             on:click={(e) => {
                 e.preventDefault();
                 goto("/place");

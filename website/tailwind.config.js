@@ -8,10 +8,13 @@ export default {
   daisyui: {
     themes: [{
       dark: {
-        ...require("daisyui/src/theming/themes")["black"],
-        primary: "#ceb594",
-        secondary: "#ffb511",
-        accent: "#bb1e3a"
+        ...require("daisyui/src/theming/themes")["business"],
+        primary: "#60F7F2",
+        secondary: "#9955FF",
+        accent: "#C9B295",
+        neutral: "#2D3748",
+        "base-100": "#0C2649",
+        error: "#E35E39"
       }
     }],
   }
