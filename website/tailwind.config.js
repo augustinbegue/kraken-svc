@@ -15,8 +15,10 @@ export default {
         neutral: "#2D3748",
         "base-100": "#0C2649",
         error: "#E35E39"
-      }
-    }],
+      },
+    },
+      "dim"
+    ],
   }
 }
 
