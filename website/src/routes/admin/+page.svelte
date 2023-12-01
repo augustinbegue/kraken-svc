@@ -1,5 +1,11 @@
 <script lang="ts">
+    import { browser } from "$app/environment";
     import { goto } from "$app/navigation";
+    import { onMount } from "svelte";
 
-    goto("/admin/leaderboard/points");
+    onMount(() => {
+        if (browser) {
+            goto("/admin/leaderboard/points");
+        }
+    });
 </script>

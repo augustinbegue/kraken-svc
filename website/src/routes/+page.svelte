@@ -89,12 +89,12 @@
 <div class="hero h-full bg-base-200">
     <div class="hero-content flex-col lg:flex-row">
         <img
-            src="assets/kraken.png"
-            alt="kraken"
+            src="assets/redacted.png"
+            alt="redacted"
             class="sm:max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg"
         />
         <div class="">
-            <h1 class="text-4xl font-bold">Liste Kraken</h1>
+            <h1 class="text-4xl font-bold">Liste Redacted</h1>
             <div
                 class="flex flex-row justify-center lg:justify-start gap-4 mt-4"
             >
