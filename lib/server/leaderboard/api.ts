@@ -4,6 +4,7 @@ import type { Profile } from '@prisma/client';
 import NodeCache from 'node-cache';
 
 const host = env.API_URL;
+const token = env.API_TOKEN;
 const cache = new NodeCache();
 
 export interface LeaderboardEntry {
@@ -65,8 +66,16 @@ export interface Activity {
 }
 export async function getActivities() {
     if (!host) throw new Error('Could not find API_URL in environment variables');
+    if (!token) throw new Error('Could not find API_TOKEN in environment variables');
 
-    const res = await fetch(`${host}/items/activity`);
+    const res = await fetch(`${host}/items/activity`,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token,
+            }
+        }
+    );
     const { data } = (await res.json()) as {
         data: Activity[];
     }
@@ -81,11 +90,13 @@ export async function getActivities() {
  */
 export async function createActivity(name: string, category: number, points: number): Promise<Activity> {
     if (!host) throw new Error('Could not find API_URL in environment variables');
+    if (!token) throw new Error('Could not find API_TOKEN in environment variables');
 
     const res = await fetch(`${host}/items/activity`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
         },
         body: JSON.stringify({
             name,
@@ -103,8 +114,15 @@ export interface Category {
 }
 export async function getCategories() {
     if (!host) throw new Error('Could not find API_URL in environment variables');
+    if (!token) throw new Error('Could not find API_TOKEN in environment variables');
 
-    const res = await fetch(`${host}/items/category`);
+    const res = await fetch(`${host}/items/category`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+        },
+    });
     const { data } = (await res.json()) as {
         data: Category[];
     }
@@ -117,11 +135,13 @@ export async function getCategories() {
  */
 export async function createCategory(name: string): Promise<Category> {
     if (!host) throw new Error('Could not find API_URL in environment variables');
+    if (!token) throw new Error('Could not find API_TOKEN in environment variables');
 
     const res = await fetch(`${host}/items/category`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
         },
         body: JSON.stringify({
             name,

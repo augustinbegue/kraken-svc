@@ -13,7 +13,7 @@
     }
 </script>
 
-<div class="navbar bg-base-100">
+<div class="navbar bg-base-200">
     <div class="flex-none">
         <button
             class="btn btn-square btn-ghost md:hidden"
@@ -32,7 +32,7 @@
 
 {#if menuOpen}
     <ul
-        class="menu bg-base-200 h-screen w-max absolute top-0 whitespace-nowrap md:hidden"
+        class="menu bg-base-100 h-screen w-screen absolute top-0 whitespace-nowrap md:hidden"
         transition:slide={{ axis: "x" }}
     >
         <button class="btn btn-ghost w-min" on:click={() => (menuOpen = false)}>
