@@ -3,8 +3,9 @@ import { prisma } from '$lib/server/db/prisma';
 import type { Profile } from '@prisma/client';
 import NodeCache from 'node-cache';
 
-const host = env.API_URL;
-const token = env.API_TOKEN;
+const url = new URL(env.API_URL);
+url.searchParams.append('access_token', env.API_TOKEN);
+
 const cache = new NodeCache();
 
 export interface LeaderboardEntry {
@@ -18,18 +19,21 @@ export interface Leaderboard {
 const LeaderboardCacheName = 'leaderboard';
 const LeaderboardTTL = 60;
 export async function getLeaderboard(): Promise<Leaderboard> {
-    if (!host) throw new Error('Could not find API_URL in environment variables');
+    if (!url) throw new Error('Could not find API_URL in environment variables');
 
     const cached = cache.get(LeaderboardCacheName);
     if (cached) return cached as Leaderboard;
 
-    const res = await fetch(`${host}/leaderboard`);
+    url.pathname = '/leaderboard';
+    const res = await fetch(url.toString());
+
     const data = (await res.json()) as {
         login: string,
-        points: number
+        total_points: number
     }[];
 
-    const logins = data.map((entry) => entry.login);
+    // const logins = data.map((entry) => entry.login);
+    const logins = ['augustin.begue', 'valentin.uhlrich', 'mickael.bobovitch', 'arthur.goullet-de-rugy'];
     const profiles = await prisma.profile.findMany({
         where: {
             preferred_username: {
@@ -38,11 +42,13 @@ export async function getLeaderboard(): Promise<Leaderboard> {
         },
     });
 
-    let entries = data.map((entry) => {
-        const profile = profiles.find((profile) => profile.preferred_username === entry.login);
+
+    // TODO: REMOVE AFTER TESTING
+    let entries = data.map((entry, i) => {
+        const profile = profiles.find((profile) => profile.preferred_username === logins[i % logins.length]);
         return {
             profile,
-            points: entry.points,
+            points: entry.total_points,
         };
     });
 
@@ -65,17 +71,10 @@ export interface Activity {
     points: number;
 }
 export async function getActivities() {
-    if (!host) throw new Error('Could not find API_URL in environment variables');
-    if (!token) throw new Error('Could not find API_TOKEN in environment variables');
+    if (!url) throw new Error('Could not find API_URL in environment variables');
 
-    const res = await fetch(`${host}/items/activity`,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token,
-            }
-        }
-    );
+    url.pathname = '/items/activity';
+    const res = await fetch(url);
     const { data } = (await res.json()) as {
         data: Activity[];
     }
@@ -89,14 +88,13 @@ export async function getActivities() {
  * @returns 
  */
 export async function createActivity(name: string, category: number, points: number): Promise<Activity> {
-    if (!host) throw new Error('Could not find API_URL in environment variables');
-    if (!token) throw new Error('Could not find API_TOKEN in environment variables');
+    if (!url) throw new Error('Could not find API_URL in environment variables');
 
-    const res = await fetch(`${host}/items/activity`, {
+    url.pathname = '/items/activity';
+    const res = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
         },
         body: JSON.stringify({
             name,
@@ -113,14 +111,13 @@ export interface Category {
     name: string;
 }
 export async function getCategories() {
-    if (!host) throw new Error('Could not find API_URL in environment variables');
-    if (!token) throw new Error('Could not find API_TOKEN in environment variables');
+    if (!url) throw new Error('Could not find API_URL in environment variables');
 
-    const res = await fetch(`${host}/items/category`, {
+    url.pathname = '/items/category';
+    const res = await fetch(url, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
         },
     });
     const { data } = (await res.json()) as {
@@ -134,14 +131,13 @@ export async function getCategories() {
  * @returns 
  */
 export async function createCategory(name: string): Promise<Category> {
-    if (!host) throw new Error('Could not find API_URL in environment variables');
-    if (!token) throw new Error('Could not find API_TOKEN in environment variables');
+    if (!url) throw new Error('Could not find API_URL in environment variables');
 
-    const res = await fetch(`${host}/items/category`, {
+    url.pathname = '/items/category';
+    const res = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
         },
         body: JSON.stringify({
             name,
