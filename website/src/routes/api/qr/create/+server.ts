@@ -16,9 +16,6 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 
     const body = await request.json() as CreateQRBody;
 
-    console.log("body", body);
-
-
     if (body.maxUses === undefined || body.activityId === undefined || body.points === undefined) {
         throw error(400, "Missing required body parameters");
     }

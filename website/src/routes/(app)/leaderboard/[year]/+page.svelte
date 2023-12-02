@@ -9,8 +9,6 @@
     $: {
         let year = $page.params.year;
         entries = data.leaderboard.entries.filter((e) => {
-            console.log(e.profile.graduation_years, parseInt(year));
-
             return e.profile.graduation_years.includes(parseInt(year));
         });
     }

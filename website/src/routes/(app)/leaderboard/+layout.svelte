@@ -23,8 +23,6 @@
     }
 
     onMount(() => {
-        console.log($page.url.pathname);
-
         let overall = $page.url.pathname === "/leaderboard";
 
         if (overall) {
