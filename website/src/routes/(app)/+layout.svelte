@@ -7,7 +7,7 @@
 </script>
 
 <main class="min-h-screen flex flex-col">
-    {#if data.profile.roles.includes("ADMIN") || data.profile.roles.includes("STAFF")}
+    {#if hasRole(data.profile, "STAFF")}
         <div class="navbar bg-base-200">
             <div class="flex-1"></div>
             <div class="flex-none pr-4 gap-4">
