@@ -110,7 +110,7 @@
                         </span>
                     </p>
 
-                    <p>Points: {data.leaderboardEntry?.points}</p>
+                    <p>Points: {data.leaderboardEntry?.points ?? 0}</p>
 
                     <div class="card-actions">
                         <a class="btn btn-error" href="/accounts/logout">

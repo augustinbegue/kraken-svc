@@ -14,11 +14,15 @@ export const load: PageServerLoad = async ({ locals }) => {
         return;
     }
 
-    const leaderboardEntry = await getLeaderboardEntry(profile.preferred_username);
+    try {
+        const leaderboardEntry = await getLeaderboardEntry(profile.preferred_username);
 
-    return {
-        leaderboardEntry,
-    };
+        return {
+            leaderboardEntry,
+        };
+    } catch (error) {
+        return;
+    }
 };
 
 
