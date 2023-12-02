@@ -2,6 +2,8 @@
     import { goto } from "$app/navigation";
     import { ChevronLeft, ChevronRight } from "lucide-svelte";
     import type { PageData } from "./$types";
+    import type { LeaderboardEntry } from "$lib/server/leaderboard/api";
+    import { onMount } from "svelte";
 
     export let data: PageData;
 
@@ -42,48 +44,13 @@
             points: 316343,
         },
     ];
-    const leaderboardByProfile = [
-        {
-            login: "augustin.begue",
-            points: 2048,
-        },
-        {
-            login: "augustin.begue",
-            points: 2043,
-        },
-        {
-            login: "augustin.begue",
-            points: 1956,
-        },
-        {
-            login: "augustin.begue",
-            points: 1843,
-        },
-        {
-            login: "augustin.begue",
-            points: 1754,
-        },
-        {
-            login: "augustin.begue",
-            points: 1579,
-        },
-        {
-            login: "augustin.begue",
-            points: 1367,
-        },
-        {
-            login: "augustin.begue",
-            points: 1321,
-        },
-        {
-            login: "augustin.begue",
-            points: 1298,
-        },
-        {
-            login: "augustin.begue",
-            points: 1287,
-        },
-    ];
+    let leaderboardByProfile: LeaderboardEntry[] = [];
+
+    onMount(async () => {
+        const res = await fetch("/api/leaderboard?limit=10");
+        const data = await res.json();
+        leaderboardByProfile = data.entries;
+    });
 </script>
 
 <div class="hero h-full bg-base-100">
@@ -230,7 +197,7 @@
                                 {:else}
                                     {i + 1}.{" "}
                                 {/if}
-                                {profile.login}
+                                {profile.profile.preferred_username}
                             </div>
                             <div class="text-gray-400">
                                 {profile.points} pts

@@ -18,22 +18,29 @@ export interface Leaderboard {
 }
 const LeaderboardCacheName = 'leaderboard';
 const LeaderboardTTL = 60;
-export async function getLeaderboard(): Promise<Leaderboard> {
+export async function getLeaderboard(page?: number, limit?: number): Promise<Leaderboard> {
     if (!url) throw new Error('Could not find API_URL in environment variables');
 
-    const cached = cache.get(LeaderboardCacheName);
+    const cached = cache.get(`${LeaderboardCacheName}:${page}:${limit}`);
     if (cached) return cached as Leaderboard;
 
-    url.pathname = '/leaderboard';
-    const res = await fetch(url.toString());
+    let turl = new URL(url.toString());
+    turl.pathname = '/leaderboard';
+    if (page) {
+        if (!limit) turl.searchParams.append('limit', '100');
+        turl.searchParams.append('page', (page - 1).toString());
+    }
+    if (limit) turl.searchParams.append('limit', limit.toString());
+
+    const res = await fetch(turl.toString());
 
     const data = (await res.json()) as {
         login: string,
         total_points: number
     }[];
 
-    // const logins = data.map((entry) => entry.login);
-    const logins = ['augustin.begue', 'valentin.uhlrich', 'mickael.bobovitch', 'arthur.goullet-de-rugy'];
+    const logins = data.map((entry) => entry.login);
+    // const logins = ['augustin.begue', 'valentin.uhlrich', 'mickael.bobovitch', 'arthur.goullet-de-rugy'];
     const profiles = await prisma.profile.findMany({
         where: {
             preferred_username: {
@@ -43,9 +50,8 @@ export async function getLeaderboard(): Promise<Leaderboard> {
     });
 
 
-    // TODO: REMOVE AFTER TESTING
     let entries = data.map((entry, i) => {
-        const profile = profiles.find((profile) => profile.preferred_username === logins[i % logins.length]);
+        const profile = profiles.find((profile) => profile.preferred_username === entry.login);
         return {
             profile,
             points: entry.total_points,
@@ -102,7 +108,7 @@ export interface Reward {
 export async function getRewards() {
     if (!url) throw new Error('Could not find API_URL in environment variables');
 
-    url.pathname = '/items/reward';
+    url.pathname = '/items/rewards';
     const res = await fetch(url);
     const { data } = (await res.json()) as {
         data: Reward[];
