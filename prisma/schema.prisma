@@ -104,4 +104,5 @@ model QRCode {
   usedAt     DateTime?
   maxUses    Int       @default(0) // 0 = unlimited
   activityId Int
+  points     Int
 }

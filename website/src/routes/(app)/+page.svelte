@@ -136,7 +136,14 @@
         <div class="card shadow-xl bg-base-100">
             <div class="card-body">
                 {#if data.profile}
-                    <p>Signed in as {data.profile.nickname}</p>
+                    <p class="text-sm">
+                        Signed in as
+                        <span class="font-bold">
+                            {data.profile.nickname}
+                        </span>
+                    </p>
+
+                    <p>Points: {data.leaderboardEntry?.points}</p>
 
                     <div class="card-actions">
                         <a class="btn btn-error" href="/accounts/logout">

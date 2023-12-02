@@ -63,6 +63,35 @@ export async function getLeaderboard(): Promise<Leaderboard> {
 
     return leaderboard;
 }
+export async function getLeaderboardEntry(login: string): Promise<LeaderboardEntry> {
+    if (!url) throw new Error('Could not find API_URL in environment variables');
+
+    const cached = cache.get(`${LeaderboardCacheName}:${login}`);
+    if (cached) return cached as LeaderboardEntry;
+
+    url.pathname = `/leaderboard/user/${login}`;
+    const res = await fetch(url.toString());
+
+    const data = (await res.json()) as {
+        login: string,
+        total_points: number
+    };
+
+    const profile = await prisma.profile.findUnique({
+        where: {
+            preferred_username: login,
+        },
+    });
+
+    const leaderboardEntry = {
+        profile,
+        points: data.total_points,
+    };
+
+    cache.set(`${LeaderboardCacheName}:${login}`, leaderboardEntry, LeaderboardTTL);
+
+    return leaderboardEntry;
+}
 
 export interface Reward {
     id: number;
@@ -73,7 +102,7 @@ export interface Reward {
 export async function getRewards() {
     if (!url) throw new Error('Could not find API_URL in environment variables');
 
-    url.pathname = '/items/rewards';
+    url.pathname = '/items/reward';
     const res = await fetch(url);
     const { data } = (await res.json()) as {
         data: Reward[];
@@ -90,7 +119,9 @@ export async function getRewards() {
 export async function createReward(login: string, activity: number, bonus: number): Promise<Reward> {
     if (!url) throw new Error('Could not find API_URL in environment variables');
 
-    url.pathname = '/items/rewards';
+    console.log(url.searchParams.getAll('access_token'));
+
+    url.pathname = '/items/reward';
     const res = await fetch(url, {
         method: 'POST',
         headers: {

@@ -16,7 +16,7 @@
     }
 </script>
 
-<main class="min-h-screen flex flex-col" data-theme="dim">
+<main class="min-h-screen flex flex-col">
     <div class="grow bg-base-200">
         <div class="navbar bg-base-200">
             <div class="flex-none">
