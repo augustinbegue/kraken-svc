@@ -78,9 +78,6 @@ export async function getLeaderboardEntry(login: string): Promise<LeaderboardEnt
     url.pathname = `/leaderboard/user/${login}`;
     const res = await fetch(url.toString());
 
-    console.log(await res.text());
-
-
     const data = (await res.json()) as {
         login: string,
         total_points: number
