@@ -8,7 +8,7 @@
 
 <main class="min-h-screen flex flex-col">
     {#if hasRole(data.profile, "STAFF")}
-        <div class="navbar bg-base-200">
+        <div class="navbar bg-primary text-primary-content">
             <div class="flex-1"></div>
             <div class="flex-none pr-4 gap-4">
                 <p class="inline-flex gap-2">
@@ -26,11 +26,11 @@
         </div>
     {/if}
 
-    <div class="grow bg-base-200">
+    <div class="grow bg-base-100">
         <slot />
     </div>
 
-    <footer class="footer p-4 bg-base-300 text-base-content">
+    <footer class="footer p-4 bg-base-100 text-base-content">
         <aside>
             <p
                 class="uppercase font-semibold text-base-content text-opacity-50"

@@ -69,7 +69,7 @@
         @apply flex flex-row gap-4 absolute bottom-0 w-screen justify-center z-50;
     }
     .controls .palette {
-        @apply grid grid-rows-2 md:grid-rows-1 grid-flow-col gap-4 p-4 bg-base-200;
+        @apply grid grid-rows-2 md:grid-rows-1 grid-flow-col gap-4 p-4 bg-base-100;
     }
     .controls .palette .color {
         @apply w-4 h-4  text-xs md:text-lg md:w-8 md:h-8 rounded-full;

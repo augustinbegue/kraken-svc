@@ -52,7 +52,7 @@
         {#each leaderboard.entries as entry, i}
             <div
                 class="grid grid-rows-1 grid-cols-12 p-4 rounded-sm gap-2"
-                class:bg-base-300={i % 2 !== 0}
+                class:bg-base-100={i % 2 !== 0}
             >
                 <span class="inline-flex justify-end">
                     {#if (!pageNum || pageNum === "1") && i === 0}

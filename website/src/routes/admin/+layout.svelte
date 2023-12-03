@@ -17,8 +17,8 @@
 </script>
 
 <main class="min-h-screen flex flex-col">
-    <div class="grow bg-base-200">
-        <div class="navbar bg-base-200">
+    <div class="grow bg-base-100">
+        <div class="navbar bg-base-100">
             <div class="flex-none">
                 <button
                     class="btn btn-square btn-ghost md:hidden"
@@ -61,8 +61,8 @@
             </ul>
         {/if}
 
-        <div class="flex flex-row bg-base-200">
-            <ul class="menu hidden md:flex bg-base-200 w-max">
+        <div class="flex flex-row bg-base-100">
+            <ul class="menu hidden md:flex bg-base-100 w-max">
                 <AdminMenu />
             </ul>
             <div class="grow">
@@ -71,7 +71,7 @@
         </div>
     </div>
 
-    <footer class="footer p-4 bg-base-300 text-base-content">
+    <footer class="footer p-4 bg-base-100 text-base-content">
         <aside>
             <p
                 class="uppercase font-semibold text-base-content text-opacity-50"

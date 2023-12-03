@@ -49,11 +49,11 @@
     </div>
 </div>
 
-<div class="flex flex-col bg-base-200 container mx-auto p-4">
+<div class="flex flex-col bg-base-100 container mx-auto p-4">
     <h1 class="text-3xl font-bold">Leaderboard</h1>
     <div
         role="tablist"
-        class="tabs tabs-boxed hidden md:grid mt-4 bg-base-300 p-2 my-2"
+        class="tabs tabs-boxed hidden md:grid mt-4 bg-base-100 p-2 my-2"
     >
         {#each tabs as tab}
             <button

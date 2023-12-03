@@ -4,11 +4,11 @@
     export let event: Event;
 </script>
 
-<div class="card bg-base-100 shadow-xl">
+<div class="card bg-secondary shadow-xl">
     <div class="card-body">
         <h2 class="card-title">
             {event.name}
-            <div class="badge badge-secondary">
+            <div class="badge badge-base-100">
                 {event.location}
             </div>
         </h2>

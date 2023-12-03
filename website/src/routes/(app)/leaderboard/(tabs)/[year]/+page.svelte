@@ -28,8 +28,8 @@
 <div class="flex flex-col">
     {#each entries as entry, i}
         <div
-            class="grid grid-rows-1 grid-cols-12 p-4 rounded-sm gap-2"
-            class:bg-base-300={i % 2 !== 0}
+            class="grid grid-rows-1 grid-cols-12 p-4 rounded-xl gap-2"
+            class:neumorphic={i % 2 !== 0}
         >
             <span class="inline-flex justify-end">
                 {#if i === 0}
