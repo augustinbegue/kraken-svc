@@ -45,3 +45,13 @@
         Gérer les utilisateurs
     </a>
 </li>
+<li></li>
+<li class="menu-title">Autres</li>
+<li>
+    <a
+        href="/admin/events"
+        class:active={$page.url.pathname === "/admin/events"}
+    >
+        Gérer les évènements
+    </a>
+</li>

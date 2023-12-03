@@ -40,7 +40,6 @@ export async function getLeaderboard(page?: number, limit?: number): Promise<Lea
     }[];
 
     const logins = data.map((entry) => entry.login);
-    // const logins = ['augustin.begue', 'valentin.uhlrich', 'mickael.bobovitch', 'arthur.goullet-de-rugy'];
     const profiles = await prisma.profile.findMany({
         where: {
             preferred_username: {
@@ -48,7 +47,6 @@ export async function getLeaderboard(page?: number, limit?: number): Promise<Lea
             },
         },
     });
-
 
     let entries = data.map((entry, i) => {
         const profile = profiles.find((profile) => profile.preferred_username === entry.login);
@@ -69,7 +67,7 @@ export async function getLeaderboard(page?: number, limit?: number): Promise<Lea
 
     return leaderboard;
 }
-export async function getLeaderboardEntry(login: string): Promise<LeaderboardEntry> {
+export async function getLeaderboardEntry(login: string): Promise<LeaderboardEntry | null> {
     if (!url) throw new Error('Could not find API_URL in environment variables');
 
     const cached = cache.get(`${LeaderboardCacheName}:${login}`);
@@ -78,25 +76,30 @@ export async function getLeaderboardEntry(login: string): Promise<LeaderboardEnt
     url.pathname = `/leaderboard/user/${login}`;
     const res = await fetch(url.toString());
 
-    const data = (await res.json()) as {
-        login: string,
-        total_points: number
-    };
+    if (res.ok) {
+        const data = (await res.json()) as {
+            login: string,
+            total_points: number
+        };
 
-    const profile = await prisma.profile.findUnique({
-        where: {
-            preferred_username: login,
-        },
-    });
+        const profile = await prisma.profile.findUnique({
+            where: {
+                preferred_username: login,
+            },
+        });
 
-    const leaderboardEntry = {
-        profile,
-        points: data.total_points,
-    };
+        const leaderboardEntry = {
+            profile,
+            points: data.total_points,
+        };
 
-    cache.set(`${LeaderboardCacheName}:${login}`, leaderboardEntry, LeaderboardTTL);
+        cache.set(`${LeaderboardCacheName}:${login}`, leaderboardEntry, LeaderboardTTL);
 
-    return leaderboardEntry;
+        return leaderboardEntry;
+    }
+    else {
+        return null;
+    }
 }
 
 export interface Reward {
@@ -119,13 +122,11 @@ export async function getRewards() {
  * Create a new reward
  * @param login 
  * @param activity 
- * @param bonus 
+ * @param bonus_points 
  * @returns 
  */
-export async function createReward(login: string, activity: number, bonus: number): Promise<Reward> {
+export async function createReward(login: string, bonus_points: number, activity?: number): Promise<Reward> {
     if (!url) throw new Error('Could not find API_URL in environment variables');
-
-    console.log(url.searchParams.getAll('access_token'));
 
     url.pathname = '/items/reward';
     const res = await fetch(url, {
@@ -136,7 +137,7 @@ export async function createReward(login: string, activity: number, bonus: numbe
         body: JSON.stringify({
             login,
             activity,
-            bonus,
+            bonus_points,
         }),
     });
     const data = await res.json();

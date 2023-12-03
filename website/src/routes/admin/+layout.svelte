@@ -48,7 +48,7 @@
 
         {#if menuOpen}
             <ul
-                class="menu bg-base-100 h-screen w-screen absolute top-0 whitespace-nowrap md:hidden"
+                class="menu bg-base-100 h-screen w-screen absolute top-0 whitespace-nowrap md:hidden z-50"
                 transition:slide={{ axis: "x" }}
             >
                 <button

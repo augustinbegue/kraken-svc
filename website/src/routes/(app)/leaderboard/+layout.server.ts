@@ -15,10 +15,4 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 
         throw redirect(302, "/accounts/login/epita");
     }
-
-    const leaderboard = await getLeaderboard();
-
-    return {
-        leaderboard
-    };
 };

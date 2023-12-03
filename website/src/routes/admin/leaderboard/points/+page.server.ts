@@ -13,7 +13,9 @@ export const actions = {
             return { success: false, error: "Missing login or points" };
         }
 
-        await createReward(login, 0, points);
+        let res = await createReward(login, points);
+        console.log(res);
+
 
         return { success: true }
     },

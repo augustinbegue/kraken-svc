@@ -2,15 +2,26 @@
     import { onMount } from "svelte";
     import type { PageData } from "./$types";
     import { page } from "$app/stores";
+    import type {
+        Leaderboard,
+        LeaderboardEntry,
+    } from "$lib/server/leaderboard/api";
+    import { browser } from "$app/environment";
 
     export let data: PageData;
-    let entries: PageData["leaderboard"]["entries"] = [];
+    let entries: LeaderboardEntry[] = [];
 
     $: {
-        let year = $page.params.year;
-        entries = data.leaderboard.entries.filter((e) => {
-            return e.profile.graduation_years.includes(parseInt(year));
-        });
+        if (browser) {
+            fetchLeaderboard(parseInt($page.params.year));
+        }
+    }
+
+    async function fetchLeaderboard(year: number) {
+        const res = await fetch(`/api/leaderboard/${year}`);
+
+        const leaderboard = (await res.json()) as Leaderboard;
+        entries = leaderboard.entries;
     }
 </script>
 

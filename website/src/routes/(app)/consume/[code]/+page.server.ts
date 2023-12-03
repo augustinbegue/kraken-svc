@@ -47,7 +47,7 @@ export const load: PageServerLoad = async ({ locals, params, cookies, url }) => 
         throw error(403, "QR Code has already been used");
     }
 
-    let res = await createReward(locals.session.profile.preferred_username, qrCode.activityId, qrCode.points);
+    let res = await createReward(locals.session.profile.preferred_username, qrCode.points, qrCode.activityId);
 
     if ((res as any).errors?.length > 0) {
         throw error(500, (res as any).errors[0].message);
