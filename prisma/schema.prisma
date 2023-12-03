@@ -106,3 +106,18 @@ model QRCode {
   activityId Int
   points     Int
 }
+
+// Events Model
+model Event {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  isActive    Boolean   @default(true)
+  isDeleted   Boolean   @default(false)
+  deletedAt   DateTime?
+  name        String
+  description String
+  startTime   DateTime
+  endTime     DateTime
+  location    String
+}
