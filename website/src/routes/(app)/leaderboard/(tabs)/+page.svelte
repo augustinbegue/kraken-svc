@@ -1,21 +1,18 @@
 <script lang="ts">
     import { page } from "$app/stores";
     import { ChevronLeft, ChevronRight, Loader2 } from "lucide-svelte";
-    import type { PageData } from "./$types";
     import type { Leaderboard } from "$lib/server/leaderboard/api";
     import { onDestroy, onMount } from "svelte";
     import type { Unsubscriber } from "svelte/store";
 
-    export let data: PageData;
-
     const LIMIT = 100;
-    let pageNum = $page.url.searchParams.get("page");
+    let pageNum = parseInt($page.url.searchParams.get("page") ?? "1");
     let leaderboard: Leaderboard;
     async function fetchLeaderboard() {
         const url = new URL("/api/leaderboard", window.location.origin);
         url.searchParams.set("limit", LIMIT.toString());
         if (pageNum) {
-            url.searchParams.set("page", pageNum);
+            url.searchParams.set("page", pageNum.toString());
         }
 
         console.log(`Fetching leaderboard from ${url.toString()}`);
@@ -27,8 +24,9 @@
     let unsub: Unsubscriber;
     onMount(() => {
         unsub = page.subscribe((value) => {
-            if (value.url.searchParams.get("page") !== pageNum) {
-                pageNum = value.url.searchParams.get("page");
+            let newPage = parseInt(value.url.searchParams.get("page") ?? "1");
+            if (newPage !== pageNum) {
+                pageNum = newPage;
                 fetchLeaderboard();
             }
         });
@@ -48,11 +46,11 @@
                 class:bg-base-300={i % 2 !== 0}
             >
                 <span class="inline-flex justify-end">
-                    {#if (!pageNum || pageNum === "1") && i === 0}
+                    {#if (!pageNum || pageNum === 1) && i === 0}
                         🥇
-                    {:else if (!pageNum || pageNum === "1") && i === 1}
+                    {:else if (!pageNum || pageNum === 1) && i === 1}
                         🥈
-                    {:else if (!pageNum || pageNum === "1") && i === 2}
+                    {:else if (!pageNum || pageNum === 1) && i === 2}
                         🥉
                     {:else}
                         {LIMIT * (pageNum - 1) + i + 1}&nbsp;
@@ -75,17 +73,14 @@
             {#if pageNum > 1}
                 <a
                     class="btn btn-ghost"
-                    href={`?page=${(pageNum ? parseInt(pageNum) : 2) - 1}`}
+                    href={`?page=${(pageNum !== 1 ? pageNum : 2) - 1}`}
                 >
                     <ChevronLeft />
                 </a>
             {:else}
                 <div></div>
             {/if}
-            <a
-                class="btn btn-ghost"
-                href={`?page=${(pageNum ? parseInt(pageNum) : 1) + 1}`}
-            >
+            <a class="btn btn-ghost" href={`?page=${pageNum + 1}`}>
                 <ChevronRight />
             </a>
         </div>
