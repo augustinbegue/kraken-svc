@@ -2,16 +2,28 @@ import { isLoggedIn } from "$lib/accounts/utils";
 import type { Profile } from "@prisma/client";
 import type { PageServerLoad } from "./$types";
 import { getLeaderboard, getLeaderboardEntry } from "$lib/server/leaderboard/api";
+import { prisma } from "$lib/server/db/prisma";
 
 export const load: PageServerLoad = async ({ locals }) => {
+
+    const events = await prisma.event.findMany({
+        orderBy: {
+            startTime: "desc",
+        },
+    });
+
     if (!isLoggedIn(locals.session)) {
-        return;
+        return {
+            events,
+        }
     }
 
     const { profile } = locals.session as { profile: Profile };
 
     if (!profile) {
-        return;
+        return {
+            events,
+        }
     }
 
     try {
@@ -19,8 +31,11 @@ export const load: PageServerLoad = async ({ locals }) => {
 
         return {
             leaderboardEntry,
+            events,
         };
     } catch (error) {
-        return;
+        return {
+            events,
+        }
     }
 };

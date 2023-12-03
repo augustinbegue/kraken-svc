@@ -9,21 +9,12 @@
     import type { PageData } from "./$types";
     import type { LeaderboardEntry } from "$lib/server/leaderboard/api";
     import { onMount } from "svelte";
+    import type { Event } from "@prisma/client";
+    import EventDisplay from "$lib/components/EventDisplay.svelte";
 
     export let data: PageData;
 
-    const eventList = [
-        {
-            name: "Début de la campagne",
-            date: "2021-09-20T00:00:00.000Z",
-            description: "La campagne commence !",
-        },
-        {
-            name: "Fin de la campagne",
-            date: "2021-10-20T00:00:00.000Z",
-            description: "La campagne se termine !",
-        },
-    ];
+    const eventList: Event[] = data.events;
     let event = eventList[0];
     let eventI = 0;
 
@@ -136,54 +127,32 @@
 >
     <div class="flex flex-col gap-4">
         <div class="widget-title">Events</div>
-        <div class="card shadow-xl bg-base-100">
-            <div class="card-body">
-                <div class="flex flex-row overflow-hidden">
-                    <div
-                        class="flex flex-row gap-4 justify-between shrink-0 w-full"
-                    >
-                        <div class="flex flex-col">
-                            <div class="text-xl font-bold">
-                                {event.name}
-                            </div>
-                            <div class="text-gray-400">
-                                {event.description}
-                            </div>
-                        </div>
-                        <div class="text-gray-400">
-                            {new Date(event.date).toLocaleDateString()}
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-row w-full justify-between items-center">
-                    <button
-                        class="btn btn-ghost"
-                        disabled={eventList.length === 1 || eventI === 0}
-                        on:click={() => {
-                            eventI =
-                                (eventI - 1 + eventList.length) %
-                                eventList.length;
-                            event = eventList[eventI];
-                        }}
-                    >
-                        <ChevronLeft />
-                    </button>
-                    <span>
-                        {eventI + 1} / {eventList.length}
-                    </span>
-                    <button
-                        class="btn btn-ghost"
-                        disabled={eventList.length === 1 ||
-                            eventI === eventList.length - 1}
-                        on:click={() => {
-                            eventI = (eventI + 1) % eventList.length;
-                            event = eventList[eventI];
-                        }}
-                    >
-                        <ChevronRight />
-                    </button>
-                </div>
-            </div>
+        <EventDisplay {event}></EventDisplay>
+        <div class="flex flex-row w-full justify-between items-center">
+            <button
+                class="btn btn-ghost btn-sm"
+                disabled={eventList.length === 1 || eventI === 0}
+                on:click={() => {
+                    eventI = (eventI - 1 + eventList.length) % eventList.length;
+                    event = eventList[eventI];
+                }}
+            >
+                <ChevronLeft />
+            </button>
+            <span class="text-sm">
+                {eventI + 1} / {eventList.length}
+            </span>
+            <button
+                class="btn btn-ghost btn-sm"
+                disabled={eventList.length === 1 ||
+                    eventI === eventList.length - 1}
+                on:click={() => {
+                    eventI = (eventI + 1) % eventList.length;
+                    event = eventList[eventI];
+                }}
+            >
+                <ChevronRight />
+            </button>
         </div>
         <div class="widget-title">Leaderboard</div>
         <div class="card shadow-xl bg-base-100">
