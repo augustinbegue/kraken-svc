@@ -8,18 +8,14 @@ export default {
   daisyui: {
     themes: [{
       dark: {
-        ...require("daisyui/src/theming/themes")["retro"],
-        primary: "#0c2649",
-        "primary-content": "#ffffff",
+        ...require("daisyui/src/theming/themes")["black"],
+        primary: "#ceb594",
         secondary: "#9955FF",
         accent: "#60F7F2",
-        "base-100": "#ceb594",
-        "base-200": "#f4d6af",
-        "base-300": "#ffe4b6",
-        neutral: "#2D3748",
-        error: "#E35E39",
 
         "--rounded-box": "1rem",
+        "--rounded-btn": "1rem",
+        "--rounded-badge": "1rem",
       },
     },
       "dim"

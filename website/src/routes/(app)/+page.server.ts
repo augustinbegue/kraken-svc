@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
     const events = await prisma.event.findMany({
         orderBy: {
-            startTime: "desc",
+            startTime: "asc",
         },
     });
 

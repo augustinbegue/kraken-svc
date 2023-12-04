@@ -8,7 +8,7 @@
 
 <main class="min-h-screen flex flex-col">
     {#if hasRole(data.profile, "STAFF")}
-        <div class="navbar bg-primary text-primary-content">
+        <div class="navbar" class:bg-blue-950={$page.url.pathname === "/"}>
             <div class="flex-1"></div>
             <div class="flex-none pr-4 gap-4">
                 <p class="inline-flex gap-2">

@@ -61,7 +61,7 @@
             </ul>
         {/if}
 
-        <div class="flex flex-row bg-base-100">
+        <div class="flex flex-row bg-base-200">
             <ul class="menu hidden md:flex bg-base-100 w-max">
                 <AdminMenu />
             </ul>

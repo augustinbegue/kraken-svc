@@ -42,8 +42,8 @@
     {#if leaderboard}
         {#each leaderboard.entries as entry, i}
             <div
-                class="grid grid-rows-1 grid-cols-12 p-4 rounded-sm gap-2"
-                class:bg-base-200={i % 2 !== 0}
+                class="grid grid-rows-1 grid-cols-12 p-4 rounded-xl gap-2 from-base-200 via-base-100 to-base-200"
+                class:bg-gradient-to-r={i % 2 === 0}
             >
                 <span class="inline-flex justify-end">
                     {#if (!pageNum || pageNum === 1) && i === 0}
