@@ -1,7 +1,13 @@
+import { hasRole } from "$lib/accounts/utils";
 import { createActivity, createCategory, getActivities, getCategories } from "$lib/server/leaderboard/api";
+import { error } from "@sveltejs/kit";
 import type { Action, PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ }) => {
+export const load: PageServerLoad = async ({ locals }) => {
+    if (!hasRole(locals.session.profile, "ADMIN")) {
+        throw error(403, "Forbidden");
+    }
+
     const categories = await getCategories();
     const activities = await getActivities();
 

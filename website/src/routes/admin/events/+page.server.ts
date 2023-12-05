@@ -1,8 +1,14 @@
 import { prisma } from "$lib/server/db/prisma";
 import type { Event } from "@prisma/client";
 import type { Actions, PageServerLoad } from "./$types";
+import { hasRole } from "$lib/accounts/utils";
+import { error } from "@sveltejs/kit";
 
-export const load: PageServerLoad = async ({ request }) => {
+export const load: PageServerLoad = async ({ request, locals }) => {
+    if (!hasRole(locals.session.profile, "ADMIN")) {
+        throw error(403, "Forbidden");
+    }
+
     const events = await prisma.event.findMany({
         orderBy: {
             startTime: "desc",

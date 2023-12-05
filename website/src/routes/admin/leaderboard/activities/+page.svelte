@@ -56,7 +56,7 @@
     <div class="flex flex-col gap-2">
         {#each data.categories as category}
             <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-            <div tabindex="0" class="collapse bg-base-100">
+            <div tabindex="0" class="collapse bg-base-300">
                 <div class="collapse-title text-xl font-medium">
                     {category.name}
                 </div>

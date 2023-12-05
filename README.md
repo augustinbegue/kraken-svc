@@ -11,16 +11,26 @@ Transmits realtime info from the rplace and leaderboard.
 
 ## TODO
 
-# leaderboard
+### leaderboard
 
--   [] Create profile leaderboard
--   [] Create promo leaderboard
--   [] Show leaderboard on homepage: Promo display and profile top 10
+-   [x] Create profile leaderboard
+-   [x] Create promo leaderboard
+-   [x] Show leaderboard on homepage: Promo display and profile top 10
+-   [x] add points
+-   [] remove points
+-   [x] get sum of points for a group/year
+-   [x] get leaderboard for a group/year (paged)
+-   [x] get global leaderboard (paged)
 
-endpoints:
+### rplace
 
--   add points
--   remove points
--   get sum of points for a group/year
--   get leaderboard for a group/year (paged)
--   get global leaderboard (paged)
+-   [x] Create rplace
+-   [x] Add cooldown
+-   [] Add points when a user places a pixel
+-   [] Admin canvas editor (add/remove multiple pixels without cooldown)
+-   [] Confirm colors and size
+
+### accounts
+
+-   [] Cri login
+-   [] Add 10 points on first login
