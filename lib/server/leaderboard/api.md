@@ -76,3 +76,16 @@ Returns the new item
 GET /items/category
 
 Returns: all the category items
+
+## Create a category
+
+POST /items/category
+Body:
+
+-   name (required)
+
+```json
+{
+    "name": "name"
+}
+```

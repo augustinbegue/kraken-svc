@@ -6,7 +6,7 @@ export const actions = {
     add: async ({ request }) => {
         const data = await request.formData();
 
-        const login = data.get("login") as string;
+        const login = (data.get("login") as string).toLowerCase();
         const points = parseInt(data.get("points") as string);
 
         if (!login || !points) {
@@ -15,7 +15,6 @@ export const actions = {
 
         let res = await createReward(login, points);
         console.log(res);
-
 
         return { success: true }
     },
