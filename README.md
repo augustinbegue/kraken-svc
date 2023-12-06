@@ -32,5 +32,5 @@ Transmits realtime info from the rplace and leaderboard.
 
 ### accounts
 
--   [] Cri login
--   [] Add 10 points on first login
+-   [x] Cri login
+-   [x] Add 10 points on first login

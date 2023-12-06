@@ -4,6 +4,7 @@ import type { RequestHandler } from "./$types";
 import { prisma } from "$lib/server/db/prisma";
 import type { Group, Profile } from "@prisma/client";
 import { log } from "$lib/server/logger";
+import { createReward } from "$lib/server/leaderboard/api";
 
 export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
     const code = url.searchParams.get("code");
@@ -55,6 +56,25 @@ export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
     const profile = (await res.json()) as Profile & {
         groups: Group[];
     };
+
+    // Check if profile exists
+    const existing = await prisma.profile.findUnique({
+        where: {
+            preferred_username: profile.preferred_username,
+        },
+        include: {
+            groups: true,
+        },
+    });
+
+    // Check if account is active
+    if (existing) {
+        if (!existing.isActive || existing.isDeleted) {
+            throw error(403, "Account is not active");
+        }
+    }
+
+    // Create session & profile
     const session = await prisma.session.create({
         data: {
             accessToken,
@@ -86,6 +106,14 @@ export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
             },
         },
     });
+
+    if (!session) {
+        throw error(500, "Failed to create session");
+    }
+    // Add 10 points to a new profile
+    if (!existing) {
+        await createReward(profile.preferred_username, 10);
+    }
 
     // Create/link groups to profile
     log.debug(
