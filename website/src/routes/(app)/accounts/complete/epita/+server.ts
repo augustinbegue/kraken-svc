@@ -69,8 +69,20 @@ export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
 
     // Check if account is active
     if (existing) {
-        if (!existing.isActive || existing.isDeleted) {
+        if (!existing.isActive) {
             throw error(403, "Account is not active");
+        }
+
+        if (existing.isDeleted) {
+            await prisma.profile.update({
+                where: {
+                    preferred_username: profile.preferred_username,
+                },
+                data: {
+                    isDeleted: false,
+                    deletedAt: undefined,
+                },
+            });
         }
     }
 

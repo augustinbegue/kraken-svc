@@ -16,7 +16,7 @@ Transmits realtime info from the rplace and leaderboard.
 -   [x] Create profile leaderboard
 -   [x] Create promo leaderboard
 -   [x] Show leaderboard on homepage: Promo display and profile top 10
--   [x] add points
+-   [x] add points (STAFF)
 -   [] remove points
 -   [x] get sum of points for a group/year
 -   [x] get leaderboard for a group/year (paged)
@@ -27,10 +27,11 @@ Transmits realtime info from the rplace and leaderboard.
 -   [x] Create rplace
 -   [x] Add cooldown
 -   [] Add points when a user places a pixel
--   [] Admin canvas editor (add/remove multiple pixels without cooldown)
+-   [] Admin canvas editor (add/remove multiple pixels without cooldown) (ADMIN)
 -   [] Confirm colors and size
 
 ### accounts
 
 -   [x] Cri login
 -   [x] Add 10 points on first login
+-   [] Account management page (ADMIN)

@@ -37,14 +37,6 @@
         Editer le canvas
     </a>
 </li>
-<li>
-    <a
-        href="/admin/place/manage"
-        class:active={$page.url.pathname === "/admin/place/manage"}
-    >
-        Gérer les utilisateurs
-    </a>
-</li>
 <li></li>
 <li class="menu-title">Autres</li>
 <li>
@@ -53,5 +45,13 @@
         class:active={$page.url.pathname === "/admin/events"}
     >
         Gérer les évènements
+    </a>
+</li>
+<li>
+    <a
+        href="/admin/accounts"
+        class:active={$page.url.pathname === "/admin/accounts"}
+    >
+        Gérer les utilisateurs
     </a>
 </li>
