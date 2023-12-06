@@ -34,4 +34,4 @@ Transmits realtime info from the rplace and leaderboard.
 
 -   [x] Cri login
 -   [x] Add 10 points on first login
--   [] Account management page (ADMIN)
+-   [x] Account management page (ADMIN)

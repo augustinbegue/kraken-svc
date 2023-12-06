@@ -70,8 +70,8 @@ export async function getLeaderboard(page?: number, limit?: number): Promise<Lea
 export async function getLeaderboardEntry(login: string): Promise<LeaderboardEntry | null> {
     if (!url) throw new Error('Could not find API_URL in environment variables');
 
-    const cached = cache.get(`${LeaderboardCacheName}:${login}`);
-    if (cached) return cached as LeaderboardEntry;
+    // const cached = cache.get(`${LeaderboardCacheName}:${login}`);
+    // if (cached) return cached as LeaderboardEntry;
 
     url.pathname = `/leaderboard/user/${login}`;
     const res = await fetch(url.toString());
