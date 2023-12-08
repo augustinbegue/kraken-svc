@@ -5,7 +5,7 @@ export class PlaceCanvas {
     // Constants
     static TILE_SIZE = 16;
     static CANVAS_SIZE = 255;
-    static COOLDOWN = 1000; // 1 sec
+    static COOLDOWN = 60 * 1000; // 1 MIN
     static CANVAS_PALETTE = [
         "#6d001a",
         "#be0039",
@@ -125,8 +125,8 @@ export class PlaceCanvas {
     /*
      * Event Functions.
      */
-    onTileClick = (event: MouseEvent, x: number, y: number) => {};
-    onMove = (event: MouseEvent, dragging: boolean) => {};
+    onTileClick = (event: MouseEvent, x: number, y: number) => { };
+    onMove = (event: MouseEvent, dragging: boolean) => { };
 
     /*
      * Canvas Event Handlers.
