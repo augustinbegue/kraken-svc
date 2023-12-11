@@ -194,12 +194,14 @@
                 {#if data.profile}
                     <div class="flex flex-row justify-between w-full">
                         <p>
+                            {data.profile.preferred_username} -
                             <span class="font-bold">
                                 {data.leaderboardEntry?.points ?? 0}
                             </span>
                             points
                         </p>
-                        <p>
+                        <a href="/accounts/logout" class="underline">Logout</a>
+                        <!-- <p>
                             <a href="/forms/match" class="underline"
                                 >Questionnaire de Personalité</a
                             >
@@ -208,7 +210,7 @@
                             <a href="/forms/tierlist" class="underline"
                                 >Tierlist des Assos</a
                             >
-                        </p>
+                        </p> -->
                     </div>
                 {:else}
                     <div class="card-actions">
