@@ -192,25 +192,23 @@
         <div class="card bg-gradient-to-br from-base-200 to-base-300">
             <div class="card-body">
                 {#if data.profile}
-                    <p>
-                        Signed in as
-                        <span class="font-bold">
-                            {data.profile.nickname}
-                        </span>
-                    </p>
-                    <p>
-                        <span class="font-bold">
-                            {data.leaderboardEntry?.points ?? 0}
-                        </span>
-                        pts
-                    </p>
-                    <div class="card-actions">
-                        <a
-                            class="btn btn-error btn-outline"
-                            href="/accounts/logout"
-                        >
-                            Logout
-                        </a>
+                    <div class="flex flex-row justify-between w-full">
+                        <p>
+                            <span class="font-bold">
+                                {data.leaderboardEntry?.points ?? 0}
+                            </span>
+                            points
+                        </p>
+                        <p>
+                            <a href="/forms/match" class="underline"
+                                >Questionnaire de Personalité</a
+                            >
+                        </p>
+                        <p>
+                            <a href="/forms/tierlist" class="underline"
+                                >Tierlist des Assos</a
+                            >
+                        </p>
                     </div>
                 {:else}
                     <div class="card-actions">

@@ -45,7 +45,7 @@
     <div class="flex flex-col items-center">
         <h1 class="text-2xl font-semibold">QR Code</h1>
         <p>Scanne ce QR Code pour obtenir tes points!</p>
-        <img src={qrDataUrl} alt="QR Code" class="max-w-5xl w-full p-4" />
+        <img src={qrDataUrl} alt="QR Code" class="max-w-lg w-full p-4" />
         <a class="text-sm underline" href={qrLink}>{qrLink}</a>
     </div>
 </Modal>
