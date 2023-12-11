@@ -11,6 +11,8 @@ Transmits realtime info from the rplace and leaderboard.
 
 ## TODO
 
+-   [] Add a favicon
+
 ### leaderboard
 
 -   [x] Create profile leaderboard
@@ -29,7 +31,7 @@ Transmits realtime info from the rplace and leaderboard.
 -   [x] Create rplace
 -   [x] Add cooldown
 -   [] Add points when a user places a pixel
--   [] Admin canvas editor (add/remove multiple pixels without cooldown) (ADMIN)
+-   [x] Admin canvas editor (add/remove multiple pixels without cooldown) (ADMIN)
 -   [] Confirm colors and size
 
 ### accounts

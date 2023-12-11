@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ locals, fetch }) => {
 
 export const actions: Action = {
     update: async ({ request, locals }) => {
-        if (hasRole(locals.session.profile, "STAFF")) {
+        if (!hasRole(locals.session.profile, "STAFF")) {
             throw error(403);
         }
 
