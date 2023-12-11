@@ -1,13 +1,13 @@
 <script lang="ts">
     import { page } from "$app/stores";
-    import { hasRole } from "$lib/accounts/utils";
+    import { hasRole, isLoggedIn } from "$lib/accounts/utils";
     import type { PageData } from "./$types";
 
     export let data: PageData;
 </script>
 
 <main class="min-h-screen flex flex-col">
-    {#if hasRole(data.profile, "STAFF")}
+    {#if data.profile}
         <div class="navbar" class:bg-blue-950={$page.url.pathname === "/"}>
             <div class="flex-1"></div>
             <div class="flex-none pr-4 gap-4">
@@ -21,7 +21,10 @@
                         {data.profile.preferred_username}
                     </a>
                 </p>
-                <a href="/admin" class="underline">KrakAdmin</a>
+                {#if hasRole(data.profile, "STAFF")}
+                    <a href="/admin" class="underline">KrakAdmin</a>
+                {/if}
+                <a href="/accounts/logout" class="underline">Logout</a>
             </div>
         </div>
     {/if}
