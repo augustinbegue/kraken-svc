@@ -21,6 +21,8 @@ Transmits realtime info from the rplace and leaderboard.
 -   [x] get sum of points for a group/year
 -   [x] get leaderboard for a group/year (paged)
 -   [x] get global leaderboard (paged)
+-   [] rewards history
+-   [] leaderboard evolution display
 
 ### rplace
 

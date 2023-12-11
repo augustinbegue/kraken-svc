@@ -5,7 +5,7 @@ export class PlaceCanvas {
     // Constants
     static TILE_SIZE = 16;
     static CANVAS_SIZE = 255;
-    static COOLDOWN = 60 * 1000; // 1 MIN
+    static COOLDOWN = 20 * 1000; // 20 SECS
     static CANVAS_PALETTE = [
         "#6d001a",
         "#be0039",
