@@ -45,53 +45,63 @@
 </button>
 
 <div
-    class="h-screen flex flex-row justify-center items-center"
+    class="h-screen flex flex-col justify-center items-center"
     bind:this={element}
 >
-    <div class="p-2">
-        <ChevronRight size="64"></ChevronRight>
-    </div>
-    <div class="flex flex-col justify-center">
-        <h1 class="text-6xl font-bold mb-8">Roue des défis</h1>
-        <div class="overflow-hidden h-[880px]">
+    <h1 class="text-8xl font-bold font-decorated my-16">
+        Roue des défis du Kraken
+    </h1>
+
+    <div class="flex flex-row justify-center items-center h-full">
+        <div class="p-2">
+            <ChevronRight size="64"></ChevronRight>
+        </div>
+        <div class="overflow-hidden h-[880px] rounded-full">
             <div bind:this={defisContainer} class="transition-all">
                 <div class="h-[400px]"></div>
                 {#each list as defi, i}
                     {@const color = colors[i % colors.length]}
                     <p
-                        class="font-bold text-4xl h-20 inline-flex text-center justify-center items-center w-full"
+                        class="font-bold text-4xl h-20 inline-flex text-center justify-center items-center w-full font-display"
                         class:text-white={color === "#000000"}
                         class:text-black={color !== "#000000"}
                         style="background-color: {color}"
                     >
-                        {defi}
+                        <span class="mb-2">
+                            {defi}
+                        </span>
                     </p>
                 {/each}
                 {#each list as defi, i}
                     {@const color = colors[i % colors.length]}
                     <p
-                        class="font-bold text-4xl h-20 inline-flex text-center justify-center items-center w-full"
+                        class="font-bold text-4xl h-20 inline-flex text-center justify-center items-center w-full font-display"
                         class:text-white={color === "#000000"}
                         class:text-black={color !== "#000000"}
                         style="background-color: {color}"
                     >
-                        {defi}
+                        <span class="mb-2">
+                            {defi}
+                        </span>
                     </p>
                 {/each}
                 <div class="h-[400px]"></div>
             </div>
         </div>
 
-        <div class="w-full flex flex-row justify-center mt-8">
-            <button
-                class="btn btn-primary btn-lg"
-                on:click={() => {
-                    roll();
-                }}>Lancer la roue !</button
-            >
+        <div class="p-2">
+            <ChevronLeft size="64"></ChevronLeft>
         </div>
     </div>
-    <div class="p-2">
-        <ChevronLeft size="64"></ChevronLeft>
+
+    <div class="w-full flex flex-row justify-center my-16">
+        <button
+            class="btn btn-primary btn-lg font-display text-3xl"
+            on:click={() => {
+                roll();
+            }}
+        >
+            <span class="mb-2"> Lancer la roue ! </span>
+        </button>
     </div>
 </div>

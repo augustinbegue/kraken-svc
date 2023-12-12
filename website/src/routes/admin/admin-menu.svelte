@@ -1,5 +1,6 @@
 <script>
     import { page } from "$app/stores";
+    import { ExternalLink } from "lucide-svelte";
 </script>
 
 <li class="menu-title">Leaderboard</li>
@@ -53,5 +54,8 @@
         class:active={$page.url.pathname === "/admin/accounts"}
     >
         Gérer les utilisateurs
+    </a>
+    <a href="/wheel" target="_blank">
+        <ExternalLink size="14" /> Roue des défis
     </a>
 </li>
