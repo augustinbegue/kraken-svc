@@ -26,10 +26,13 @@
     export let data: PageData;
 </script>
 
+<h1
+    class="text-6xl font-bold font-decorated text-center md:text-left container mx-auto mb-6"
+>
+    Tu Préfères ?&nbsp;&nbsp;Kraken Edition
+</h1>
+
 <div class="container mx-auto flex flex-col gap-2 max-w-md">
-    <h1 class="text-6xl font-bold font-decorated text-center md:text-left">
-        Tu Préfères ? Kraken Edition
-    </h1>
     <h2 class="text-xl font-medium text-center md:text-left">
         Répond aux questions et découvre de qui tu es le plus proche!
     </h2>

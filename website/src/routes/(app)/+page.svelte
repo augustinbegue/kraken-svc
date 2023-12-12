@@ -87,7 +87,7 @@
                     <Instagram />
                 </a>
                 <a
-                    href="https://discord.gg/v6hFZypaDQ"
+                    href="https://discord.gg/S4GUk3yhBX"
                     target="_blank"
                     class="btn btn-accent rounded-full h-14 w-14"
                 >
@@ -147,9 +147,9 @@
             <a href="/cards" class="btn md:btn-lg btn-accent">
                 Découvre les cartes pokemon
             </a>
-            <a class="btn md:btn-lg btn-secondary grow" href="/games/match"
-                >Tu Préfères ?</a
-            >
+            <a class="btn md:btn-lg btn-secondary grow" href="/games/match">
+                Tu Préfères ?
+            </a>
         </div>
         <h2 class="widget-title">Events</h2>
         <EventDisplay {event}></EventDisplay>
@@ -158,6 +158,7 @@
                 class="btn btn-ghost btn-sm"
                 disabled={eventList.length === 1 || eventI === 0}
                 on:click={() => {
+                    clearInterval(eventsInterval);
                     eventI = (eventI - 1 + eventList.length) % eventList.length;
                     event = eventList[eventI];
                 }}
@@ -172,6 +173,7 @@
                 disabled={eventList.length === 1 ||
                     eventI === eventList.length - 1}
                 on:click={() => {
+                    clearInterval(eventsInterval);
                     eventI = (eventI + 1) % eventList.length;
                     event = eventList[eventI];
                 }}
