@@ -11,7 +11,12 @@ Transmits realtime info from the rplace and leaderboard.
 
 ## TODO
 
--   [] Add a favicon
+-   [x] Add a favicon
+-   [] Add social links
+
+## TODO PROD
+
+-   [] Reset the database
 
 ### leaderboard
 
@@ -25,17 +30,29 @@ Transmits realtime info from the rplace and leaderboard.
 -   [x] get global leaderboard (paged)
 -   [] rewards history
 -   [] leaderboard evolution display
+-   [] add explaination for the leaderboard
 
 ### rplace
 
 -   [x] Create rplace
 -   [x] Add cooldown
--   [] Add points when a user places a pixel
+-   [x] Add points when a user places a pixel
 -   [x] Admin canvas editor (add/remove multiple pixels without cooldown) (ADMIN)
 -   [] Confirm colors and size
+-   [] add explaination for the rplace
 
 ### accounts
 
 -   [x] Cri login
 -   [x] Add 10 points on first login
 -   [x] Account management page (ADMIN)
+
+### to ask
+
+-   [] Implications du leaderboard (récompenses, communication dessus)
+-   [] Ajout de la page de programme (https://liste.bdekraken.fr/programme)
+-   [] @Arthur reinitaliser tout le monde à 0 points
+-   [] questions definitives + role du formulaire (https://liste.bdekraken.fr/forms/match)
+    -   Tu preferes, donc besoin des nouvelles questions
+    -   On garde le match et je cook un truc a moitié random pour associer a un membre du bureau
+-   [] confirmation supression tierlist
