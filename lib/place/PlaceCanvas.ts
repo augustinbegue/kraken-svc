@@ -100,6 +100,7 @@ export class PlaceCanvas {
             this.canvas.addEventListener(
                 "wheel",
                 this.handleMouseWheel.bind(this),
+                { passive: false }
             );
             this.canvas.addEventListener(
                 "mouseleave",
@@ -166,6 +167,8 @@ export class PlaceCanvas {
         this.onMove(e, this.dragging);
     }
     handleMouseWheel(e: WheelEvent) {
+        e.preventDefault();
+
         if (e.deltaY < 0) {
             this.zoomFactor *= 1.1;
         } else {
