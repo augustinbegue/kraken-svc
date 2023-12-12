@@ -4,7 +4,11 @@ import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals, cookies }) => {
     if (!isLoggedIn(locals.session)) {
-        throw redirect(300, "/accounts/login/epita");
+        cookies.set("redirect",
+            "/wheel",
+            { path: "/", httpOnly: false, sameSite: "lax" }
+        );
+        throw redirect(302, "/accounts/login/epita");
     };
 
     if (!hasRole(locals.session.profile, "STAFF")) {

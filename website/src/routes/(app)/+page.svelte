@@ -71,14 +71,16 @@
             class="max-w-xs lg:max-w-sm xl:max-w-md"
         />
         <div class="">
-            <h1 class="text-6xl font-bold font-decorated">
+            <h1
+                class="text-6xl font-bold font-decorated text-center md:text-left"
+            >
                 Le Retour du Kraken
             </h1>
             <div
                 class="flex flex-row justify-center lg:justify-start gap-4 mt-4"
             >
                 <a
-                    href=""
+                    href="https://www.instagram.com/kraken_liste_bde"
                     target="_blank"
                     class="btn btn-primary rounded-full h-14 w-14"
                 >
@@ -105,7 +107,7 @@
         </div>
     </div>
 </div>
-<div class="container mx-auto px-8 pt-4">
+<div class="container mx-auto px-4 pt-4">
     <a class="widget-title font-display" href="/leaderboard">
         Top des promos
     </a>
@@ -125,7 +127,7 @@
                 <div class="stat-title text-xl text-base-100">
                     {entry.year}
                 </div>
-                <div class="stat-value text-base-100">
+                <div class="stat-value text-base-100 text-3xl md:text-4xl">
                     {entry.points} <span>pts</span>
                 </div>
             </div>
@@ -133,9 +135,22 @@
     </div>
 </div>
 <div
-    class="container mx-auto grid grid-cols-1 md:grid-cols-2 grid-flow-row p-8 gap-8"
+    class="container mx-auto grid grid-cols-1 md:grid-cols-2 grid-flow-row p-4 gap-8"
 >
     <div class="flex flex-col gap-4">
+        <div class="flex flex-row font-display">
+            <a class="btn md:btn-lg btn-primary grow" href="/programme">
+                Lit le Programme
+            </a>
+        </div>
+        <div class="flex flex-row gap-4 font-display">
+            <a href="/cards" class="btn md:btn-lg btn-accent">
+                Découvre les cartes pokemon
+            </a>
+            <a class="btn md:btn-lg btn-secondary grow" href="/games/match"
+                >Tu Préfères ?</a
+            >
+        </div>
         <h2 class="widget-title">Events</h2>
         <EventDisplay {event}></EventDisplay>
         <div class="flex flex-row w-full justify-between items-center">
@@ -170,7 +185,7 @@
                 <div class="flex flex-col">
                     {#each leaderboardByProfile as profile, i}
                         <div class="flex flex-row justify-between">
-                            <div class="text-xl font-bold">
+                            <div class="md:text-xl font-bold">
                                 {#if i == 0}
                                     🥇
                                 {:else if i == 1}
@@ -197,57 +212,7 @@
                 </div>
             </div>
         </div>
-        <h2 class="widget-title">Instagram</h2>
-        <div class="card bg-gradient-to-br from-base-200 to-base-300">
-            <div class="card-body flex flex-row justify-center">
-                <!-- svelte-ignore a11y-missing-attribute -->
-                <iframe
-                    class="w-full"
-                    height="560"
-                    id="instagram-embed-1"
-                    src="https://www.instagram.com/tagueo/embed"
-                    allowtransparency={true}
-                    allowfullscreen={true}
-                    frameborder="0"
-                    data-instgrm-payload-id="instagram-media-payload-1"
-                    scrolling="no"
-                    style="background: white; max-width: 540px; width: calc(100% - 2px); border-radius: 3px; border: 1px solid rgb(219, 219, 219); box-shadow: none; display: block; margin: 0px 0px 12px; min-width: 326px; padding: 0px;"
-                ></iframe>
-            </div>
-        </div>
-    </div>
-    <div class="flex flex-col gap-4">
-        <a class="widget-title font-display" href="/place">KrakPlace</a>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <div
-            class="card shadow-xl bg-base-200 cursor-pointer p-0"
-            on:click={(e) => {
-                e.preventDefault();
-                goto("/place");
-            }}
-        >
-            <div class="card-body p-1">
-                <iframe
-                    class="aspect-square pointer-events-none"
-                    src="/place/embed"
-                    title="KrakPlace"
-                >
-                </iframe>
-            </div>
-        </div>
-
         <h2 class="widget-title">Infos</h2>
-
-        <div class="flex flex-row gap-2 font-display">
-            <a class="btn btn-lg btn-primary grow" href="/programme"
-                >Lire le Programme</a
-            >
-            <a class="btn btn-lg btn-secondary grow" href="/games/match"
-                >Tu Préfères ?</a
-            >
-        </div>
-
         <div class="card bg-gradient-to-br from-base-200 to-base-300">
             <div class="card-body">
                 {#if data.profile}
@@ -276,6 +241,50 @@
                         </a>
                     </div>
                 {/if}
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col gap-4">
+        <a class="widget-title font-display" href="/place">KrakPlace</a>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <div
+            class="card shadow-xl bg-base-200 cursor-pointer p-0"
+            on:click={(e) => {
+                e.preventDefault();
+                goto("/place");
+            }}
+        >
+            <div class="card-body p-1">
+                <iframe
+                    class="aspect-square pointer-events-none"
+                    src="/place/embed"
+                    title="KrakPlace"
+                >
+                </iframe>
+            </div>
+        </div>
+
+        <a
+            class="widget-title font-display"
+            target="_blank"
+            href="https://www.instagram.com/kraken_liste_bde">Instagram</a
+        >
+        <div class="card bg-gradient-to-br from-base-200 to-base-300">
+            <div class="card-body flex flex-row justify-center">
+                <!-- svelte-ignore a11y-missing-attribute -->
+                <iframe
+                    class="w-full"
+                    height="560"
+                    id="instagram-embed-1"
+                    src="https://www.instagram.com/kraken_liste_bde/embed"
+                    allowtransparency={true}
+                    allowfullscreen={true}
+                    frameborder="0"
+                    data-instgrm-payload-id="instagram-media-payload-1"
+                    scrolling="no"
+                    style="background: white; max-width: 540px; width: calc(100% - 2px); border-radius: 3px; border: 1px solid rgb(219, 219, 219); box-shadow: none; display: block; margin: 0px 0px 12px; min-width: 326px; padding: 0px;"
+                ></iframe>
             </div>
         </div>
     </div>

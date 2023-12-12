@@ -19,7 +19,7 @@
             </div>
             <div class="flex-none pr-4 gap-4">
                 <p class="inline-flex gap-2">
-                    logged in as <a
+                    <a
                         class="font-semibold"
                         href="https://cri.epita.fr/users/{data.profile
                             .preferred_username}"

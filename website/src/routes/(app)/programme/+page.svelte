@@ -2,9 +2,6 @@
     import { ArrowBigLeft } from "lucide-svelte";
 </script>
 
-<a class="btn btn-ghost m-4" href="/">
-    <ArrowBigLeft />
-</a>
 <div class="container mx-auto p-4">
     <!-- Table of Contents -->
     <div class="mb-8">
