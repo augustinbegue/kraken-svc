@@ -87,7 +87,7 @@
                     <Instagram />
                 </a>
                 <a
-                    href="https://discord.gg/S4GUk3yhBX"
+                    href="https://discord.gg/WH7S87WPN4"
                     target="_blank"
                     class="btn btn-accent rounded-full h-14 w-14"
                 >

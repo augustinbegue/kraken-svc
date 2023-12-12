@@ -2,7 +2,7 @@
     {
         "question": "Tu préfères manger à",
         "answers": [
-            "O'Zamzan",
+            "O'Zaman",
             "3 Broches",
             "Zara",
             "Constantinople"
@@ -21,6 +21,15 @@
         "answers": [
             "Python",
             "OCaml"
+        ]
+    },
+    {
+        "question": "Tu prends une douche tous les",
+        "answers": [
+            "Jours",
+            "Semaines",
+            "Mois",
+            "Une quoi ?"
         ]
     },
     {
@@ -65,102 +74,6 @@
         "answers": [
             "Unisson",
             "BDE"
-        ]
-    },
-    {
-        "question": "Quand t'as un creux, tu va chez",
-        "answers": [
-            "La Cave",
-            "VJN"
-        ]
-    },
-    {
-        "question": "Les meilleurs concerts, c'est",
-        "answers": [
-            "Soul Of Sound",
-            "Unplug"
-        ]
-    },
-    {
-        "question": "Tu préfères",
-        "answers": [
-            "Epichess",
-            "Epit'As"
-        ]
-    },
-    {
-        "question": "Tu préfères manger à",
-        "answers": [
-            "O'Zamzan",
-            "3 Broches",
-            "Zara",
-            "Constantinople"
-        ]
-    },
-    {
-        "question": "Tu préfères coder sur",
-        "answers": [
-            "VS Code",
-            "Vim",
-            "Bloc Note (je suis un malade mental)"
-        ]
-    },
-    {
-        "question": "Tu préfères le",
-        "answers": [
-            "Python",
-            "OCaml"
-        ]
-    },
-    {
-        "question": "Tu préfères le",
-        "answers": [
-            "C",
-            "C#"
-        ]
-    },
-    {
-        "question": "Tu préfères les",
-        "answers": [
-            "ACDC",
-            "ASM",
-            "YAKA",
-            "ACU"
-        ]
-    },
-    {
-        "question": "Tu fais tes courses à",
-        "answers": [
-            "Auchan",
-            "Liddl"
-        ]
-    },
-    {
-        "question": "Le meilleur prof c'est",
-        "answers": [
-            "Ternier",
-            "Nasko"
-        ]
-    },
-    {
-        "question": "A un afterwork, tu va remplir ton verre chez",
-        "answers": [
-            "La Paillote",
-            "Lateb"
-        ]
-    },
-    {
-        "question": "Le week-end, tu préfères aller en soirée",
-        "answers": [
-            "Unisson",
-            "BDE"
-        ]
-    },
-    {
-        "question": "Quand t'as un creux, tu va chez",
-        "answers": [
-            "La Cave",
-            "VJN"
         ]
     },
     {
@@ -179,6 +92,13 @@
             "Louis (Vice Président)",
             "Wassim (Vice Trésorier)",
             "Marius (Vice Secrétaire)"
+        ]
+    },
+    {
+        "question": "Tu va voter pour",
+        "answers": [
+            "Kraken",
+            "Kraken"
         ]
     }
 ]
