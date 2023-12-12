@@ -2,7 +2,7 @@
     import { ArrowBigLeft } from "lucide-svelte";
 </script>
 
-<a class="btn btn-ghost mx-4" href="/">
+<a class="btn btn-ghost m-4" href="/">
     <ArrowBigLeft />
 </a>
 <div class="container mx-auto p-4">
@@ -361,9 +361,9 @@
         <!-- Parties -->
         <section id="parties" class="mb-4">
             <h3 class="text-xl font-bold mb-2">4.3 Les soirées</h3>
-            Lors de notre mandat nous avons prévu d’organiser d’organiser 7 soirées
-            à l’Under afin de se constituer un fond de roulement solide afin de financer
-            une partie du gala que nous souhaiterions faire dans une salle de soirée
+            Lors de notre mandat nous avons prévu d’organiser 7 soirées à l’Under
+            afin de se constituer un fond de roulement solide afin de financer une
+            partie du gala que nous souhaiterions faire dans une salle de soirée
             parisienne. De plus ces soirées aideront à financer une partie du WEI
             afin de baisser les coûts pour l’école et surtout les étudiants. L’objectif
             étant de produire un bénéfice moyen de 2500 euros par soirée.
@@ -373,12 +373,12 @@
         <section id="afterworks" class="mb-4">
             <h3 class="text-xl font-bold mb-2">4.4 Les afterworks</h3>
             Lors de notre mandat nous souhaitons aussi organiser des afterwork. En
-            effet, la vie étudiante ne se résume pas qu’aux, nous avons aussi besoin
-            d’événements pour que les étudiants se rencontrent, rencontrent leurs
-            associations, ainsi que leur BDE. Ces moments seront pour nous des moments
-            de partage et d’échange respectueux avec nos étudiants afin de mieux
-            les connaître et avoir leurs retours sur les activités que nous leurs
-            organisons.
+            effet, la vie étudiante ne se résume pas qu’aux soirées, nous avons aussi
+            besoin d’événements pour que les étudiants se rencontrent, rencontrent
+            leurs associations, ainsi que leur BDE. Ces moments seront pour nous
+            des moments de partage et d’échange respectueux avec nos étudiants afin
+            de mieux les connaître et avoir leurs retours sur les activités que nous
+            leurs organisons.
         </section>
 
         <!-- Promotion Pulls -->

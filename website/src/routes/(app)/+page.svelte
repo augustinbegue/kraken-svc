@@ -178,6 +178,24 @@
                 </div>
             </div>
         </div>
+        <div class="widget-title">Instagram</div>
+        <div class="card bg-gradient-to-br from-base-200 to-base-300">
+            <div class="card-body flex flex-row justify-center">
+                <!-- svelte-ignore a11y-missing-attribute -->
+                <iframe
+                    class="w-full"
+                    height="560"
+                    id="instagram-embed-1"
+                    src="https://www.instagram.com/tagueo/embed"
+                    allowtransparency={true}
+                    allowfullscreen={true}
+                    frameborder="0"
+                    data-instgrm-payload-id="instagram-media-payload-1"
+                    scrolling="no"
+                    style="background: white; max-width: 540px; width: calc(100% - 2px); border-radius: 3px; border: 1px solid rgb(219, 219, 219); box-shadow: none; display: block; margin: 0px 0px 12px; min-width: 326px; padding: 0px;"
+                ></iframe>
+            </div>
+        </div>
     </div>
     <div class="flex flex-col gap-4">
         <div class="widget-title">Status</div>
