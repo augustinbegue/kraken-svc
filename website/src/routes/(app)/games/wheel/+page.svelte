@@ -12,20 +12,25 @@
 
     let currentI = 0;
     let pxOffset = currentI * 80;
+    let fullOffset = list.length * 80;
     let defisContainer: HTMLDivElement;
-    function roll() {
-        let oldI = currentI;
-        currentI = Math.floor(Math.random() * list.length);
-        pxOffset = currentI * 80;
+    async function roll() {
+        // Reset to 1st list
+        pxOffset -= fullOffset;
+        defisContainer.style.transitionDuration = "0ms";
         defisContainer.style.transform = `translateY(-${pxOffset}px)`;
 
-        let deltaI = currentI > oldI ? currentI - oldI : oldI - currentI;
-        let duration = 1000 + deltaI * 100;
+        console.log("reset offset", pxOffset);
 
-        defisContainer.style.transitionDuration = `${Math.max(
-            1000,
-            duration,
-        )}ms`;
+        await new Promise((resolve) => setTimeout(resolve, 10));
+
+        currentI = Math.floor(Math.random() * list.length);
+        pxOffset = currentI * 80 + fullOffset;
+
+        console.log("new offset", pxOffset);
+
+        defisContainer.style.transitionDuration = `8000ms`;
+        defisContainer.style.transform = `translateY(-${pxOffset}px)`;
     }
 </script>
 
@@ -51,6 +56,17 @@
         <div class="overflow-hidden h-[880px]">
             <div bind:this={defisContainer} class="transition-all">
                 <div class="h-[400px]"></div>
+                {#each list as defi, i}
+                    {@const color = colors[i % colors.length]}
+                    <p
+                        class="font-bold text-4xl h-20 inline-flex text-center justify-center items-center w-full"
+                        class:text-white={color === "#000000"}
+                        class:text-black={color !== "#000000"}
+                        style="background-color: {color}"
+                    >
+                        {defi}
+                    </p>
+                {/each}
                 {#each list as defi, i}
                     {@const color = colors[i % colors.length]}
                     <p
