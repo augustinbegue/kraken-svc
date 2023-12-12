@@ -41,15 +41,7 @@
     });
 </script>
 
-<div class="navbar bg-base-100">
-    <div class="flex-none">
-        <a class="btn btn-square btn-ghost" href="/">
-            <ArrowBigLeft />
-        </a>
-    </div>
-</div>
-
-<div class="flex flex-col bg-base-100 container mx-auto p-4">
+<div class="flex flex-col container mx-auto p-4">
     <h1 class="text-6xl font-bold font-decorated">Leaderboard</h1>
     <div
         role="tablist"

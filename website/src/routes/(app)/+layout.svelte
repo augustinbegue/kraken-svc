@@ -1,6 +1,7 @@
 <script lang="ts">
     import { page } from "$app/stores";
     import { hasRole, isLoggedIn } from "$lib/accounts/utils";
+    import { ArrowBigLeft } from "lucide-svelte";
     import type { PageData } from "./$types";
 
     export let data: PageData;
@@ -9,7 +10,13 @@
 <main class="min-h-screen flex flex-col">
     {#if data.profile}
         <div class="navbar" class:bg-blue-950={$page.url.pathname === "/"}>
-            <div class="flex-1"></div>
+            <div class="flex-1">
+                {#if $page.url.pathname !== "/"}
+                    <button class="btn btn-ghost">
+                        <a href="/"><ArrowBigLeft /></a>
+                    </button>
+                {/if}
+            </div>
             <div class="flex-none pr-4 gap-4">
                 <p class="inline-flex gap-2">
                     logged in as <a

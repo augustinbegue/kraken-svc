@@ -130,10 +130,16 @@
     });
 </script>
 
-<div class="buttons">
-    <a class="btn btn-ghost" href="/">
+<div
+    class="flex flex-row gap-4 absolute top-0 w-screen justify-between items-center z-50 bg-base-100 opacity-40 p-2"
+>
+    <a class="btn btn-sm btn-ghost" href="/">
         <ArrowBigLeft />
     </a>
+
+    <p>
+        Logged in as {data.profile.preferred_username}
+    </p>
 </div>
 
 <div
@@ -219,11 +225,6 @@
         transition: transform 0.1s linear;
         image-rendering: pixelated;
     }
-
-    .buttons {
-        @apply flex flex-row gap-4 absolute top-0 w-screen justify-start z-50 p-4;
-    }
-
     .controls {
         @apply flex flex-row gap-4 absolute bottom-0 w-screen justify-center z-50;
     }

@@ -106,8 +106,12 @@
     </div>
 </div>
 <div class="container mx-auto px-8 pt-4">
-    <h2 class="widget-title mb-4">Top des promos</h2>
-    <div class="stats shadow w-full bg-gradient-to-r from-secondary to-accent">
+    <a class="widget-title font-display" href="/leaderboard">
+        Top des promos
+    </a>
+    <div
+        class="stats shadow w-full bg-gradient-to-r from-secondary to-accent mt-4"
+    >
         {#each leaderboardByYear.sort((a, b) => {
             return b.points - a.points;
         }) as entry, i}
@@ -160,7 +164,7 @@
                 <ChevronRight />
             </button>
         </div>
-        <h2 class="widget-title">Leaderboard</h2>
+        <a class="widget-title font-display" href="/leaderboard">Leaderboard</a>
         <div class="card bg-gradient-to-br from-base-200 to-base-300">
             <div class="card-body">
                 <div class="flex flex-col">
@@ -184,9 +188,12 @@
                         </div>
                         <div class="divider my-1"></div>
                     {/each}
-                    <a href="/leaderboard" class="btn btn-primary btn-outline"
-                        >Full Leaderboard</a
+                    <a
+                        href="/leaderboard"
+                        class="btn btn-primary btn-outline font-display"
                     >
+                        Leaderboard Complet
+                    </a>
                 </div>
             </div>
         </div>
@@ -210,49 +217,7 @@
         </div>
     </div>
     <div class="flex flex-col gap-4">
-        <h2 class="widget-title">Status</h2>
-        <div class="card bg-gradient-to-br from-base-200 to-base-300">
-            <div class="card-body">
-                {#if data.profile}
-                    <div class="flex flex-row justify-between w-full">
-                        <p>
-                            {data.profile.preferred_username} -
-                            <span class="font-bold">
-                                {data.leaderboardEntry?.points ?? 0}
-                            </span>
-                            points
-                        </p>
-                        <a href="/accounts/logout" class="underline">Logout</a>
-                        <!-- <p>
-                            <a href="/forms/match" class="underline"
-                                >Questionnaire de Personalité</a
-                            >
-                        </p>
-                        <p>
-                            <a href="/forms/tierlist" class="underline"
-                                >Tierlist des Assos</a
-                            >
-                        </p> -->
-                    </div>
-                {:else}
-                    <div class="card-actions">
-                        <a
-                            class="btn btn-primary btn-outline"
-                            href="/accounts/login/epita"
-                        >
-                            <img
-                                class="h-6"
-                                src="https://s3.cri.epita.fr/cri-intranet/img/logo.png"
-                                alt="forge id"
-                            />
-                            Login with Forge ID
-                        </a>
-                    </div>
-                {/if}
-            </div>
-        </div>
-
-        <h2 class="widget-title">KrakPlace</h2>
+        <a class="widget-title font-display" href="/place">KrakPlace</a>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <div
@@ -269,6 +234,48 @@
                     title="KrakPlace"
                 >
                 </iframe>
+            </div>
+        </div>
+
+        <h2 class="widget-title">Infos</h2>
+
+        <div class="flex flex-row gap-2 font-display">
+            <a class="btn btn-lg btn-primary grow" href="/programme"
+                >Lire le Programme</a
+            >
+            <a class="btn btn-lg btn-secondary grow" href="/games/match"
+                >Tu Préfères ?</a
+            >
+        </div>
+
+        <div class="card bg-gradient-to-br from-base-200 to-base-300">
+            <div class="card-body">
+                {#if data.profile}
+                    <div class="flex flex-row justify-between w-full">
+                        <p>
+                            {data.profile.preferred_username} -
+                            <span class="font-bold">
+                                {data.leaderboardEntry?.points ?? 0}
+                            </span>
+                            points
+                        </p>
+                        <a href="/accounts/logout" class="underline">Logout</a>
+                    </div>
+                {:else}
+                    <div class="card-actions">
+                        <a
+                            class="btn btn-primary btn-outline"
+                            href="/accounts/login/epita"
+                        >
+                            <img
+                                class="h-6"
+                                src="https://s3.cri.epita.fr/cri-intranet/img/logo.png"
+                                alt="forge id"
+                            />
+                            Login with Forge ID
+                        </a>
+                    </div>
+                {/if}
             </div>
         </div>
     </div>
