@@ -50,10 +50,10 @@
 </div>
 
 <div class="flex flex-col bg-base-100 container mx-auto p-4">
-    <h1 class="text-3xl font-bold">Leaderboard</h1>
+    <h1 class="text-6xl font-bold font-decorated">Leaderboard</h1>
     <div
         role="tablist"
-        class="tabs tabs-boxed hidden md:grid mt-4 bg-base-100 p-2 my-2"
+        class="tabs tabs-boxed hidden md:grid mt-4 bg-base-100 p-2 my-2 font-display tabs-lg"
     >
         {#each tabs as tab}
             <button

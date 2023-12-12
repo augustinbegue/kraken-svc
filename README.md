@@ -38,7 +38,7 @@ Transmits realtime info from the rplace and leaderboard.
 -   [x] Add cooldown
 -   [x] Add points when a user places a pixel
 -   [x] Admin canvas editor (add/remove multiple pixels without cooldown) (ADMIN)
--   [] Confirm colors and size
+-   [] handle zoom on mobile and with touchpad
 -   [] add explaination for the rplace
 
 ### accounts

@@ -2,6 +2,10 @@
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}', '../lib/**/*.{html,js,svelte,ts}'],
   theme: {
+    fontFamily: {
+      decorated: ['Adlery-Pro-Blockletter', 'sans-serif'],
+      display: ['Etna', 'sans-serif'],
+    },
     extend: {},
   },
   plugins: [require("daisyui")],

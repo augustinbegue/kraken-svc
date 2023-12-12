@@ -8,7 +8,7 @@
     } from "lucide-svelte";
     import type { PageData } from "./$types";
     import type { LeaderboardEntry } from "$lib/server/leaderboard/api";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import type { Event } from "@prisma/client";
     import EventDisplay from "$lib/components/EventDisplay.svelte";
 
@@ -42,6 +42,7 @@
     ];
     let leaderboardByProfile: LeaderboardEntry[] = [];
 
+    let eventsInterval: NodeJS.Timeout;
     onMount(async () => {
         const res2 = await fetch("/api/leaderboard/grouped");
         const data2 = await res2.json();
@@ -50,6 +51,15 @@
         const res = await fetch("/api/leaderboard?limit=10");
         const data = await res.json();
         leaderboardByProfile = data.entries;
+
+        eventsInterval = setInterval(() => {
+            eventI = (eventI + 1) % eventList.length;
+            event = eventList[eventI];
+        }, 10000);
+    });
+
+    onDestroy(() => {
+        clearInterval(eventsInterval);
     });
 </script>
 
@@ -61,7 +71,9 @@
             class="max-w-xs lg:max-w-sm xl:max-w-md"
         />
         <div class="">
-            <h1 class="text-4xl font-bold">Votez Kraken!</h1>
+            <h1 class="text-6xl font-bold font-decorated">
+                Le Retour du Kraken
+            </h1>
             <div
                 class="flex flex-row justify-center lg:justify-start gap-4 mt-4"
             >
@@ -94,7 +106,7 @@
     </div>
 </div>
 <div class="container mx-auto px-8 pt-4">
-    <h1 class="widget-title mb-4">Top des promos</h1>
+    <h2 class="widget-title mb-4">Top des promos</h2>
     <div class="stats shadow w-full bg-gradient-to-r from-secondary to-accent">
         {#each leaderboardByYear.sort((a, b) => {
             return b.points - a.points;
@@ -120,7 +132,7 @@
     class="container mx-auto grid grid-cols-1 md:grid-cols-2 grid-flow-row p-8 gap-8"
 >
     <div class="flex flex-col gap-4">
-        <div class="widget-title">Events</div>
+        <h2 class="widget-title">Events</h2>
         <EventDisplay {event}></EventDisplay>
         <div class="flex flex-row w-full justify-between items-center">
             <button
@@ -148,7 +160,7 @@
                 <ChevronRight />
             </button>
         </div>
-        <div class="widget-title">Leaderboard</div>
+        <h2 class="widget-title">Leaderboard</h2>
         <div class="card bg-gradient-to-br from-base-200 to-base-300">
             <div class="card-body">
                 <div class="flex flex-col">
@@ -178,7 +190,7 @@
                 </div>
             </div>
         </div>
-        <div class="widget-title">Instagram</div>
+        <h2 class="widget-title">Instagram</h2>
         <div class="card bg-gradient-to-br from-base-200 to-base-300">
             <div class="card-body flex flex-row justify-center">
                 <!-- svelte-ignore a11y-missing-attribute -->
@@ -198,7 +210,7 @@
         </div>
     </div>
     <div class="flex flex-col gap-4">
-        <div class="widget-title">Status</div>
+        <h2 class="widget-title">Status</h2>
         <div class="card bg-gradient-to-br from-base-200 to-base-300">
             <div class="card-body">
                 {#if data.profile}
@@ -240,7 +252,7 @@
             </div>
         </div>
 
-        <div class="widget-title">KrakPlace</div>
+        <h2 class="widget-title">KrakPlace</h2>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <div

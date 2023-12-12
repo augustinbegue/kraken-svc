@@ -6,9 +6,9 @@
 
 <div class="card bg-secondary shadow-xl">
     <div class="card-body">
-        <h2 class="card-title">
+        <h2 class="card-title text-2xl inline-flex items-baseline">
             {event.name}
-            <div class="badge badge-base-100">
+            <div class="badge badge-lg badge-base-100 font-display">
                 {event.location}
             </div>
         </h2>
@@ -18,6 +18,6 @@
             {event.endTime.toLocaleDateString()}
             {event.endTime.toLocaleTimeString()}
         </span>
-        <p>{@html event.description}</p>
+        <p class="text-lg">{@html event.description}</p>
     </div>
 </div>
