@@ -160,7 +160,7 @@
 ></div>
 
 {#if loadingState.length === 0}
-    {#if $interactionEnabled}
+    {#if false}
         <div class="controls" transition:slide>
             <div class="palette">
                 {#if showFullPalette}
