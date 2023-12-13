@@ -26,6 +26,10 @@
     export let data: PageData;
 </script>
 
+<svelte:head>
+    <title>Tu Préfères ? | Kraken</title>
+</svelte:head>
+
 <h1
     class="text-6xl font-bold font-decorated text-center md:text-left container mx-auto mb-6"
 >

@@ -1,8 +1,18 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import type { PageServerData } from "./$types";
+    import { goto } from "$app/navigation";
 
     export let data: PageServerData;
+
+    onMount(() => {
+        if (!data.qrCode) goto("/");
+    });
 </script>
+
+<svelte:head>
+    <title>QR Code | Kraken</title>
+</svelte:head>
 
 {#if data.qrCode}
     <div class="flex flex-col items-center max-w-lg mx-auto">

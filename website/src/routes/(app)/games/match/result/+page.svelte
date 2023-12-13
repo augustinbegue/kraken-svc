@@ -42,6 +42,10 @@
     });
 </script>
 
+<svelte:head>
+    <title>Tu Préfères ? | Kraken</title>
+</svelte:head>
+
 <div class="container mx-auto flex flex-col gap-2 max-w-md">
     <h1 class="text-6xl font-bold font-decorated text-center md:text-left">
         Tu Préfères ?&nbsp;&nbsp;Kraken Edition

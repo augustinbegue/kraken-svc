@@ -130,6 +130,10 @@
     });
 </script>
 
+<svelte:head>
+    <title>KrakPlace | Kraken</title>
+</svelte:head>
+
 <div
     class="flex flex-row gap-4 absolute top-0 w-screen justify-between items-center z-50 bg-base-100 opacity-40 p-2"
 >

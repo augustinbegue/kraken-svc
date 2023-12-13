@@ -2,7 +2,13 @@
     import { ArrowBigLeft } from "lucide-svelte";
 </script>
 
+<svelte:head>
+    <title>Programme | Kraken</title>
+</svelte:head>
+
 <div class="container mx-auto p-4">
+    <h1 class="text-8xl font-decorated">Le Programme</h1>
+
     <!-- Table of Contents -->
     <div class="mb-8">
         <h2 class="text-2xl font-bold mb-4">Table des matières</h2>

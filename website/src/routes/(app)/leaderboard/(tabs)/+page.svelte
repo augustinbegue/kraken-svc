@@ -38,6 +38,10 @@
     });
 </script>
 
+<svelte:head>
+    <title>Leaderboard | Kraken</title>
+</svelte:head>
+
 <div class="flex flex-col">
     {#if leaderboard}
         {#each leaderboard.entries as entry, i}

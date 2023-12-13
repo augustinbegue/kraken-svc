@@ -1,5 +1,9 @@
 <script lang="ts"></script>
 
+<svelte:head>
+    <title>Cartes Pokemon | Kraken</title>
+</svelte:head>
+
 <div class="p-4">
     <h1 class="text-6xl md:text-8xl font-decorated text-center md:text-left">
         Cartes Pokemon Kraken

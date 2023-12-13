@@ -63,6 +63,14 @@
     });
 </script>
 
+<svelte:head>
+    <title>Kraken | Liste BDE Epita</title>
+    <meta
+        name="description"
+        content="Le Retour du Kraken ! 🐙🏴‍☠️Votez Kraken pour votre prochain BDE Epita !"
+    />
+</svelte:head>
+
 <div class="hero bg-gradient-to-b from-blue-950 to-base-100 py-32">
     <div class="hero-content flex-col lg:flex-row">
         <img
