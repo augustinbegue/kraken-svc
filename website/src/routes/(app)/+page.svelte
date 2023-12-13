@@ -148,14 +148,14 @@
     <div class="flex flex-col gap-4">
         <div class="flex flex-row font-display">
             <a class="btn md:btn-lg btn-primary grow" href="/programme">
-                Lit le Programme
+                Lis le Programme
             </a>
         </div>
         <div class="flex flex-row gap-4 font-display">
-            <a href="/cards" class="btn md:btn-lg btn-accent">
-                Découvre les cartes pokemon
+            <a href="/cards" class="btn md:btn-lg btn-accent grow">
+                Cartes pokemon
             </a>
-            <a class="btn md:btn-lg btn-secondary grow" href="/games/match">
+            <a class="btn md:btn-lg btn-secondary" href="/games/match">
                 Tu Préfères ?
             </a>
         </div>
