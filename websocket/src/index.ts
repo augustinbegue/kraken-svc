@@ -30,8 +30,7 @@ app.ws("/*", {
 
         (ws as any).id = Math.random().toString(36).substring(2, 15);
         log.info(
-            `client connected (${(ws as any).id}) from ${
-                decoder.decode(ws.getRemoteAddressAsText()) || "unknown"
+            `client connected (${(ws as any).id}) from ${decoder.decode(ws.getRemoteAddressAsText()) || "unknown"
             }`,
         );
         ws.subscribe(SUBSCRIPTIONS_ENUM.PLACE);
@@ -40,41 +39,45 @@ app.ws("/*", {
         log.info(`client disconnected (${(ws as any).id})`);
     },
     message: async (ws, message, isBinary) => {
-        log.info(
-            `client message (${(ws as any).id}): ${decoder.decode(message)}`,
-        );
-
-        const messageObject = JSON.parse(decoder.decode(message)) as WSMessage;
-
-        if (messageObject.secret !== APP_SECRET) {
-            ws.send(JSON.stringify({ type: "error", message: "forbidden" }));
-            ws.close();
-            return;
-        }
-
-        // Place update
-        if (messageObject.type === "place.update") {
-            messageObject.secret = undefined;
-            const data = (messageObject as WSMessagePlaceUpdate).data;
-
-            // Update the database
-            await prisma.tile.update({
-                where: {
-                    i: data.i,
-                },
-                data: {
-                    color: data.color,
-                },
-            });
-
-            log.info(`place.update: ${JSON.stringify(data)}`);
-
-            // Send the update to all subscribers
-            ws.publish(
-                SUBSCRIPTIONS_ENUM.PLACE,
-                JSON.stringify(messageObject),
-                isBinary,
+        try {
+            log.info(
+                `client message (${(ws as any).id}): ${decoder.decode(message)}`,
             );
+
+            const messageObject = JSON.parse(decoder.decode(message)) as WSMessage;
+
+            if (messageObject.secret !== APP_SECRET) {
+                ws.send(JSON.stringify({ type: "error", message: "forbidden" }));
+                ws.close();
+                return;
+            }
+
+            // Place update
+            if (messageObject.type === "place.update") {
+                messageObject.secret = undefined;
+                const data = (messageObject as WSMessagePlaceUpdate).data;
+
+                // Update the database
+                await prisma.tile.update({
+                    where: {
+                        i: data.i,
+                    },
+                    data: {
+                        color: data.color,
+                    },
+                });
+
+                log.info(`place.update: ${JSON.stringify(data)}`);
+
+                // Send the update to all subscribers
+                ws.publish(
+                    SUBSCRIPTIONS_ENUM.PLACE,
+                    JSON.stringify(messageObject),
+                    isBinary,
+                );
+            }
+        } catch (error) {
+            log.error(error);
         }
     },
 }).listen(parseInt(PORT), (listenSocket) => {
