@@ -10,6 +10,7 @@
     import { dev } from "$app/environment";
     import type { ApiTileDrawBody } from "../api/place/tile/draw/+server";
     import { PlaceWebsocketHandler } from "$lib/websocket/PlaceWebsocketHandler";
+    import Modal from "$lib/components/Modal.svelte";
 
     export let data: PageData;
 
@@ -26,6 +27,9 @@
 
     // Websocket
     let wsHandler: PlaceWebsocketHandler;
+
+    // Rules
+    let rulesModal: Modal;
 
     // Cooldown
     let lastPlacedDate = data.placeProfile.lastPlaced.getTime();
@@ -118,6 +122,8 @@
         wsHandler = new PlaceWebsocketHandler(data.wsUrl, placeCanvas);
         wsHandler.onReady = () => {
             loadingState = "";
+
+            rulesModal.open();
         };
 
         computeCooldown();
@@ -223,7 +229,72 @@
 
 <canvas class="canvas" bind:this={canvas}> </canvas>
 
+<Modal bind:this={rulesModal}>
+    <div class="container mx-auto">
+        <h1 class="text-6xl font-decorated">KrakPlace</h1>
+        <p>Bienvenue sur le KrakPlace!</p>
+        <h2 class="text-xl">Les Règles</h2>
+        <p>
+            Pour pouvoir participer, tu dois prendre en compte ces quelques
+            règles:
+        </p>
+        <ul class="list-decimal ml-4">
+            <li>Chaque pixel placé te donne un point au Leaderboard.</li>
+            <li>
+                Tu n'as pas le droit de dessiner des choses offensives ou
+                obscènes.
+            </li>
+            <li>
+                L'utilisation de bot ou de tout autre moyen pour contourner les
+                modalités du jeu sont interdits.
+            </li>
+            <li>
+                La Liste Kraken se réserve le droit de restreindre l'accès au
+                site et de signaler les comptes ne respectant pas les règles
+                énoncés ci-dessus.
+            </li>
+            <li>
+                La Liste Kraken décline toute responsabilité concernant le
+                contenu présent sur cet espace. Toute personne participante
+                s'engage en tant qu'individu et non au nom de quelquonque entite
+                ou organisation.
+            </li>
+        </ul>
+        <h2 class="text-xl mt-2">Comment Jouer</h2>
+        <ul class="list-decimal ml-4">
+            <li>Zoom sur le canvas jusqu'a ce que la palette apparaisse.</li>
+            <li>
+                Tu peux séléctionner un pixel sur le canvas en maintenant le
+                clic gauche et en bougeant ta souris.
+            </li>
+            <li>
+                Choisis une couleur dans la palette et clique sur le pinceau
+                pour dessiner.
+            </li>
+            <li>
+                Tu peux aussi cliquer sur une case pour voir qui l'a modifé et
+                quand.
+            </li>
+            <li>
+                Si tu rencontre des problèmes, assure toi d'etre sur un
+                pc/laptop avec chrome.
+            </li>
+        </ul>
+        <button
+            class="btn btn-primary w-full mt-4"
+            on:click={() => {
+                rulesModal.close();
+            }}
+        >
+            Compris!
+        </button>
+    </div>
+</Modal>
+
 <style lang="postcss">
+    :root {
+        @apply bg-base-200;
+    }
     .canvas {
         @apply absolute top-0 left-0;
         transition: transform 0.1s linear;

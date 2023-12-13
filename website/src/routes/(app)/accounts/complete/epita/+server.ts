@@ -70,7 +70,7 @@ export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
     // Check if account is active
     if (existing) {
         if (!existing.isActive) {
-            throw error(403, "Account is not active");
+            throw error(403, "Account is disabled.");
         }
 
         if (existing.isDeleted) {
