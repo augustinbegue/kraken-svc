@@ -40,7 +40,7 @@ export class PlaceCanvas {
         "#d4d7d9",
         "#ffffff",
     ];
-    private MIN_SCALE = 0.3;
+    private MIN_SCALE = 0.2;
     private INTERACTION_SCALE = 0.5;
 
     public board: Tile[];
@@ -161,21 +161,34 @@ export class PlaceCanvas {
     handleMouseMove(e: MouseEvent) {
         this.moved = true;
         if (this.dragging) {
-            this.xTranslate += e.movementX;
-            this.yTranslate += e.movementY;
+            this.xTranslate += e.movementX * 2 / this.zoomFactor;
+            this.yTranslate += e.movementY * 2 / this.zoomFactor;
+
+            let screenCenterX = window.innerWidth / 2 - this.xTranslate;
+            let screenCenterY = window.innerHeight / 2 - this.yTranslate;
+            this.canvas.style.transformOrigin = `${screenCenterX}px ${screenCenterY}px`;
         }
         this.onMove(e, this.dragging);
     }
     handleMouseWheel(e: WheelEvent) {
         e.preventDefault();
 
+        let newZoomFactor = this.zoomFactor;
         if (e.deltaY < 0) {
-            this.zoomFactor *= 1.1;
+            newZoomFactor *= 1.1;
         } else {
-            this.zoomFactor /= 1.1;
+            newZoomFactor /= 1.1;
         }
 
-        this.zoomFactor = Math.max(this.MIN_SCALE, this.zoomFactor);
+        let screenCenterX = window.innerWidth / 2 - this.xTranslate;
+        let screenCenterY = window.innerHeight / 2 - this.yTranslate;
+        this.canvas.style.transformOrigin = `${screenCenterX}px ${screenCenterY}px`;
+
+        this.zoomFactor = Math.max(
+            this.MIN_SCALE,
+            newZoomFactor
+        );
+
 
         if (this.zoomFactor >= this.INTERACTION_SCALE) {
             this.boundCanvas();
