@@ -47,12 +47,14 @@
     });
 </script>
 
-<div class="flex flex-col">
+<div class="flex flex-col p-8 bg-primary">
     {#if leaderboard}
         {#each leaderboard.entries as entry, i}
             <div
-                class="grid grid-rows-1 grid-cols-12 p-4 rounded-sm gap-2"
-                class:bg-base-100={i % 2 !== 0}
+                class="grid grid-rows-1 grid-cols-12 p-4 rounded-xl gap-2 font-bold text-3xl font-display text-black"
+                style="text-shadow: 1px 0 #fff, -1px 0 #fff, 0 1px #fff, 0 -1px #fff,
+             1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;"
+                class:bg-gradient-to-r={i % 2 === 0}
             >
                 <span class="inline-flex justify-end">
                     {#if (!pageNum || pageNum === "1") && i === 0}
@@ -62,19 +64,19 @@
                     {:else if (!pageNum || pageNum === "1") && i === 2}
                         🥉
                     {:else}
-                        {LIMIT * (pageNum - 1) + i + 1}&nbsp;
+                        {i + 1}&nbsp;
                     {/if}
                 </span>
                 <span class="col-span-8 inline-flex items-baseline gap-2">
                     {entry.profile.preferred_username}
-                    <span class="opacity-50 text-xs">
+                    <span class="opacity-50">
                         {entry.profile.graduation_years}
                     </span>
                 </span>
                 <span class="inline-flex justify-end"> </span>
                 <span class="inline-flex justify-end col-span-2 items-baseline">
                     {entry.points}
-                    <span class="text-xs">&nbsp;pts</span>
+                    <span class="text-lg">&nbsp;pts</span>
                 </span>
             </div>
         {/each}
