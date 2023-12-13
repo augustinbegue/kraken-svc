@@ -79,6 +79,15 @@
         return (await res.json()) as TileInfo;
     }
 
+    const reopening = 1702580400000;
+    let countdown = reopening - Date.now();
+    $: hours = Math.floor(countdown / 1000 / 60 / 60);
+    $: minutes = Math.floor((countdown / 1000 / 60) % 60);
+    $: seconds = Math.floor((countdown / 1000) % 60);
+    const interval = setInterval(() => {
+        countdown = reopening - Date.now();
+    }, 1000);
+
     let loadingState = "Loading canvas...";
     onMount(async () => {
         document.getElementsByTagName("html")[0].style.overflow = "hidden";
@@ -133,6 +142,8 @@
         document.getElementsByTagName("html")[0].style.overflow = "auto";
         document.getElementsByTagName("body")[0].style.overflow = "auto";
         if (wsHandler) wsHandler.destroy();
+
+        clearInterval(interval);
     });
 </script>
 
@@ -160,7 +171,7 @@
 ></div>
 
 {#if loadingState.length === 0}
-    {#if false}
+    {#if countdown <= 0}
         <div class="controls" transition:slide>
             <div class="palette">
                 {#if showFullPalette}
@@ -231,63 +242,79 @@
 
 <Modal bind:this={rulesModal}>
     <div class="container mx-auto">
-        <h1 class="text-6xl font-decorated">KrakPlace</h1>
-        <p>Bienvenue sur le KrakPlace!</p>
-        <h2 class="text-xl">Les Règles</h2>
-        <p>
-            Pour pouvoir participer, tu dois prendre en compte ces quelques
-            règles:
-        </p>
-        <ul class="list-decimal ml-4">
-            <li>Chaque pixel placé te donne un point au Leaderboard.</li>
-            <li>
-                Tu n'as pas le droit de dessiner des choses offensives ou
-                obscènes.
-            </li>
-            <li>
-                L'utilisation de bot ou de tout autre moyen pour contourner les
-                modalités du jeu sont interdits.
-            </li>
-            <li>
-                La Liste Kraken se réserve le droit de restreindre l'accès au
-                site et de signaler les comptes ne respectant pas les règles
-                énoncés ci-dessus.
-            </li>
-            <li>
-                La Liste Kraken décline toute responsabilité concernant le
-                contenu présent sur cet espace. Toute personne participante
-                s'engage en tant qu'individu et non au nom de quelquonque entite
-                ou organisation.
-            </li>
-        </ul>
-        <h2 class="text-xl mt-2">Comment Jouer</h2>
-        <ul class="list-decimal ml-4">
-            <li>Zoom sur le canvas jusqu'a ce que la palette apparaisse.</li>
-            <li>
-                Tu peux séléctionner un pixel sur le canvas en maintenant le
-                clic gauche et en bougeant ta souris.
-            </li>
-            <li>
-                Choisis une couleur dans la palette et clique sur le pinceau
-                pour dessiner.
-            </li>
-            <li>
-                Tu peux aussi cliquer sur une case pour voir qui l'a modifé et
-                quand.
-            </li>
-            <li>
-                Si tu rencontre des problèmes, assure toi d'etre sur un
-                pc/laptop avec chrome.
-            </li>
-        </ul>
-        <button
-            class="btn btn-primary w-full mt-4"
-            on:click={() => {
-                rulesModal.close();
-            }}
-        >
-            Compris!
-        </button>
+        {#if countdown <= 0}
+            <h1 class="text-6xl font-decorated">KrakPlace</h1>
+            <p>Bienvenue sur le KrakPlace!</p>
+            <h2 class="text-xl">Les Règles</h2>
+            <p>
+                Pour pouvoir participer, tu dois prendre en compte ces quelques
+                règles:
+            </p>
+            <ul class="list-decimal ml-4">
+                <li>Chaque pixel placé te donne un point au Leaderboard.</li>
+                <li>
+                    Tu n'as pas le droit de dessiner des choses offensives ou
+                    obscènes.
+                </li>
+                <li>
+                    L'utilisation de bot ou de tout autre moyen pour contourner
+                    les modalités du jeu sont interdits.
+                </li>
+                <li>
+                    La Liste Kraken se réserve le droit de restreindre l'accès
+                    au site et de signaler les comptes ne respectant pas les
+                    règles énoncés ci-dessus.
+                </li>
+                <li>
+                    La Liste Kraken décline toute responsabilité concernant le
+                    contenu présent sur cet espace. Toute personne participante
+                    s'engage en tant qu'individu et non au nom de quelquonque
+                    entite ou organisation.
+                </li>
+            </ul>
+            <h2 class="text-xl mt-2">Comment Jouer</h2>
+            <ul class="list-decimal ml-4">
+                <li>
+                    Zoom sur le canvas jusqu'a ce que la palette apparaisse.
+                </li>
+                <li>
+                    Tu peux séléctionner un pixel sur le canvas en maintenant le
+                    clic gauche et en bougeant ta souris.
+                </li>
+                <li>
+                    Choisis une couleur dans la palette et clique sur le pinceau
+                    pour dessiner.
+                </li>
+                <li>
+                    Tu peux aussi cliquer sur une case pour voir qui l'a modifé
+                    et quand.
+                </li>
+                <li>
+                    Si tu rencontre des problèmes, assure toi d'etre sur un
+                    pc/laptop avec chrome.
+                </li>
+            </ul>
+            <button
+                class="btn btn-primary w-full mt-4"
+                on:click={() => {
+                    rulesModal.close();
+                }}
+            >
+                Compris!
+            </button>
+        {:else}
+            <div class="flex flex-row items-center w-full justify-center">
+                <img src="/assets/kraken.png" class="max-w-xs" />
+                <div>
+                    <h1 class="text-6xl font-decorated">KrakPlace</h1>
+                    <p class="text-2xl font-bold font-display">
+                        Le Kraken a du replonger dans les abysses.
+                        <br />
+                        Il sera de retour dans {hours}h {minutes}m {seconds}s.
+                    </p>
+                </div>
+            </div>
+        {/if}
     </div>
 </Modal>
 

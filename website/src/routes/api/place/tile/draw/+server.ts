@@ -17,6 +17,11 @@ export const POST: RequestHandler = async ({ request, locals }) => {
     if (!isLoggedIn(locals.session)) {
         throw error(401, "Unauthorized");
     }
+
+    if (Date.now() < 1702580400) {
+        throw error(403, "Forbidden");
+    }
+
     const profile = locals.session.profile as Profile;
 
     const body = (await request.json()) as ApiTileDrawBody;
