@@ -116,12 +116,19 @@
             tileTooltip.style.left = `${event.clientX}px`;
             tileTooltip.style.top = `${event.clientY}px`;
             tileTooltip.classList.add("tooltip-open");
+            console.log(info);
+
             tileTooltip.attributes.getNamedItem("data-tip")!.value =
                 `x: ${x}, y: ${y} | ${info.login} | ${new Date(
                     info.placedAt,
-                ).toLocaleDateString()} ${new Date(
-                    info.placedAt,
-                ).toLocaleTimeString()}`;
+                ).toLocaleString("fr-FR", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                    hour: "numeric",
+                    minute: "numeric",
+                    second: "numeric",
+                })}`;
         };
         placeCanvas.onMove = (_, dragging) => {
             if (dragging) tileTooltip.classList.remove("tooltip-open");

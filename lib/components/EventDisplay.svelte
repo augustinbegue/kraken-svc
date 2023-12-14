@@ -2,7 +2,7 @@
     import { Event } from "@prisma/client";
 
     export let event: Event;
-    export let color: string = "bg-primary";
+    export let color: string = "secondary";
 </script>
 
 <div class="card bg-{color} shadow-xl text-{color}-content">

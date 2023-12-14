@@ -1,4 +1,3 @@
-import { env } from "$env/dynamic/private";
 import { isLoggedIn } from "$lib/accounts/utils";
 import { prisma } from "$lib/server/db/prisma";
 import { log } from "$lib/server/logger";

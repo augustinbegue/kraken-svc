@@ -1,7 +1,6 @@
 import { isLoggedIn } from "$lib/accounts/utils";
 import { redirect } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types";
-import { getLeaderboard } from "$lib/server/leaderboard/api";
 
 export const load: LayoutServerLoad = async ({ locals, cookies }) => {
     const { session } = locals;
