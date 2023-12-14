@@ -102,7 +102,7 @@
                     <img src="/assets/discord-mark-black.png" alt="Discord" />
                 </a>
                 <a
-                    href="https://twitch.tv/krakenlive"
+                    href="https://twitch.tv/krakendirect"
                     target="_blank"
                     class="btn btn-secondary rounded-full h-14 w-14"
                 >
