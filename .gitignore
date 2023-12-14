@@ -10,3 +10,6 @@ website/.svelte-kit
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 *.lockb
+
+# Sentry Config File
+.sentryclirc
