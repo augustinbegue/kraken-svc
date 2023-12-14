@@ -18,8 +18,6 @@ export const POST: RequestHandler = async ({ request, locals }) => {
         throw error(401, "Unauthorized");
     }
 
-    throw error(403, "Forbidden");
-
     const profile = locals.session.profile as Profile;
 
     const body = (await request.json()) as ApiTileDrawBody;
