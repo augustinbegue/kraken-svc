@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from "$app/stores";
     import { ChevronLeft, ChevronRight, Loader2 } from "lucide-svelte";
-    import type { PageData } from "../(embed)/embed/$types";
+    import type { PageData } from "./$types";
     import type { Leaderboard } from "$lib/server/leaderboard/api";
     import { onDestroy, onMount } from "svelte";
     import type { Unsubscriber } from "svelte/store";

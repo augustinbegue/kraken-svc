@@ -10,6 +10,11 @@ export const load: PageServerLoad = async ({ locals }) => {
         orderBy: {
             startTime: "asc",
         },
+        where: {
+            endTime: {
+                gt: new Date(),
+            },
+        },
     });
 
     if (!isLoggedIn(locals.session)) {
