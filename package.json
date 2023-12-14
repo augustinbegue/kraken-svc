@@ -1,6 +1,6 @@
 {
   "name": "kraken-svc",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "workspaces": [
     "website",
     "websocket"
@@ -20,16 +20,7 @@
     "docker:up": "docker compose up -d",
     "docker:push": "docker compose push"
   },
-  "dependencies": {
-    "@prisma/client": "^5.6.0",
-    "@sentry/sveltekit": "^7.87.0",
-    "prisma": "^5.6.0",
-    "qrcode": "^1.5.3",
-    "tslog": "^4.9.2",
-    "uWebSockets.js": "uNetworking/uWebSockets.js#v20.33.0"
-  },
   "devDependencies": {
-    "@types/qrcode": "^1.5.5",
     "concurrently": "^8.2.2"
   }
 }
