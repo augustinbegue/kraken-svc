@@ -25,7 +25,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
         const { x, y, color } = body;
 
-        if (!x || !y || !color) {
+        if (x === undefined || y === undefined || !color) {
             throw error(400, "Bad Request");
         }
 
