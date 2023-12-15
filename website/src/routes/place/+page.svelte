@@ -116,7 +116,6 @@
             tileTooltip.style.left = `${event.clientX}px`;
             tileTooltip.style.top = `${event.clientY}px`;
             tileTooltip.classList.add("tooltip-open");
-            console.log(info);
 
             tileTooltip.attributes.getNamedItem("data-tip")!.value =
                 `x: ${x}, y: ${y} | ${info.login} | ${new Date(
@@ -178,7 +177,7 @@
 ></div>
 
 {#if loadingState.length === 0}
-    {#if countdown <= 0}
+    {#if $interactionEnabled}
         <div class="controls" transition:slide>
             <div class="palette">
                 {#if showFullPalette}

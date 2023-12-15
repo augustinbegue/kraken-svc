@@ -12,6 +12,7 @@ export interface WSMessagePlaceUpdate extends WSMessage {
         i: number;
         x: number;
         y: number;
+        login: string;
         color: string;
     };
 }

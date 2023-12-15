@@ -17,7 +17,8 @@ export async function sendCanvasUpdate(
     color: string,
 ) {
     const session = locals.session as Session;
-    // Check if the profile exists,
+
+    // Check if the profile exists
     let placeProfile = await prisma.placeProfile.findUnique({
         where: {
             login: session.login,
@@ -41,36 +42,13 @@ export async function sendCanvasUpdate(
     }
 
     const i = x + y * PlaceCanvas.CANVAS_SIZE;
-
-    await prisma.placeProfile.update({
-        where: {
-            login: session.login,
-        },
-        data: {
-            tilesPlaced: {
-                increment: 1,
-            },
-            lastPlaced: new Date(),
-        },
-    });
-    await prisma.tileInfo.create({
-        data: {
-            color,
-            i,
-            placedAt: new Date(),
-            placeProfile: {
-                connect: {
-                    login: session.login,
-                },
-            },
-        },
-    });
     locals.ws.send({
         type: "place.update",
         data: {
             i,
             x,
             y,
+            login: placeProfile.login,
             color,
         },
     });

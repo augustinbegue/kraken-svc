@@ -57,24 +57,7 @@ app.ws("/*", {
                 messageObject.secret = undefined;
                 const data = (messageObject as WSMessagePlaceUpdate).data;
 
-                // Update the database
-                await prisma.tile.update({
-                    where: {
-                        i: data.i,
-                    },
-                    data: {
-                        color: data.color,
-                    },
-                });
-
-                log.info(`place.update: ${JSON.stringify(data)}`);
-
-                // Send the update to all subscribers
-                ws.publish(
-                    SUBSCRIPTIONS_ENUM.PLACE,
-                    JSON.stringify(messageObject),
-                    isBinary,
-                );
+                await handlePlaceUpdate(data, ws, isBinary);
             }
         } catch (error) {
             log.error(error);
@@ -87,3 +70,74 @@ app.ws("/*", {
         log.error(`Failed to listen to port ${PORT}`);
     }
 });
+
+async function handlePlaceUpdate(data: WSMessagePlaceUpdate["data"], ws, isBinary: boolean) {
+    let placeProfile = await prisma.placeProfile.findUnique({
+        where: {
+            login: data.login,
+        },
+    });
+
+    // Check if the cooldown is over
+    if (placeProfile &&
+        (placeProfile.lastPlaced.getTime() + 10 * 1000 <
+            Date.now())) {
+
+        // Update the database
+        await prisma.tile.update({
+            where: {
+                i: data.i,
+            },
+            data: {
+                color: data.color,
+            },
+        });
+
+
+        log.info(`place.update: ${JSON.stringify(data)}`);
+
+        // Update the database
+        await prisma.placeProfile.update({
+            where: {
+                login: data.login,
+            },
+            data: {
+                tilesPlaced: {
+                    increment: 1,
+                },
+                lastPlaced: new Date(),
+            },
+        });
+        await prisma.tileInfo.create({
+            data: {
+                color: data.color,
+                i: data.i,
+                placedAt: new Date(),
+                placeProfile: {
+                    connect: {
+                        login: data.login,
+                    },
+                },
+            },
+        });
+        // Send the update to all subscribers
+        ws.publish(
+            SUBSCRIPTIONS_ENUM.PLACE,
+            JSON.stringify({
+                type: "place.update",
+                data: {
+                    color: data.color,
+                    i: data.i,
+                    x: data.x,
+                    y: data.y,
+                    login: data.login,
+                }
+            }),
+            isBinary
+        );
+    }
+    else {
+        log.debug(`⚠️ place.update frauduleuse: ${JSON.stringify(data)} (ignored)`);
+    }
+}
+

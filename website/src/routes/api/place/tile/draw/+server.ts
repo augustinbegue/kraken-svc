@@ -20,15 +20,23 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
     const profile = locals.session.profile as Profile;
 
-    const body = (await request.json()) as ApiTileDrawBody;
+    try {
+        const body = (await request.json()) as ApiTileDrawBody;
 
-    const { x, y, color } = body;
+        const { x, y, color } = body;
 
-    if (await sendCanvasUpdate(locals, x, y, color)) {
-        await createReward(profile.preferred_username, 0, placeActivityId);
+        if (!x || !y || !color) {
+            throw error(400, "Bad Request");
+        }
 
-        return json({ success: true });
-    } else {
+        if (await sendCanvasUpdate(locals, x, y, color)) {
+            await createReward(profile.preferred_username, 0, placeActivityId);
+
+            return json({ success: true });
+        } else {
+            throw error(400, "Bad Request");
+        }
+    } catch (e) {
         throw error(400, "Bad Request");
     }
 };
