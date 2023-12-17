@@ -11,6 +11,7 @@
     import { onDestroy, onMount } from "svelte";
     import type { Event } from "@prisma/client";
     import EventDisplay from "$lib/components/EventDisplay.svelte";
+    import { page } from "$app/stores";
 
     export let data: PageData;
 
@@ -159,6 +160,27 @@
                 Tu Préfères ?
             </a>
         </div>
+
+        <a
+            class="widget-title font-display"
+            href="https://twitch.tv/krakendirect"
+            target="_blank">Twitch</a
+        >
+        <div class="card bg-gradient-to-br from-base-200 to-base-300">
+            <div class="card-body flex flex-row justify-center">
+                <!-- svelte-ignore a11y-missing-attribute -->
+                <iframe
+                    src="https://player.twitch.tv/?channel=krakendirect&parent={$page
+                        .url.hostname}"
+                    frameborder="0"
+                    scrolling="no"
+                    height="378"
+                    width="620"
+                    allowfullscreen={true}
+                ></iframe>
+            </div>
+        </div>
+
         <h2 class="widget-title">Events</h2>
         <EventDisplay {event}></EventDisplay>
         <div class="flex flex-row w-full justify-between items-center">
