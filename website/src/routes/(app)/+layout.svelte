@@ -1,11 +1,18 @@
 <script lang="ts">
     import { page } from "$app/stores";
-    import { hasRole, isLoggedIn } from "$lib/accounts/utils";
-    import { ArrowBigLeft, HomeIcon } from "lucide-svelte";
-    import type { PageData } from "./$types";
+    import { hasRole } from "$lib/accounts/utils";
+    import { HomeIcon } from "lucide-svelte";
+    import type { LayoutData } from "./$types";
+    import AnnouncementDisplay from "$lib/components/AnnouncementDisplay.svelte";
 
-    export let data: PageData;
+    export let data: LayoutData;
+
+    let displayAlert = true;
 </script>
+
+{#if displayAlert}
+    <AnnouncementDisplay announcement={data.currentAnnouncement} />
+{/if}
 
 <main class="min-h-screen flex flex-col">
     {#if data.profile}

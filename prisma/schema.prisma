@@ -121,3 +121,16 @@ model Event {
   endTime     DateTime
   location    String
 }
+
+model Announcement {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  isActive    Boolean   @default(true)
+  isDeleted   Boolean   @default(false)
+  deletedAt   DateTime?
+  title       String
+  description String
+  link        String?
+  image       String?
+}

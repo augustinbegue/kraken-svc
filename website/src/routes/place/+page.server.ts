@@ -39,7 +39,12 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
 
     const wsUrl = env.WS_URL;
 
+    const currentAnnouncement = await prisma.announcement.findFirst({
+        orderBy: { createdAt: "desc" },
+    });
+
     return {
+        currentAnnouncement,
         session,
         placeProfile,
         wsUrl,
