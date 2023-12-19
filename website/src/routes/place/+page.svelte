@@ -37,7 +37,7 @@
     let cooldown = 0;
     function computeCooldown() {
         const now = Date.now();
-        const diff = lastPlacedDate + PlaceCanvas.COOLDOWN - now;
+        const diff = lastPlacedDate + PlaceCanvas.getCooldown() - now;
         cooldown = Math.max(0, diff);
 
         if (cooldown > 0) {
@@ -80,13 +80,12 @@
         return (await res.json()) as TileInfo;
     }
 
-    const endDate = new Date("2023-12-19T20:00:00.000+01:00").getTime();
-    let countdown = endDate - Date.now();
+    let countdown = PlaceCanvas.endDate - Date.now();
     $: hours = Math.floor(countdown / 1000 / 60 / 60);
     $: minutes = Math.floor((countdown / 1000 / 60) % 60);
     $: seconds = Math.floor((countdown / 1000) % 60);
     const interval = setInterval(() => {
-        countdown = endDate - Date.now();
+        countdown = PlaceCanvas.endDate - Date.now();
     }, 1000);
 
     let loadingState = "Loading canvas...";
@@ -183,7 +182,7 @@
 ></div>
 
 {#if loadingState.length === 0}
-    {#if $interactionEnabled && countdown >= 0}
+    {#if $interactionEnabled}
         <div class="controls" transition:slide>
             <div class="palette">
                 {#if showFullPalette}
@@ -225,9 +224,9 @@
                     background-size: 100% 100%;
                     background-position: 0px 0px;
                     background-image: conic-gradient(from 0deg at 50% 50%, #FFFFFF00 0%, #FFFFFF00 {(1 -
-                            cooldown / PlaceCanvas.COOLDOWN) *
+                            cooldown / PlaceCanvas.getCooldown()) *
                             100}%, #FF000050 {(1 -
-                            cooldown / PlaceCanvas.COOLDOWN) *
+                            cooldown / PlaceCanvas.getCooldown()) *
                             100}%, #FF000050 99%);
                     "
                     >

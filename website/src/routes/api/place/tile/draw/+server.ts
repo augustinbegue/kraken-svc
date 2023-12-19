@@ -4,6 +4,7 @@ import type { RequestHandler } from "./$types";
 import { sendCanvasUpdate } from "$lib/server/place";
 import type { Profile, Session } from "@prisma/client";
 import { createReward } from "$lib/server/leaderboard/api";
+import { PlaceCanvas } from "$lib/place/PlaceCanvas";
 
 export interface ApiTileDrawBody {
     x: number;
@@ -13,6 +14,8 @@ export interface ApiTileDrawBody {
 
 let placeActivityId = 4;
 
+const cutoffDate = new Date("2023-12-20T01:00:00.000Z").getTime();
+
 export const POST: RequestHandler = async ({ request, locals }) => {
     if (!isLoggedIn(locals.session)) {
         throw error(401, "Unauthorized");
@@ -20,10 +23,8 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
     const profile = locals.session.profile as Profile;
 
-    const endDate = new Date("2023-12-19T20:00:00.000+01:00").getTime();
     const now = Date.now();
-
-    if (now > endDate) {
+    if (now > cutoffDate) {
         throw error(403, "Forbidden");
     }
 

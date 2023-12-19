@@ -5,7 +5,15 @@ export class PlaceCanvas {
     // Constants
     static TILE_SIZE = 16;
     static CANVAS_SIZE = 255;
-    static COOLDOWN = 10 * 1000; // 10 SECS
+    static endDate = new Date("2023-12-19T20:00:00.000+01:00").getTime();
+    static getCooldown() {
+        const now = Date.now();
+        if (now > PlaceCanvas.endDate) {
+            return 1 * 1000;
+        }
+
+        return 10 * 1000;
+    }
     static CANVAS_PALETTE = [
         "#6d001a",
         "#be0039",

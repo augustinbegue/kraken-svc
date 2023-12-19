@@ -2,10 +2,41 @@ import { Logger } from "tslog";
 import { App } from "uWebSockets.js";
 import type { WSMessage, WSMessagePlaceUpdate } from "$lib/websocket";
 import { prisma } from "$lib/server/db/prisma";
+import { intToRGBA, read } from 'jimp';
 
 require("dotenv").config({
     path: "../.env",
 });
+
+
+const endDate = new Date("2023-12-19T20:00:00.000+01:00").getTime();
+function getCooldown() {
+    const now = Date.now();
+    if (now > endDate) {
+        return 1 * 1000;
+    }
+
+    return 10 * 1000;
+}
+function getColorFun(r, g, b) {
+    return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+let image: any;
+async function readPixelColor(x: number, y: number): Promise<string> {
+    try {
+        if (!image) {
+            log.info("Reading image");
+            image = await read("./end.png");
+        }
+
+        const color = intToRGBA(image.getPixelColor(x, y));
+
+        return getColorFun(color.r, color.g, color.b);
+    } catch (error) {
+        console.error('Error reading pixel color:', error);
+    }
+}
+
 
 const APP_SECRET = process.env.APP_SECRET;
 const PORT = new URL(process.env.WS_URL || "ws://localhost:8888").port;
@@ -80,8 +111,21 @@ async function handlePlaceUpdate(data: WSMessagePlaceUpdate["data"], ws, isBinar
 
     // Check if the cooldown is over
     if (placeProfile &&
-        (placeProfile.lastPlaced.getTime() + 10 * 1000 <
+        (placeProfile.lastPlaced.getTime() + getCooldown() <
             Date.now())) {
+
+        if (data.x < 0 || data.x > 255 || data.y < 0 || data.y > 255) {
+            log.debug(`⚠️ place.update frauduleuse: ${JSON.stringify(data)} (coordinates)`);
+            return;
+        }
+
+        let color = data.color;
+
+        // If place is over, replace by end image
+        const now = Date.now();
+        if (now > endDate) {
+            color = await readPixelColor(data.x, data.y);
+        }
 
         // Update the database
         await prisma.tile.update({
@@ -89,7 +133,7 @@ async function handlePlaceUpdate(data: WSMessagePlaceUpdate["data"], ws, isBinar
                 i: data.i,
             },
             data: {
-                color: data.color,
+                color: color,
             },
         });
 
@@ -110,7 +154,7 @@ async function handlePlaceUpdate(data: WSMessagePlaceUpdate["data"], ws, isBinar
         });
         await prisma.tileInfo.create({
             data: {
-                color: data.color,
+                color: color,
                 i: data.i,
                 placedAt: new Date(),
                 placeProfile: {
@@ -126,7 +170,7 @@ async function handlePlaceUpdate(data: WSMessagePlaceUpdate["data"], ws, isBinar
             JSON.stringify({
                 type: "place.update",
                 data: {
-                    color: data.color,
+                    color: color,
                     i: data.i,
                     x: data.x,
                     y: data.y,
