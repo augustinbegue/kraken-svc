@@ -168,6 +168,7 @@ export class PlaceCanvas {
             let screenCenterY = window.innerHeight / 2 - this.yTranslate;
             this.canvas.style.transformOrigin = `${screenCenterX}px ${screenCenterY}px`;
         }
+
         this.onMove(e, this.dragging);
     }
     handleMouseWheel(e: WheelEvent) {
@@ -189,13 +190,14 @@ export class PlaceCanvas {
             newZoomFactor
         );
 
-
         if (this.zoomFactor >= this.INTERACTION_SCALE) {
             this.boundCanvas();
             this.showSelectedTile();
         } else {
             this.clearCursor();
         }
+
+        this.onMove(e, true);
     }
     handleMouseLeave(e: MouseEvent) {
         this.dragging = false;

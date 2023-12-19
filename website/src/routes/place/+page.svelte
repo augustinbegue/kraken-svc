@@ -11,6 +11,7 @@
     import type { ApiTileDrawBody } from "../api/place/tile/draw/+server";
     import { PlaceWebsocketHandler } from "$lib/websocket/PlaceWebsocketHandler";
     import Modal from "$lib/components/Modal.svelte";
+    import AnnouncementDisplay from "$lib/components/AnnouncementDisplay.svelte";
 
     export let data: PageData;
 
@@ -156,6 +157,8 @@
 <svelte:head>
     <title>KrakPlace | Kraken</title>
 </svelte:head>
+
+<AnnouncementDisplay announcement={data.currentAnnouncement} />
 
 <div
     class="flex flex-row gap-4 absolute top-0 w-screen justify-between items-center z-50 bg-base-100 opacity-40 p-2"

@@ -61,6 +61,16 @@
     >
         Gérer les utilisateurs
     </a>
+</li>
+<li>
+    <a
+        href="/admin/announcements"
+        class:active={$page.url.pathname === "/admin/announcement"}
+    >
+        Gérer l'Annonce
+    </a>
+</li>
+<li>
     <a href="/wheel" target="_blank">
         <ExternalLink size="14" /> Roue des défis
     </a>
