@@ -80,13 +80,13 @@
         return (await res.json()) as TileInfo;
     }
 
-    const reopening = 1702580400000;
-    let countdown = reopening - Date.now();
+    const endDate = new Date("2023-12-19T20:00:00.000+01:00").getTime();
+    let countdown = endDate - Date.now();
     $: hours = Math.floor(countdown / 1000 / 60 / 60);
     $: minutes = Math.floor((countdown / 1000 / 60) % 60);
     $: seconds = Math.floor((countdown / 1000) % 60);
     const interval = setInterval(() => {
-        countdown = reopening - Date.now();
+        countdown = endDate - Date.now();
     }, 1000);
 
     let loadingState = "Loading canvas...";
@@ -167,6 +167,9 @@
         <ArrowBigLeft />
     </a>
 
+    <p class="text-xl font-medium font-display">
+        Fin dans {hours}h {minutes}m {seconds}s
+    </p>
     <p>
         Logged in as {data.profile.preferred_username}
     </p>
@@ -180,7 +183,7 @@
 ></div>
 
 {#if loadingState.length === 0}
-    {#if $interactionEnabled}
+    {#if $interactionEnabled && countdown >= 0}
         <div class="controls" transition:slide>
             <div class="palette">
                 {#if showFullPalette}
@@ -251,7 +254,7 @@
 
 <Modal bind:this={rulesModal}>
     <div class="container mx-auto">
-        {#if countdown <= 0}
+        {#if countdown >= 0}
             <h1 class="text-6xl font-decorated">KrakPlace</h1>
             <p>Bienvenue sur le KrakPlace!</p>
             <h2 class="text-xl">Les Règles</h2>
@@ -317,9 +320,9 @@
                 <div>
                     <h1 class="text-6xl font-decorated">KrakPlace</h1>
                     <p class="text-2xl font-bold font-display">
-                        Le Kraken a du replonger dans les abysses.
+                        C'est la fin!
                         <br />
-                        Il sera de retour dans {hours}h {minutes}m {seconds}s.
+                        Merci d'avoir participé au KrakPlace 💖
                     </p>
                 </div>
             </div>

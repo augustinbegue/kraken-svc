@@ -37,6 +37,8 @@
     >
         Editer le canvas
     </a>
+</li>
+<li>
     <a
         href="/admin/place/history"
         class:active={$page.url.pathname === "/admin/place/edit"}

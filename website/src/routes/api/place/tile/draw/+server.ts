@@ -20,6 +20,13 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
     const profile = locals.session.profile as Profile;
 
+    const endDate = new Date("2023-12-19T20:00:00.000+01:00").getTime();
+    const now = Date.now();
+
+    if (now > endDate) {
+        throw error(403, "Forbidden");
+    }
+
     try {
         const body = (await request.json()) as ApiTileDrawBody;
 
