@@ -1,6 +1,6 @@
 import { hasRole } from "$lib/accounts/utils";
 import { error } from "@sveltejs/kit";
-import type { Action, PageServerLoad } from "../$types";
+import type { Action, PageServerLoad } from "./$types";
 import type { Tile } from "@prisma/client";
 import { PlaceCanvas } from "$lib/place/PlaceCanvas";
 import { prisma } from "$lib/server/db/prisma";

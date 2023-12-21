@@ -46,6 +46,14 @@
         Historique du canvas
     </a>
 </li>
+<li>
+    <a
+        href="/admin/place/timelapse"
+        class:active={$page.url.pathname === "/admin/place/timelapse"}
+    >
+        Timelapse
+    </a>
+</li>
 <li></li>
 <li class="menu-title">Autres</li>
 <li>
