@@ -9,75 +9,9 @@ Sentry.init({
     tracesSampleRate: 1.0,
 });
 
-import { WebsocketHandler } from "$lib/server/websocket/WebsocketHandler";
-export let wsHandler: WebsocketHandler;
-const handleWebsocket: Handle = async ({ event, resolve }) => {
-    const { locals } = event;
-
-    if (!wsHandler) {
-        wsHandler = new WebsocketHandler();
-    }
-
-    locals.ws = wsHandler;
-
-    return resolve(event);
-};
-
-import { isLoggedIn } from "$lib/accounts/utils";
-import { prisma } from "$lib/server/db/prisma";
-import type { Profile, Session } from "@prisma/client";
-const handleSession: Handle = async ({ event, resolve }) => {
-    const { cookies, locals } = event;
-
-    const sessionId = cookies.get("session");
-
-    if (sessionId) {
-        const found = await prisma.session.findUnique({
-            where: {
-                id: atob(sessionId),
-            },
-            include: {
-                profile: {
-                    include: {
-                        groups: true,
-                    },
-                },
-            },
-        });
-
-        if (!found || found?.expiresAt < new Date()) {
-            cookies.delete("session", {
-                path: "/",
-            });
-        } else {
-            locals.session = found;
-        }
-    }
-
-    const state = cookies.get("state");
-
-    if (!state) {
-        // Set state cookie, expires in 5 minutes
-        cookies.set("state", crypto.randomUUID(), {
-            maxAge: 60 * 5,
-            path: "/",
-        });
-    }
-
-    return resolve(event);
-};
-
 import { log } from "$lib/server/logger";
 const handleAccessLogs: Handle = async ({ event, resolve }) => {
-    const { locals } = event;
-    let profile: Profile | undefined;
-    if (isLoggedIn(locals.session)) {
-        profile = locals.session.profile;
-    }
-
-    let clientIdentifier = profile
-        ? `${profile.nickname}: ${event.getClientAddress()}`
-        : event.getClientAddress();
+    let clientIdentifier = event.getClientAddress();
 
     log.info(
         `${event.request.method} ${event.url.pathname} from ${clientIdentifier}`,
@@ -104,8 +38,6 @@ const handleAccessLogs: Handle = async ({ event, resolve }) => {
 
 export const handle = sequence(
     sentryHandle(),
-    handleWebsocket,
-    handleSession,
     handleAccessLogs,
 );
 
