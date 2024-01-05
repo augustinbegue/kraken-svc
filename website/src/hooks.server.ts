@@ -104,7 +104,7 @@ const handleAccessLogs: Handle = async ({ event, resolve }) => {
 
 export const handle = sequence(
     sentryHandle(),
-    handleWebsocket,
+    // handleWebsocket,
     handleSession,
     handleAccessLogs,
 );
