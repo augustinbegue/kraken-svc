@@ -89,7 +89,7 @@
                 class="flex flex-row justify-center lg:justify-start gap-4 mt-4"
             >
                 <a
-                    href="https://www.instagram.com/kraken_liste_bde"
+                    href="https://www.instagram.com/kraken_bde_epita"
                     target="_blank"
                     class="btn btn-primary rounded-full h-14 w-14"
                 >
@@ -300,7 +300,7 @@
         <a
             class="widget-title font-display"
             target="_blank"
-            href="https://www.instagram.com/kraken_liste_bde">Instagram</a
+            href="https://www.instagram.com/kraken_bde_epita">Instagram</a
         >
         <div class="card bg-gradient-to-br from-base-200 to-base-300">
             <div class="card-body flex flex-row justify-center">
@@ -309,7 +309,7 @@
                     class="w-full"
                     height="560"
                     id="instagram-embed-1"
-                    src="https://www.instagram.com/kraken_liste_bde/embed"
+                    src="https://www.instagram.com/kraken_bde_epita/embed"
                     allowtransparency={true}
                     allowfullscreen={true}
                     frameborder="0"
