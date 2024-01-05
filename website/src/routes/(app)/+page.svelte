@@ -116,7 +116,7 @@
         </div>
     </div>
 </div>
-<div class="container mx-auto px-4 pt-4">
+<!-- <div class="container mx-auto px-4 pt-4">
     <a class="widget-title font-display" href="/leaderboard">
         Top des promos
     </a>
@@ -142,12 +142,12 @@
             </div>
         {/each}
     </div>
-</div>
+</div> -->
 <div
     class="container mx-auto grid grid-cols-1 md:grid-cols-2 grid-flow-row p-4 gap-8"
 >
     <div class="flex flex-col gap-4">
-        <div class="flex flex-row font-display">
+        <!-- <div class="flex flex-row font-display">
             <a class="btn md:btn-lg btn-primary grow" href="/programme">
                 Lis le Programme
             </a>
@@ -159,17 +159,17 @@
             <a class="btn md:btn-lg btn-secondary" href="/games/match">
                 Tu Préfères ?
             </a>
-        </div>
+        </div> -->
 
-        <a
+        <!-- <a
             class="widget-title font-display"
             href="https://twitch.tv/krakendirect"
             target="_blank">Twitch</a
         >
         <div class="card bg-gradient-to-br from-base-200 to-base-300">
-            <div class="card-body flex flex-row justify-center">
-                <!-- svelte-ignore a11y-missing-attribute -->
-                <iframe
+            <div class="card-body flex flex-row justify-center"> -->
+        <!-- svelte-ignore a11y-missing-attribute -->
+        <!-- <iframe
                     src="https://player.twitch.tv/?channel=krakendirect&parent={$page
                         .url.hostname}"
                     frameborder="0"
@@ -179,7 +179,7 @@
                     allowfullscreen={true}
                 ></iframe>
             </div>
-        </div>
+        </div> -->
 
         <h2 class="widget-title">Events</h2>
         <EventDisplay {event}></EventDisplay>
@@ -211,7 +211,7 @@
                 <ChevronRight />
             </button>
         </div>
-        <a class="widget-title font-display" href="/leaderboard">Leaderboard</a>
+        <!-- <a class="widget-title font-display" href="/leaderboard">Leaderboard</a>
         <div class="card bg-gradient-to-br from-base-200 to-base-300">
             <div class="card-body">
                 <div class="flex flex-col">
@@ -243,19 +243,19 @@
                     </a>
                 </div>
             </div>
-        </div>
+        </div> -->
         <h2 class="widget-title">Infos</h2>
         <div class="card bg-gradient-to-br from-base-200 to-base-300">
             <div class="card-body">
                 {#if data.profile}
                     <div class="flex flex-row justify-between w-full">
-                        <p>
+                        <!-- <p>
                             {data.profile.preferred_username} -
                             <span class="font-bold">
                                 {data.leaderboardEntry?.points ?? 0}
                             </span>
                             points
-                        </p>
+                        </p> -->
                         <a href="/accounts/logout" class="underline">Logout</a>
                     </div>
                 {:else}
@@ -277,10 +277,10 @@
         </div>
     </div>
     <div class="flex flex-col gap-4">
-        <a class="widget-title font-display" href="/place">KrakPlace</a>
+        <!-- <a class="widget-title font-display" href="/place">KrakPlace</a> -->
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <div
+        <!-- <div
             class="card shadow-xl bg-base-200 cursor-pointer p-0"
             on:click={(e) => {
                 e.preventDefault();
@@ -295,7 +295,7 @@
                 >
                 </iframe>
             </div>
-        </div>
+        </div> -->
 
         <a
             class="widget-title font-display"
