@@ -4,6 +4,7 @@ import type { RequestHandler } from "./$types";
 import { sendCanvasUpdate } from "$lib/server/place";
 import type { Profile, Session } from "@prisma/client";
 import { createReward } from "$lib/server/leaderboard/api";
+import { env } from "$env/dynamic/private";
 
 export interface ApiTileDrawBody {
     x: number;
@@ -20,7 +21,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
     const profile = locals.session.profile as Profile;
 
-    const endDate = new Date("2023-12-19T20:00:00.000+01:00").getTime();
+    const endDate = new Date(env.END_DATE ?? "").getTime();
     const now = Date.now();
 
     if (now > endDate) {

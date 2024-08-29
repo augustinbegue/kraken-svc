@@ -80,7 +80,7 @@
         return (await res.json()) as TileInfo;
     }
 
-    const endDate = new Date("2023-12-19T20:00:00.000+01:00").getTime();
+    const endDate = new Date(data.endDate).getTime();
     let countdown = endDate - Date.now();
     $: hours = Math.floor(countdown / 1000 / 60 / 60);
     $: minutes = Math.floor((countdown / 1000 / 60) % 60);

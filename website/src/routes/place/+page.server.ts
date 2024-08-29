@@ -38,6 +38,7 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
     }
 
     const wsUrl = env.WS_URL;
+    const endDate = env.END_DATE ?? "";
 
     const currentAnnouncement = await prisma.announcement.findFirst({
         orderBy: { createdAt: "desc" },
@@ -48,5 +49,6 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
         session,
         placeProfile,
         wsUrl,
+        endDate
     };
 };
