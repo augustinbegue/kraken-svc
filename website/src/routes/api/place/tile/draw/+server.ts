@@ -38,7 +38,8 @@ export const POST: RequestHandler = async ({ request, locals }) => {
         }
 
         if (await sendCanvasUpdate(locals, x, y, color)) {
-            await createReward(profile.preferred_username, 0, placeActivityId);
+            // TODO: Add Point to new Leaderboard
+            // await createReward(profile.preferred_username, 0, placeActivityId);
 
             return json({ success: true });
         } else {

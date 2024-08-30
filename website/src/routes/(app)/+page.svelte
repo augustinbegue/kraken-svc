@@ -1,67 +1,11 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import {
-        ChevronLeft,
-        ChevronRight,
-        Instagram,
-        Twitch,
-    } from "lucide-svelte";
+    import { Instagram, Twitch } from "lucide-svelte";
     import type { PageData } from "./$types";
-    import type { LeaderboardEntry } from "$lib/server/leaderboard/api";
     import { onDestroy, onMount } from "svelte";
     import type { Event } from "@prisma/client";
-    import EventDisplay from "$lib/components/EventDisplay.svelte";
-    import { page } from "$app/stores";
 
     export let data: PageData;
-
-    const eventList: Event[] = data.events;
-    let event = eventList[0];
-    let eventI = 0;
-
-    let leaderboardByYear = [
-        {
-            year: 2024,
-            points: 0,
-        },
-        {
-            year: 2025,
-            points: 0,
-        },
-        {
-            year: 2026,
-            points: 0,
-        },
-        {
-            year: 2027,
-            points: 0,
-        },
-        {
-            year: 2028,
-            points: 0,
-        },
-    ];
-    let leaderboardByProfile: LeaderboardEntry[] = [];
-
-    let eventsInterval: NodeJS.Timeout;
-    onMount(async () => {
-        const res2 = await fetch("/api/leaderboard/grouped");
-        const data2 = await res2.json();
-        leaderboardByYear = data2;
-
-        const res = await fetch("/api/leaderboard?limit=10");
-        const data = await res.json();
-        leaderboardByProfile = data.entries;
-
-        eventsInterval = setInterval(() => {
-            eventI = (eventI + 1) % eventList.length;
-            event = eventList[eventI];
-        }, 10000);
-    });
-
-    onDestroy(() => {
-        clearInterval(eventsInterval);
-    });
 </script>
 
 <svelte:head>
