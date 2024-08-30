@@ -1,6 +1,7 @@
 import { PlaceCanvas } from "$lib/place/PlaceCanvas";
 import type { Session } from "@prisma/client";
 import { prisma } from "../db/prisma";
+import { log } from "../logger";
 
 /**
  * checks if the user can update the canvas and sends the update to the websocket server
@@ -25,6 +26,7 @@ export async function sendCanvasUpdate(
         },
     });
     if (!placeProfile) {
+        log.error(`User ${session.login} tried to place without a profile`);
         return false;
     }
 
@@ -33,11 +35,13 @@ export async function sendCanvasUpdate(
         placeProfile.lastPlaced.getTime() + PlaceCanvas.COOLDOWN >=
         Date.now()
     ) {
+        log.error(`User ${placeProfile.login} tried to place too fast`);
         return false;
     }
 
     // Check if the color is valid
     if (!PlaceCanvas.CANVAS_PALETTE.includes(color)) {
+        log.error(`User ${placeProfile.login} tried to place with an invalid color`);
         return false;
     }
 
