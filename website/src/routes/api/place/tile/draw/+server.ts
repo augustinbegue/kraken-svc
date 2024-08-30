@@ -3,7 +3,6 @@ import { error, json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { sendCanvasUpdate } from "$lib/server/place";
 import type { Profile, Session } from "@prisma/client";
-import { createReward } from "$lib/server/leaderboard/api";
 import { env } from "$env/dynamic/private";
 
 export interface ApiTileDrawBody {
