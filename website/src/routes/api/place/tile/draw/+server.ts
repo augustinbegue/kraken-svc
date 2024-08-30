@@ -15,7 +15,7 @@ export interface ApiTileDrawBody {
 async function addPointToLeaderboard(profile: Profile) {
     const url = new URL("/wei/addPlacePoint", env.API_URL);
 
-    log.info("Adding point to leaderboard", profile.preferred_username);
+    log.info("Adding point to leaderboard", profile.email.split("@")[0]);
 
     const res = await fetch(url, {
         method: "PUT",
