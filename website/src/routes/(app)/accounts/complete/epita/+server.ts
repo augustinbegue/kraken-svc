@@ -104,6 +104,7 @@ export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
                         uid: profile.uid,
                         gid: profile.gid,
                         graduation_years: profile.graduation_years,
+                        email: profile.email,
                     },
                 },
             },
