@@ -1,6 +1,6 @@
 {
   "name": "kraken-svc",
-  "version": "0.5.3",
+  "version": "0.5.5",
   "workspaces": [
     "website",
     "websocket"

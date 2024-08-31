@@ -58,6 +58,8 @@ export class PlaceCanvas {
     private lastTouchY: number = 0;
     private lastPinchDistance: number | null = null;
     private isMobile: boolean;
+    private initialDistance: number = 0;
+    private initialScale: number = 1;
 
     constructor(
         canvas: HTMLCanvasElement,
@@ -136,12 +138,31 @@ export class PlaceCanvas {
     /*
      * Canvas Event Handlers.
      */
+    setZoomFactor(newZoomFactor: number) {
+        let screenCenterX = window.innerWidth / 2 - this.xTranslate;
+        let screenCenterY = window.innerHeight / 2 - this.yTranslate;
+        this.canvas.style.transformOrigin = `${screenCenterX}px ${screenCenterY}px`;
+
+        this.zoomFactor = Math.max(this.MIN_SCALE, Math.min(newZoomFactor, 10)); // Add an upper limit if needed
+
+        if (this.zoomFactor >= this.INTERACTION_SCALE) {
+            this.boundCanvas();
+            this.showSelectedTile();
+        } else {
+            this.clearCursor();
+        }
+
+        this.onMove(new MouseEvent('mousemove'), true);
+    }
+
     private dragging = false;
     private moved = false;
+
     handleMouseDown(e: MouseEvent) {
         this.dragging = true;
         this.moved = false;
     }
+
     handleMouseUp(e: MouseEvent) {
         if (this.moved && this.dragging) {
             this.moved = false;
@@ -162,6 +183,7 @@ export class PlaceCanvas {
             this.moved = false;
         }
     }
+
     handleMouseMove(e: MouseEvent) {
         this.moved = true;
         if (this.dragging) {
@@ -175,53 +197,24 @@ export class PlaceCanvas {
 
         this.onMove(e, this.dragging);
     }
-    handleMouseWheel(e: WheelEvent | TouchEvent) {
+
+    handleMouseWheel(e: WheelEvent) {
         e.preventDefault();
 
         let newZoomFactor = this.zoomFactor;
-        if (e instanceof WheelEvent) {
-            if (e.deltaY < 0) {
-                newZoomFactor *= 1.1;
-            } else {
-                newZoomFactor /= 1.1;
-            }
-        } else if (e instanceof TouchEvent && e.touches.length === 2) {
-            // Implement pinch-to-zoom
-            const touch1 = e.touches[0];
-            const touch2 = e.touches[1];
-            const dist = Math.hypot(touch1.clientX - touch2.clientX, touch1.clientY - touch2.clientY);
-
-            if (this.lastPinchDistance) {
-                if (dist > this.lastPinchDistance) {
-                    newZoomFactor *= 1.1;
-                } else if (dist < this.lastPinchDistance) {
-                    newZoomFactor /= 1.1;
-                }
-            }
-            this.lastPinchDistance = dist;
-        }
-
-        let screenCenterX = window.innerWidth / 2 - this.xTranslate;
-        let screenCenterY = window.innerHeight / 2 - this.yTranslate;
-        this.canvas.style.transformOrigin = `${screenCenterX}px ${screenCenterY}px`;
-
-        this.zoomFactor = Math.max(
-            this.MIN_SCALE,
-            newZoomFactor
-        );
-
-        if (this.zoomFactor >= this.INTERACTION_SCALE) {
-            this.boundCanvas();
-            this.showSelectedTile();
+        if (e.deltaY < 0) {
+            newZoomFactor *= 1.1;
         } else {
-            this.clearCursor();
+            newZoomFactor /= 1.1;
         }
 
-        this.onMove(e, true);
+        this.setZoomFactor(newZoomFactor);
     }
+
     handleMouseLeave(e: MouseEvent) {
         this.dragging = false;
     }
+
     handleResize(e: UIEvent) {
         this.xTranslate =
             window.innerWidth / 2 -
@@ -261,7 +254,9 @@ export class PlaceCanvas {
     }
 
     handleTouchMove(e: TouchEvent) {
-        e.preventDefault();
+        if (e.touches.length > 1) {
+            e.preventDefault();
+        }
         if (e.touches.length === 1 && this.dragging) {
             this.moved = true;
             const touch = e.touches[0];
@@ -282,7 +277,24 @@ export class PlaceCanvas {
         }
     }
 
-    private lastPinchDistance: number | null = null;
+    handleGestureStart(e: any) {
+        e.preventDefault();
+        this.initialDistance = e.scale;
+        this.initialScale = this.zoomFactor;
+    }
+
+    handleGestureChange(e: any) {
+        e.preventDefault();
+        const newScale = this.initialScale * e.scale;
+        this.setZoomFactor(newScale);
+    }
+
+    handleGestureEnd(e: any) {
+        e.preventDefault();
+        // Reset the initial values
+        this.initialDistance = 0;
+        this.initialScale = 1;
+    }
 
     /*
      * Canvas Rendering Functions.
