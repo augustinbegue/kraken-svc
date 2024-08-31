@@ -16,7 +16,7 @@
     />
 </svelte:head>
 
-<div class="hero bg-gradient-to-b from-blue-950 to-base-100 py-32">
+<div class="hero bg-gradient-to-b from-blue-950 to-base-100 md:py-32">
     <div class="hero-content flex-col lg:flex-row">
         <img
             src="assets/kraken.png"
@@ -33,7 +33,7 @@
                 class="flex flex-row justify-center lg:justify-start gap-4 mt-4"
             >
                 <a
-                    href="https://www.instagram.com/kraken_liste_bde"
+                    href="https://www.instagram.com/kraken_bde_epita/"
                     target="_blank"
                     class="btn btn-primary rounded-full h-14 w-14"
                 >
@@ -60,8 +60,8 @@
         </div>
     </div>
 </div>
-<div class="container mx-auto px-4 pt-4">
-    <div class="flex flex-col gap-4">
+<div class="container mx-auto px-4 pt-4 flex flex-row justify-center">
+    <div class="flex flex-col gap-4 max-w-screen-sm grow">
         <a class="widget-title font-display" href="/place">KrakPlace</a>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->

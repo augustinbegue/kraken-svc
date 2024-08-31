@@ -40,7 +40,7 @@ export class PlaceCanvas {
         "#d4d7d9",
         "#ffffff",
     ];
-    private MIN_SCALE = 0.2;
+    private MIN_SCALE: number;
     private INTERACTION_SCALE = 0.5;
 
     public board: Tile[];
@@ -48,11 +48,16 @@ export class PlaceCanvas {
     public ctx: CanvasRenderingContext2D;
     public cursor: HTMLElement;
 
-    public zoomFactor = this.MIN_SCALE;
+    public zoomFactor: number;
     public xTranslate: number;
     public yTranslate: number;
 
     public interactionEnabled: Writable<boolean> = writable(false);
+
+    private lastTouchX: number = 0;
+    private lastTouchY: number = 0;
+    private lastPinchDistance: number | null = null;
+    private isMobile: boolean;
 
     constructor(
         canvas: HTMLCanvasElement,
@@ -67,6 +72,15 @@ export class PlaceCanvas {
         }
         this.ctx = ctx;
         this.cursor = cursor;
+
+        // Detect if the device is mobile
+        this.isMobile = window.innerWidth <= 768; // You can adjust this threshold as needed
+
+        // Set MIN_SCALE based on device type
+        this.MIN_SCALE = this.isMobile ? 0.09 : 0.2;
+
+        // Initialize zoomFactor with MIN_SCALE
+        this.zoomFactor = this.MIN_SCALE;
 
         // Initialize board
         this.board = board;
@@ -84,28 +98,18 @@ export class PlaceCanvas {
         this.ctx.imageSmoothingEnabled = false;
 
         if (!embed) {
-            // Add event listeners
-            this.canvas.addEventListener(
-                "mousedown",
-                this.handleMouseDown.bind(this),
-            );
-            this.canvas.addEventListener(
-                "mouseup",
-                this.handleMouseUp.bind(this),
-            );
-            this.canvas.addEventListener(
-                "mousemove",
-                this.handleMouseMove.bind(this),
-            );
-            this.canvas.addEventListener(
-                "wheel",
-                this.handleMouseWheel.bind(this),
-                { passive: false }
-            );
-            this.canvas.addEventListener(
-                "mouseleave",
-                this.handleMouseLeave.bind(this),
-            );
+            // Add event listeners for mouse events
+            this.canvas.addEventListener("mousedown", this.handleMouseDown.bind(this));
+            this.canvas.addEventListener("mouseup", this.handleMouseUp.bind(this));
+            this.canvas.addEventListener("mousemove", this.handleMouseMove.bind(this));
+            this.canvas.addEventListener("wheel", this.handleMouseWheel.bind(this), { passive: false });
+            this.canvas.addEventListener("mouseleave", this.handleMouseLeave.bind(this));
+
+            // Add event listeners for touch events
+            this.canvas.addEventListener("touchstart", this.handleTouchStart.bind(this));
+            this.canvas.addEventListener("touchend", this.handleTouchEnd.bind(this));
+            this.canvas.addEventListener("touchmove", this.handleTouchMove.bind(this));
+
             window.addEventListener("resize", this.handleResize.bind(this));
 
             // Set initial cursor position
@@ -171,14 +175,30 @@ export class PlaceCanvas {
 
         this.onMove(e, this.dragging);
     }
-    handleMouseWheel(e: WheelEvent) {
+    handleMouseWheel(e: WheelEvent | TouchEvent) {
         e.preventDefault();
 
         let newZoomFactor = this.zoomFactor;
-        if (e.deltaY < 0) {
-            newZoomFactor *= 1.1;
-        } else {
-            newZoomFactor /= 1.1;
+        if (e instanceof WheelEvent) {
+            if (e.deltaY < 0) {
+                newZoomFactor *= 1.1;
+            } else {
+                newZoomFactor /= 1.1;
+            }
+        } else if (e instanceof TouchEvent && e.touches.length === 2) {
+            // Implement pinch-to-zoom
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            const dist = Math.hypot(touch1.clientX - touch2.clientX, touch1.clientY - touch2.clientY);
+
+            if (this.lastPinchDistance) {
+                if (dist > this.lastPinchDistance) {
+                    newZoomFactor *= 1.1;
+                } else if (dist < this.lastPinchDistance) {
+                    newZoomFactor /= 1.1;
+                }
+            }
+            this.lastPinchDistance = dist;
         }
 
         let screenCenterX = window.innerWidth / 2 - this.xTranslate;
@@ -210,6 +230,59 @@ export class PlaceCanvas {
             window.innerHeight / 2 -
             (PlaceCanvas.CANVAS_SIZE * PlaceCanvas.TILE_SIZE) / 2;
     }
+
+    handleTouchStart(e: TouchEvent) {
+        e.preventDefault();
+        if (e.touches.length === 1) {
+            this.dragging = true;
+            this.moved = false;
+            this.lastTouchX = e.touches[0].clientX;
+            this.lastTouchY = e.touches[0].clientY;
+        }
+    }
+
+    handleTouchEnd(e: TouchEvent) {
+        e.preventDefault();
+        if (!this.moved && this.dragging) {
+            let { x, y } = this.getCanvasCoordsFromScreenCoords(
+                this.lastTouchX,
+                this.lastTouchY
+            );
+            this.onTileClick(new MouseEvent('click'), x, y);
+        }
+        this.dragging = false;
+        this.moved = false;
+        if (this.zoomFactor >= this.INTERACTION_SCALE) {
+            this.boundCanvas();
+            this.showSelectedTile();
+        } else {
+            this.clearCursor();
+        }
+    }
+
+    handleTouchMove(e: TouchEvent) {
+        e.preventDefault();
+        if (e.touches.length === 1 && this.dragging) {
+            this.moved = true;
+            const touch = e.touches[0];
+            const movementX = touch.clientX - this.lastTouchX;
+            const movementY = touch.clientY - this.lastTouchY;
+
+            this.xTranslate += movementX * 2 / this.zoomFactor;
+            this.yTranslate += movementY * 2 / this.zoomFactor;
+
+            this.lastTouchX = touch.clientX;
+            this.lastTouchY = touch.clientY;
+
+            let screenCenterX = window.innerWidth / 2 - this.xTranslate;
+            let screenCenterY = window.innerHeight / 2 - this.yTranslate;
+            this.canvas.style.transformOrigin = `${screenCenterX}px ${screenCenterY}px`;
+
+            this.onMove(new MouseEvent('mousemove'), this.dragging);
+        }
+    }
+
+    private lastPinchDistance: number | null = null;
 
     /*
      * Canvas Rendering Functions.
