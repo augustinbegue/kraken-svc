@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 COPY websocket/package.json ./websocket/package.json
 
-RUN npm ci --workspace=websocket
+RUN npm install --workspace=websocket
 
 COPY . .
 

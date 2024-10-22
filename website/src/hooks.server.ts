@@ -23,8 +23,7 @@ const handleWebsocket: Handle = async ({ event, resolve }) => {
     return resolve(event);
 };
 
-import { isLoggedIn } from "$lib/accounts/utils";
-import { prisma } from "$lib/server/db/prisma";
+import { getUserSession, isLoggedIn } from "$lib/accounts/utils";
 import type { Profile, Session } from "@prisma/client";
 const handleSession: Handle = async ({ event, resolve }) => {
     const { cookies, locals } = event;
@@ -32,18 +31,7 @@ const handleSession: Handle = async ({ event, resolve }) => {
     const sessionId = cookies.get("session");
 
     if (sessionId) {
-        const found = await prisma.session.findUnique({
-            where: {
-                id: atob(sessionId),
-            },
-            include: {
-                profile: {
-                    include: {
-                        groups: true,
-                    },
-                },
-            },
-        });
+        const found = await getUserSession(sessionId);
 
         if (!found || found?.expiresAt < new Date()) {
             cookies.delete("session", {

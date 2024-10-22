@@ -1,22 +1,25 @@
-version: "3.9"
 services:
-    website:
-        build:
-            dockerfile: dockerfile-website
-            tags:
-                - docker.hostag.fr/krakensvc-website:${npm_package_version}
-        image: docker.hostag.fr/krakensvc-website:${npm_package_version}
-        ports:
-            - "8080:3000"
-        env_file:
-            - .env
-    websocket:
-        build:
-            dockerfile: dockerfile-websocket
-            tags:
-                - docker.hostag.fr/krakensvc-websocket:${npm_package_version}
-        image: docker.hostag.fr/krakensvc-websocket:${npm_package_version}
-        ports:
-            - "8888:8888"
-        env_file:
-            - .env
+  website:
+    build:
+      dockerfile: dockerfile-website
+      tags:
+        - docker.hostag.fr/krakensvc-website:${npm_package_version}
+    image: docker.hostag.fr/krakensvc-website:${npm_package_version}
+    ports:
+      - "8080:3000"
+    env_file:
+      - .env
+    restart: always
+    environment:
+      - WS_URL=ws://websocket:8888
+  websocket:
+    build:
+      dockerfile: dockerfile-websocket
+      tags:
+        - docker.hostag.fr/krakensvc-websocket:${npm_package_version}
+    image: docker.hostag.fr/krakensvc-websocket:${npm_package_version}
+    ports:
+      - "8888:8888"
+    env_file:
+      - .env
+    restart: always

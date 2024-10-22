@@ -6,7 +6,7 @@ COPY package.json package-lock.json ./
 COPY website/package.json ./website/package.json
 COPY website/package-lock.json ./website/package-lock.json
 
-RUN npm ci --workspace=website
+RUN npm install --workspace=website
 
 COPY . .
 

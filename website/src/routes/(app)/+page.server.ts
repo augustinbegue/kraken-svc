@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
     const { session } = locals;
 
     if (!isLoggedIn(session)) {
-        cookies.set("redirect", "/place", {
+        cookies.set("redirect", "/", {
             path: "/",
             sameSite: "lax",
             maxAge: 60 * 60 * 24 * 7,

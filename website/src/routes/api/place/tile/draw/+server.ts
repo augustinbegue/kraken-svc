@@ -1,4 +1,4 @@
-import { isLoggedIn } from "$lib/accounts/utils";
+import { addReward, isLoggedIn } from "$lib/accounts/utils";
 import { error, json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { sendCanvasUpdate } from "$lib/server/place";
@@ -10,29 +10,6 @@ export interface ApiTileDrawBody {
     x: number;
     y: number;
     color: string;
-}
-
-async function addPointToLeaderboard(profile: Profile) {
-    const url = new URL("/wei/addPlacePoint", env.API_URL);
-
-    log.info("Adding point to leaderboard", profile.email.split("@")[0]);
-
-    const res = await fetch(url, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Token ${env.API_TOKEN}`,
-        },
-        body: JSON.stringify({
-            login: profile.email.split("@")[0],
-        }),
-    })
-        .catch(e => console.error(e));
-
-    if (res)
-        log.info("Leaderboard response", res.status);
-
-    return res && res.ok;
 }
 
 export const POST: RequestHandler = async ({ request, locals }) => {
@@ -60,7 +37,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
         }
 
         if (await sendCanvasUpdate(locals, x, y, color)) {
-            await addPointToLeaderboard(profile);
+            await addReward(profile.preferred_username);
 
             return json({ success: true });
         } else {
