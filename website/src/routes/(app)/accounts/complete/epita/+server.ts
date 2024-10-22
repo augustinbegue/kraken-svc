@@ -161,5 +161,5 @@ export const GET: RequestHandler = async ({ locals, url, cookies, fetch }) => {
 
     const redirection = cookies.get("redirect");
     cookies.delete("redirect", { path: "/" });
-    throw redirect(302, redirection || "/");
+    throw redirect(302, "/");
 };

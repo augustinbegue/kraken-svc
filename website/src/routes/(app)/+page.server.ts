@@ -1,42 +1,54 @@
 import { isLoggedIn } from "$lib/accounts/utils";
-import type { Profile } from "@prisma/client";
+import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { prisma } from "$lib/server/db/prisma";
+import type { Session } from "@prisma/client";
+import { env } from "$env/dynamic/private";
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, cookies }) => {
+    const { session } = locals;
 
-    const events = await prisma.event.findMany({
-        orderBy: {
-            startTime: "asc",
-        },
+    if (!isLoggedIn(session)) {
+        cookies.set("redirect", "/place", {
+            path: "/",
+            sameSite: "lax",
+            maxAge: 60 * 60 * 24 * 7,
+        });
+
+        throw redirect(302, "/accounts/login/epita");
+    }
+
+    let placeProfile = await prisma.placeProfile.findUnique({
         where: {
-            endTime: {
-                gt: new Date(),
-            },
+            login: (session as Session).login,
         },
     });
 
-    if (!isLoggedIn(locals.session)) {
-        return {
-            events,
-        }
+    if (!placeProfile) {
+        placeProfile = await prisma.placeProfile.create({
+            data: {
+                profile: {
+                    connect: {
+                        preferred_username: (session as Session).login,
+                    },
+                },
+                tilesPlaced: 0,
+            },
+        });
     }
 
-    const { profile } = locals.session as { profile: Profile };
+    const wsUrl = env.WS_URL;
+    const endDate = env.END_DATE ?? "";
 
-    if (!profile) {
-        return {
-            events,
-        }
-    }
+    const currentAnnouncement = await prisma.announcement.findFirst({
+        orderBy: { createdAt: "desc" },
+    });
 
-    try {
-        return {
-            events,
-        };
-    } catch (error) {
-        return {
-            events,
-        }
-    }
+    return {
+        currentAnnouncement,
+        session,
+        placeProfile,
+        wsUrl,
+        endDate
+    };
 };
