@@ -5,6 +5,7 @@ import { sendCanvasUpdate } from "$lib/server/place";
 import type { Profile, Session } from "@prisma/client";
 import { env } from "$env/dynamic/private";
 import { log } from "$lib/server/logger";
+import { addReward } from "$lib/server/accounts/utils";
 
 export interface ApiTileDrawBody {
     x: number;
