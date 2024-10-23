@@ -23,48 +23,17 @@ const handleWebsocket: Handle = async ({ event, resolve }) => {
     return resolve(event);
 };
 
-import { getUserSession, isLoggedIn } from "$lib/accounts/utils";
-import type { Profile, Session } from "@prisma/client";
-const handleSession: Handle = async ({ event, resolve }) => {
-    const { cookies, locals } = event;
-
-    const sessionId = cookies.get("session");
-
-    if (sessionId) {
-        const found = await getUserSession(sessionId);
-
-        if (!found || found?.expiresAt < new Date()) {
-            cookies.delete("session", {
-                path: "/",
-            });
-        } else {
-            locals.session = found;
-        }
-    }
-
-    const state = cookies.get("state");
-
-    if (!state) {
-        // Set state cookie, expires in 5 minutes
-        cookies.set("state", crypto.randomUUID(), {
-            maxAge: 60 * 5,
-            path: "/",
-        });
-    }
-
-    return resolve(event);
-};
-
+import { isLoggedIn } from "$lib/accounts/utils";
 import { log } from "$lib/server/logger";
 const handleAccessLogs: Handle = async ({ event, resolve }) => {
     const { locals } = event;
-    let profile: Profile | undefined;
-    if (isLoggedIn(locals.session)) {
-        profile = locals.session.profile;
+    let id: string | undefined;
+    if (await isLoggedIn(locals.session)) {
+        id = locals.session.id;
     }
 
-    let clientIdentifier = profile
-        ? `${profile.nickname}: ${event.getClientAddress()}`
+    let clientIdentifier = id
+        ? `${id}: ${event.getClientAddress()}`
         : event.getClientAddress();
 
     log.info(
@@ -85,7 +54,6 @@ const handleAccessLogs: Handle = async ({ event, resolve }) => {
 export const handle = sequence(
     sentryHandle(),
     handleWebsocket,
-    handleSession,
     handleAccessLogs,
 );
 

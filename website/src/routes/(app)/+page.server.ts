@@ -4,18 +4,19 @@ import type { PageServerLoad } from "./$types";
 import { prisma } from "$lib/server/db/prisma";
 import type { Session } from "@prisma/client";
 import { env } from "$env/dynamic/private";
+import { PUBLIC_LOGIN_URL } from '$env/static/public';
 
 export const load: PageServerLoad = async ({ locals, cookies }) => {
     const { session } = locals;
 
-    if (!isLoggedIn(session)) {
+    if (!(await isLoggedIn(session))) {
         cookies.set("redirect", "/", {
             path: "/",
             sameSite: "lax",
             maxAge: 60 * 60 * 24 * 7,
         });
 
-        throw redirect(302, "/accounts/login/epita");
+        throw redirect(302, PUBLIC_LOGIN_URL);
     }
 
     let placeProfile = await prisma.placeProfile.findUnique({

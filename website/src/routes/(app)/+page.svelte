@@ -158,8 +158,6 @@
   <title>KrakPlace | Kraken</title>
 </svelte:head>
 
-<AnnouncementDisplay announcement={data.currentAnnouncement} />
-
 <div
   class="flex flex-row gap-4 absolute top-0 w-screen justify-between items-center z-50 bg-base-100 opacity-40 p-2"
 >
@@ -167,7 +165,7 @@
     Fin dans {hours}h {minutes}m {seconds}s
   </p>
   <p>
-    Logged in as {data.profile.preferred_username}
+    Logged in as {data.session.login}
   </p>
 </div>
 

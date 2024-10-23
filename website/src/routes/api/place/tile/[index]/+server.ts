@@ -6,7 +6,7 @@ import { isLoggedIn } from "$lib/accounts/utils";
 export const GET: RequestHandler = async ({ params, locals }) => {
     const { index } = params;
 
-    if (!isLoggedIn(locals.session)) {
+    if (!(await isLoggedIn(locals.session))) {
         throw error(401, "Unauthorized");
     }
 

@@ -14,7 +14,7 @@ export interface ApiTileDrawBody {
 }
 
 export const POST: RequestHandler = async ({ request, locals }) => {
-    if (!isLoggedIn(locals.session)) {
+    if (!(await isLoggedIn(locals.session))) {
         throw error(401, "Unauthorized");
     }
 

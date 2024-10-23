@@ -4,7 +4,7 @@ import type { PageServerLoad } from "./$types";
 import { prisma } from "$lib/server/db/prisma";
 
 export const load: PageServerLoad = async ({ locals }) => {
-    if (!hasRole(locals.session.profile, "ADMIN")) {
+    if (!hasRole(locals.session, "ADMIN")) {
         throw error(403, "Forbidden");
     }
 
