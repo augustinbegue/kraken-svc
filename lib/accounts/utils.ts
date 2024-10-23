@@ -1,7 +1,11 @@
 import type { Profile, Role, Session } from "@prisma/client";
 import type { ClientSession } from ".";
+import getUserClient from "liste-kraken-sdk/dist/client/user";
+import { getCurrentUser } from "liste-kraken-sdk/dist/requests/users/get";
 
-export async function isLoggedIn(session: ClientSession): boolean {
+
+export async function isLoggedIn(session: ClientSession): Promise<boolean> {
+    return session !== undefined && (session as Session).login !== undefined;
 }
 
 export function hasRole(profile: ClientSession, role: Role): boolean {
@@ -15,8 +19,14 @@ export function hasRole(profile: ClientSession, role: Role): boolean {
     return false;
 }
 
-export async function getUserSession(id: string): ClientSession {
-}
+export async function getUserSession(): Promise<ClientSession | null> {
+    const client = getUserClient(import.meta.env.VITE_API_URL);
+    const user = await getCurrentUser(client);
 
-export async function addReward(login: string): void {
+    if (!user) return null;
+
+    return {
+        id: user.id,
+        login: user.email ?? ""
+    };
 }

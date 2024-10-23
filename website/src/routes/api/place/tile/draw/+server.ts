@@ -1,4 +1,4 @@
-import { addReward, isLoggedIn } from "$lib/accounts/utils";
+import { isLoggedIn } from "$lib/accounts/utils";
 import { error, json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { sendCanvasUpdate } from "$lib/server/place";
@@ -17,7 +17,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
         throw error(401, "Unauthorized");
     }
 
-    const profile = locals.session.profile as Profile;
+    const session = locals.session;
 
     const endDate = new Date(env.END_DATE ?? "").getTime();
     const now = Date.now();
@@ -32,12 +32,12 @@ export const POST: RequestHandler = async ({ request, locals }) => {
         const { x, y, color } = body;
 
         if (x === undefined || y === undefined || !color) {
-            log.error(`User ${profile.preferred_username} tried to place with invalid data`);
+            log.error(`User ${session.id} tried to place with invalid data`);
             throw error(400, "Bad Request");
         }
 
         if (await sendCanvasUpdate(locals, x, y, color)) {
-            await addReward(profile.preferred_username);
+            await addReward(session.id);
 
             return json({ success: true });
         } else {
