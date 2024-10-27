@@ -54,16 +54,9 @@ const handleAccessLogs: Handle = async ({ event, resolve }) => {
     return response;
 };
 
-import { PUBLIC_LOGIN_URL } from "$env/static/public";
 import { getUserSession } from "$lib/server/accounts/utils";
 const handleSession: Handle = async ({ event, resolve }) => {
     const session = await getUserSession(event.cookies.get("krakookie") ?? "")
-
-    if (!session) {
-        console.log('hook not logged in', event.cookies.get("krakookie"))
-        throw redirect(302, PUBLIC_LOGIN_URL);
-    }
-
     event.locals.session = session;
 
     return await resolve(event);
