@@ -1,21 +1,27 @@
-import getStaticClient from "liste-kraken-sdk/dist/client/static";
-import { claimReward } from "liste-kraken-sdk/dist/requests/rewards/claim";
 import { prisma } from "../db/prisma";
-import { PUBLIC_API_URL } from "$env/static/public";
 import type { ClientSession } from "$lib/accounts";
 
-export async function addReward(id: string): Promise<void> {
-    if (!process.env.API_URL || !process.env.API_TOKEN || !process.env.API_REWARD_ID) {
-        throw new Error("API_URL, API_TOKEN and API_REWARD_ID must be set");
+export async function addReward(token: string): Promise<void> {
+    if (!process.env.API_URL || !process.env.API_REWARD_ID) {
+        throw new Error("API_URL and API_REWARD_ID must be set");
     }
 
-    const client = getStaticClient(process.env.API_URL, process.env.API_TOKEN);
-
-    // claimReward(client, process.env.API_REWARD_ID, id);
+    await fetch(new URL("/claim", process.env.API_URL), {
+        headers: {
+            cookie: `krakookie=${token}`
+        },
+        body: JSON.stringify({
+            reward_id: process.env.API_REWARD_ID
+        })
+    })
 }
 
 export async function getUserSession(token: string): Promise<ClientSession | null> {
-    const res = await fetch(new URL("/users/me", PUBLIC_API_URL), {
+    if (!process.env.API_URL) {
+        throw new Error("API_URL must be set");
+    }
+
+    const res = await fetch(new URL("/users/me", process.env.API_URL), {
         headers: {
             cookie: `krakookie=${token}`
         }

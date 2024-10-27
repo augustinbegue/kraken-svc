@@ -13,7 +13,7 @@ export interface ApiTileDrawBody {
     color: string;
 }
 
-export const POST: RequestHandler = async ({ request, locals }) => {
+export const POST: RequestHandler = async ({ request, locals, cookies }) => {
     if (!(await isLoggedIn(locals.session))) {
         throw error(401, "Unauthorized");
     }
@@ -38,7 +38,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
         }
 
         if (await sendCanvasUpdate(locals, x, y, color)) {
-            await addReward(session.id);
+            await addReward(cookies.get("krakookie") ?? "");
 
             return json({ success: true });
         } else {
