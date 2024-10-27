@@ -9,7 +9,7 @@ export interface AccountsEditBody {
 }
 
 export const POST: RequestHandler = async ({ locals, request }) => {
-    if (!hasRole(locals.session.profile, "ADMIN")) {
+    if (!hasRole(locals.session, "ADMIN")) {
         throw error(403, "Forbidden");
     }
 

@@ -29,12 +29,15 @@ const handleAccessLogs: Handle = async ({ event, resolve }) => {
     const { locals } = event;
     let id: string | undefined;
     if (await isLoggedIn(locals.session)) {
-        id = locals.session.id;
+        id = locals.session.login;
     }
 
-    let clientIdentifier = id
-        ? `${id}: ${event.getClientAddress()}`
-        : event.getClientAddress();
+    let clientIdentifier = id ? id : "unknown"
+    try {
+        clientIdentifier = id
+            ? `${id}: ${event.getClientAddress()}`
+            : event.getClientAddress();
+    } catch { }
 
     log.info(
         `${event.request.method} ${event.url.pathname} from ${clientIdentifier}`,
@@ -53,11 +56,10 @@ const handleAccessLogs: Handle = async ({ event, resolve }) => {
 
 import { PUBLIC_LOGIN_URL } from "$env/static/public";
 const handleSession: Handle = async ({ event, resolve }) => {
-    const session = await getUserSession()
-    console.log('session', session);
+    const session = await getUserSession(event.cookies.get("krakookie") ?? "")
 
     if (!session) {
-        console.log('hook not logged in', event.locals, event.cookies.getAll())
+        console.log('hook not logged in', event.cookies.get("krakookie"))
         throw redirect(302, PUBLIC_LOGIN_URL);
     }
 

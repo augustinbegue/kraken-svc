@@ -1,7 +1,5 @@
-import type { Profile, Role, Session } from "@prisma/client";
+import type { Role, Session } from "@prisma/client";
 import type { ClientSession } from ".";
-import getUserClient from "liste-kraken-sdk/dist/client/user";
-import { getCurrentUser } from "liste-kraken-sdk/dist/requests/users/get";
 import { PUBLIC_API_URL } from '$env/static/public';
 
 export async function isLoggedIn(session: ClientSession): Promise<boolean> {
@@ -12,16 +10,25 @@ export function hasRole(profile: ClientSession, role: Role): boolean {
     return profile.login === "augustin.begue";
 }
 
-export async function getUserSession(): Promise<ClientSession | null> {
-    const client = getUserClient(PUBLIC_API_URL);
-    console.log('sdk client', client);
+export async function getUserSession(token: string): Promise<ClientSession | null> {
+    const res = await fetch(new URL("/users/me", PUBLIC_API_URL), {
+        headers: {
+            cookie: `krakookie=${token}`
+        }
+    })
 
-    const user = await getCurrentUser(client);
+    if (res.status === 401)
+        return null;
 
-    if (!user) return null;
+    const { data }: {
+        data: {
+            id: string,
+            email: string
+        }
+    } = await res.json()
 
     return {
-        id: user.id,
-        login: user.email?.split("@")[0] ?? "",
-    };
+        id: data.id,
+        login: data.email.split('@')[0]
+    }
 }

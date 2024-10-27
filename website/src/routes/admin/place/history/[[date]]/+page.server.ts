@@ -6,7 +6,7 @@ import { PlaceCanvas } from "$lib/place/PlaceCanvas";
 import { prisma } from "$lib/server/db/prisma";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
-    if (!hasRole(locals.session.profile, "ADMIN")) {
+    if (!hasRole(locals.session, "ADMIN")) {
         throw error(403);
     }
 

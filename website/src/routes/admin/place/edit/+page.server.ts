@@ -6,7 +6,7 @@ import { PlaceCanvas } from "$lib/place/PlaceCanvas";
 import { prisma } from "$lib/server/db/prisma";
 
 export const load: PageServerLoad = async ({ locals, fetch }) => {
-    if (!hasRole(locals.session.profile, "STAFF")) {
+    if (!hasRole(locals.session, "STAFF")) {
         throw error(403);
     }
 
@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ locals, fetch }) => {
 
 export const actions: Action = {
     update: async ({ request, locals }) => {
-        if (!hasRole(locals.session.profile, "STAFF")) {
+        if (!hasRole(locals.session, "STAFF")) {
             throw error(403);
         }
 
