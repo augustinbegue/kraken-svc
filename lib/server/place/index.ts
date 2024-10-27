@@ -1,5 +1,4 @@
 import { PlaceCanvas } from "$lib/place/PlaceCanvas";
-import type { Session } from "@prisma/client";
 import { prisma } from "../db/prisma";
 import { log } from "../logger";
 
@@ -17,7 +16,7 @@ export async function sendCanvasUpdate(
     y: number,
     color: string,
 ) {
-    const session = locals.session as Session;
+    const session = locals.session;
 
     // Check if the profile exists
     let placeProfile = await prisma.placeProfile.findUnique({

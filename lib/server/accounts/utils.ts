@@ -1,17 +1,8 @@
-import type { Session } from "@prisma/client";
 import getStaticClient from "liste-kraken-sdk/dist/client/static";
 import { claimReward } from "liste-kraken-sdk/dist/requests/rewards/claim";
 import { prisma } from "../db/prisma";
 import { PUBLIC_API_URL } from "$env/static/public";
 import { ClientSession } from "$lib/accounts";
-
-export async function getSession(sessionId: string): Promise<Session | null> {
-    return await prisma.session.findUnique({
-        where: {
-            id: sessionId,
-        },
-    });
-}
 
 export async function addReward(id: string): Promise<void> {
     if (!process.env.API_URL || !process.env.API_TOKEN || !process.env.API_REWARD_ID) {

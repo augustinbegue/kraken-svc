@@ -2,9 +2,9 @@ import { isLoggedIn } from "$lib/accounts/utils";
 import { error, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { prisma } from "$lib/server/db/prisma";
-import type { Session } from "@prisma/client";
 import { env } from "$env/dynamic/private";
 import { PUBLIC_LOGIN_URL } from '$env/static/public';
+import { ClientSession } from "$lib/accounts";
 
 export const load: PageServerLoad = async ({ locals, cookies }) => {
     const { session } = locals;
@@ -15,7 +15,7 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
 
     let placeProfile = await prisma.placeProfile.findUnique({
         where: {
-            login: (session as Session).login,
+            login: session.login,
         },
     });
 
@@ -24,7 +24,7 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
             data: {
                 profile: {
                     connect: {
-                        preferred_username: (session as Session).login,
+                        preferred_username: session.login,
                     },
                 },
                 tilesPlaced: 0,

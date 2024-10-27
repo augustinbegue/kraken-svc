@@ -2,7 +2,7 @@ import { isLoggedIn } from "$lib/accounts/utils";
 import { error, json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { sendCanvasUpdate } from "$lib/server/place";
-import type { Profile, Session } from "@prisma/client";
+import type { Profile } from "@prisma/client";
 import { env } from "$env/dynamic/private";
 import { log } from "$lib/server/logger";
 import { addReward } from "$lib/server/accounts/utils";
