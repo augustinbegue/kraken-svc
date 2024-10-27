@@ -1,5 +1,4 @@
 import { PUBLIC_LOGIN_URL } from "$env/static/public";
-import { getUserSession } from "$lib/accounts/utils";
 import { handleErrorWithSentry, Replay } from "@sentry/sveltekit";
 import * as Sentry from '@sentry/sveltekit';
 import { type Handle, redirect } from "@sveltejs/kit";

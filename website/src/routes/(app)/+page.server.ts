@@ -4,7 +4,6 @@ import type { PageServerLoad } from "./$types";
 import { prisma } from "$lib/server/db/prisma";
 import { env } from "$env/dynamic/private";
 import { PUBLIC_LOGIN_URL } from '$env/static/public';
-import { ClientSession } from "$lib/accounts";
 
 export const load: PageServerLoad = async ({ locals, cookies }) => {
     const { session } = locals;
