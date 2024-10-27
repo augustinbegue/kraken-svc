@@ -1,5 +1,8 @@
+import { PUBLIC_LOGIN_URL } from "$env/static/public";
+import { getUserSession } from "$lib/accounts/utils";
 import { handleErrorWithSentry, Replay } from "@sentry/sveltekit";
 import * as Sentry from '@sentry/sveltekit';
+import { type Handle, redirect } from "@sveltejs/kit";
 
 Sentry.init({
     dsn: 'https://cc019f35a1099c0d9de1249474e88764@o4506393568280576.ingest.sentry.io/4506393569591296',

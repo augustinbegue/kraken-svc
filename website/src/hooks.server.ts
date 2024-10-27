@@ -1,5 +1,5 @@
 
-import type { Handle } from "@sveltejs/kit";
+import { redirect, type Handle } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
 
 import { handleErrorWithSentry, sentryHandle } from "@sentry/sveltekit";
@@ -23,7 +23,7 @@ const handleWebsocket: Handle = async ({ event, resolve }) => {
     return resolve(event);
 };
 
-import { isLoggedIn } from "$lib/accounts/utils";
+import { getUserSession, isLoggedIn } from "$lib/accounts/utils";
 import { log } from "$lib/server/logger";
 const handleAccessLogs: Handle = async ({ event, resolve }) => {
     const { locals } = event;
@@ -51,8 +51,25 @@ const handleAccessLogs: Handle = async ({ event, resolve }) => {
     return response;
 };
 
+import { PUBLIC_LOGIN_URL } from "$env/static/public";
+const handleSession: Handle = async ({ event, resolve }) => {
+    const session = await getUserSession()
+    console.log('session', session);
+
+    if (!session) {
+        console.log('hook not logged in', event.locals, event.cookies.getAll())
+        throw redirect(302, PUBLIC_LOGIN_URL);
+    }
+
+    event.locals.session = session;
+
+    return await resolve(event);
+}
+
+
 export const handle = sequence(
     sentryHandle(),
+    handleSession,
     handleWebsocket,
     handleAccessLogs,
 );

@@ -14,6 +14,8 @@ export function hasRole(profile: ClientSession, role: Role): boolean {
 
 export async function getUserSession(): Promise<ClientSession | null> {
     const client = getUserClient(PUBLIC_API_URL);
+    console.log('sdk client', client);
+
     const user = await getCurrentUser(client);
 
     if (!user) return null;
