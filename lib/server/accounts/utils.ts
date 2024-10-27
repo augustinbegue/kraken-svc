@@ -2,6 +2,8 @@ import type { Session } from "@prisma/client";
 import getStaticClient from "liste-kraken-sdk/dist/client/static";
 import { claimReward } from "liste-kraken-sdk/dist/requests/rewards/claim";
 import { prisma } from "../db/prisma";
+import { PUBLIC_API_URL } from "$env/static/public";
+import { ClientSession } from "$lib/accounts";
 
 export async function getSession(sessionId: string): Promise<Session | null> {
     return await prisma.session.findUnique({
@@ -19,4 +21,42 @@ export async function addReward(id: string): Promise<void> {
     const client = getStaticClient(process.env.API_URL, process.env.API_TOKEN);
 
     // claimReward(client, process.env.API_REWARD_ID, id);
+}
+
+export async function getUserSession(token: string): Promise<ClientSession | null> {
+    const res = await fetch(new URL("/users/me", PUBLIC_API_URL), {
+        headers: {
+            cookie: `krakookie=${token}`
+        }
+    })
+
+    if (res.status === 401)
+        return null;
+
+    const { data }: {
+        data: {
+            id: string,
+            email: string
+        }
+    } = await res.json()
+
+    const session = {
+        id: data.id,
+        login: data.email.split('@')[0],
+    };
+
+    const profile = await prisma.profile.findFirst({
+        where: {
+            email: data.email
+        }
+    })
+    if (!profile)
+        await prisma.profile.create({
+            data: {
+                email: data.email,
+                preferred_username: session.login
+            }
+        })
+
+    return session;
 }

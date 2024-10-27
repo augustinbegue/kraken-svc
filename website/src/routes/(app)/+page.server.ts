@@ -10,8 +10,7 @@ export const load: PageServerLoad = async ({ locals, cookies }) => {
     const { session } = locals;
 
     if (!(await isLoggedIn(session))) {
-        // throw redirect(302, PUBLIC_LOGIN_URL);
-        throw error(403)
+        throw redirect(302, PUBLIC_LOGIN_URL);
     }
 
     let placeProfile = await prisma.placeProfile.findUnique({

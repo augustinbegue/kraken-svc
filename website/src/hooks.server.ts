@@ -23,7 +23,7 @@ const handleWebsocket: Handle = async ({ event, resolve }) => {
     return resolve(event);
 };
 
-import { getUserSession, isLoggedIn } from "$lib/accounts/utils";
+import { isLoggedIn } from "$lib/accounts/utils";
 import { log } from "$lib/server/logger";
 const handleAccessLogs: Handle = async ({ event, resolve }) => {
     const { locals } = event;
@@ -55,6 +55,7 @@ const handleAccessLogs: Handle = async ({ event, resolve }) => {
 };
 
 import { PUBLIC_LOGIN_URL } from "$env/static/public";
+import { getUserSession } from "$lib/server/accounts/utils";
 const handleSession: Handle = async ({ event, resolve }) => {
     const session = await getUserSession(event.cookies.get("krakookie") ?? "")
 
