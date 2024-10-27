@@ -7,6 +7,7 @@ export async function addReward(token: string): Promise<void> {
     }
 
     await fetch(new URL("/claim", process.env.API_URL), {
+        method: "POST",
         headers: {
             cookie: `krakookie=${token}`
         },
