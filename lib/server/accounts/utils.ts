@@ -6,7 +6,7 @@ export async function addReward(token: string): Promise<void> {
         throw new Error("API_URL and API_REWARD_ID must be set");
     }
 
-    await fetch(new URL("/claim", process.env.API_URL), {
+    await fetch(new URL("/rewards/claim", process.env.API_URL), {
         method: "POST",
         headers: {
             cookie: `krakookie=${token}`
